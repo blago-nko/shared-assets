@@ -1,0 +1,22 @@
+{
+  "description": "Маршрутизация хранения изображений",
+  "version": "1.0",
+  "storage": {
+    "blogger": {
+      "enabled": true,
+      "max_size_px": 2048,
+      "formats": ["webp", "avif"],
+      "purpose": "Основное хранилище (безлимит)"
+    },
+    "r2": {
+      "enabled": true,
+      "max_size_gb": 10,
+      "purpose": "Только PDF и медиа-паспорта"
+    }
+  },
+  "routing": {
+    "images": "blogger",
+    "pdf": "r2",
+    "media_passport": "r2"
+  }
+}
