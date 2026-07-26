@@ -1,0 +1,20 @@
+{
+  "description": "Файлы верификации в поисковых системах",
+  "version": "1.0",
+  "domains": {
+    "blagorussia.ru": {
+      "yandex": "yandex_XXXXX.html",
+      "google": "googleXXXXX.html",
+      "bing": "BingSiteAuth.xml",
+      "mail": "mail_XXXXX.html"
+    },
+    "obrazslov.ru": {
+      "yandex": "yandex_XXXXX.html",
+      "google": "googleXXXXX.html"
+    }
+  },
+  "dns_txt_records": {
+    "yandex": "yandex-verification: XXXXX",
+    "google": "google-site-verification: XXXXX"
+  }
+}
