@@ -1,0 +1,16 @@
+/* Mobile-First: xs (320px) */
+@media (max-width: 480px) {
+    .main-nav ul { flex-direction: column; gap: 8px; }
+    .logo { font-size: 20px; }
+    .main-content { padding: 20px 0; }
+}
+
+/* Планшеты */
+@media (min-width: 481px) and (max-width: 768px) {
+    .container { padding: 0 24px; }
+}
+
+/* Десктоп */
+@media (min-width: 769px) {
+    .container { padding: 0 32px; }
+}
