@@ -1,0 +1,8 @@
+/* Тема для blagorussia.ru */
+:root {
+    --primary: #1a5276;
+    --secondary: #2e86c1;
+    --accent: #e74c3c;
+}
+.logo a { color: var(--primary); }
+.site-header { background: #eaf2f8; border-bottom-color: var(--secondary); }
