@@ -1,0 +1,27 @@
+{
+  "description": "Централизованная конфигурация социальных ссылок",
+  "version": "1.0",
+  "default": {
+    "vk": "https://vk.com/blagorussia",
+    "telegram": "https://t.me/blagorussia",
+    "ok": "https://ok.ru/blagorussia",
+    "dzen": "https://dzen.ru/blagorussia",
+    "youtube": "https://youtube.com/blagorussia"
+  },
+  "sites": {
+    "blagorussia.ru": {
+      "vk": "https://vk.com/blagorussia",
+      "telegram": "https://t.me/blagorussia",
+      "ok": "https://ok.ru/blagorussia",
+      "dzen": "https://dzen.ru/blagorussia",
+      "youtube": "https://youtube.com/blagorussia"
+    },
+    "obrazslov.ru": {
+      "vk": "https://vk.com/obrazslov",
+      "telegram": "https://t.me/obrazslov",
+      "ok": "https://ok.ru/obrazslov",
+      "dzen": "https://dzen.ru/obrazslov",
+      "youtube": "https://youtube.com/obrazslov"
+    }
+  }
+}
