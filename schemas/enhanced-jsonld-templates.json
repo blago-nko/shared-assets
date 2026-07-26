@@ -1,0 +1,62 @@
+{
+  "description": "Шаблоны расширенной JSON-LD разметки для ИИ-поисковиков",
+  "version": "1.0",
+  "templates": {
+    "Article": {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "{{title}}",
+      "description": "{{description}}",
+      "author": {
+        "@type": "Person",
+        "name": "{{author_name}}",
+        "url": "{{author_url}}"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "НП «Общественное благополучие Воронежа»"
+      },
+      "datePublished": "{{date_published}}",
+      "dateModified": "{{date_modified}}"
+    },
+    "ImageObject": {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": "{{image_url}}",
+      "width": "{{width}}",
+      "height": "{{height}}",
+      "caption": "{{caption}}",
+      "author": {
+        "@type": "Person",
+        "name": "{{author_name}}"
+      },
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    "BreadcrumbList": {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "{{item1_name}}",
+          "item": "{{item1_url}}"
+        }
+      ]
+    },
+    "FAQPage": {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "{{question}}",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "{{answer}}"
+          }
+        }
+      ]
+    }
+  }
+}
