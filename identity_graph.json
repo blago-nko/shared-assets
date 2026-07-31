@@ -1,0 +1,13 @@
+{
+  "entities": [
+    {
+      "name": "Бобров Александр Валентинович",
+      "roles": ["founder", "author_expert", "admin"],
+      "sameAs": {
+        "founder": "https://blagorussia.ru/team/founder/",
+        "author_expert": "https://obrazslov.ru/authors/bobrov",
+        "admin": "https://can.blagorussia.ru/staff/bobrov"
+      }
+    }
+  ]
+}
