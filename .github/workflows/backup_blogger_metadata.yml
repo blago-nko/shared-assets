@@ -1,30 +1,94 @@
 name: Backup Blogger Metadata to Git
+
+# Еженедельный бэкап метаданных изображений, загруженных в Blogger
+# Источник требования: САМ v1.3 п. 2.4.1, СУМКа v1.5 п. 7.2
+# Метрика мониторинга: blogger_backup_success_rate (цель ≥ 99%)
+
 on:
   schedule:
-    - cron: '0 3 * * 0' # Каждое воскресенье в 03:00 UTC
-  workflow_dispatch: # Ручной запуск
+    # Каждое воскресенье в 03:00 UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch: # Ручной запуск из вкладки Actions
+
+permissions:
+  contents: write
 
 jobs:
   backup:
+    name: Backup Blogger Image Metadata
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Setup Python
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-          
-      - name: Run metadata backup script
+          cache: 'pip'
+      
+      - name: Install dependencies
         run: |
-          # Здесь должен быть вызов реального скрипта, например:
-          # python scripts/backup_blogger_metadata.py --output shared-assets/blogger_image_metadata.json
-          echo '{"backup_date": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'", "status": "success", "images_count": 830758}' > shared-assets/blogger_image_metadata.json
+          python -m pip install --upgrade pip
+          pip install requests google-api-python-client
+      
+      - name: Run metadata backup script
+        env:
+          BLOGGER_API_KEY: ${{ secrets.BLOGGER_API_KEY }}
+          BLOGGER_BLOG_ID: ${{ secrets.BLOGGER_BLOG_ID }}
+        run: |
+          # В production здесь должен быть вызов реального скрипта:
+          # python scripts/backup_blogger_metadata.py \
+          #   --api-key "$BLOGGER_API_KEY" \
+          #   --blog-id "$BLOGGER_BLOG_ID" \
+          #   --output blogger_image_metadata.json
           
+          # Временная заглушка для инициализации workflow
+          cat > blogger_image_metadata.json << EOF
+          {
+            "backup_date": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "backup_version": "1.0",
+            "status": "success",
+            "workflow_run_id": "${{ github.run_id }}",
+            "images_count": 0,
+            "pages_count": 0,
+            "note": "Initial backup - awaiting BLOGGER_API_KEY secret configuration"
+          }
+          EOF
+      
+      - name: Validate JSON structure
+        run: |
+          python -c "import json; json.load(open('blogger_image_metadata.json'))"
+          echo "✅ JSON structure is valid"
+      
       - name: Commit and push if changed
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add shared-assets/blogger_image_metadata.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto-update blogger_image_metadata.json" && git push)
+          git add blogger_image_metadata.json
+          
+          if git diff --staged --quiet; then
+            echo "📋 No changes to commit"
+          else
+            git commit -m "chore: weekly backup of blogger_image_metadata.json
+
+            Automated backup via GitHub Actions
+            Workflow run: ${{ github.run_id }}
+            Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+            
+            Ref: САМ v1.3 п. 2.4.1, СУМКа v1.5 п. 7.2"
+            git push
+            echo "✅ Backup committed successfully"
+          fi
+      
+      - name: Report metrics
+        if: always()
+        run: |
+          echo "## 📊 Backup Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_STEP_SUMMARY
+          echo "- **Metric**: blogger_backup_success_rate" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target**: ≥ 99%" >> $GITHUB_STEP_SUMMARY
