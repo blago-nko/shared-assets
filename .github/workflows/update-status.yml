@@ -1,25 +1,103 @@
 name: Auto-update STATUS.md
+
+# Автоматическое обновление timestamp в STATUS.md после merge в main
+# Источник требования: САМ v1.3 п. 1.5, СУМКа v1.5 п. 7.2
+# Метрика мониторинга: status_md_autoupdate_success_rate (цель ≥ 99%)
+
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+    paths:
+      - 'docs/STATUS.md'
+      - 'docs/TASKS.md'
+      - 'blogger_image_metadata.json'
+  schedule:
+    # Каждые 6 часов для поддержания актуальности
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Ручной запуск
+
+permissions:
+  contents: write
 
 jobs:
   update-status:
+    name: Update STATUS.md Timestamp
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Update STATUS.md timestamp
+        with:
+          fetch-depth: 0
+      
+      - name: Check if STATUS.md exists
+        id: check
+        run: |
+          if [ -f "docs/STATUS.md" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✅ docs/STATUS.md found"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "⚠️ docs/STATUS.md not found - skipping update"
+          fi
+      
+      - name: Update timestamp in STATUS.md
+        if: steps.check.outputs.exists == 'true'
         run: |
           CURRENT_DATE=$(date -u +"%d.%m.%Y %H:%M UTC")
-          sed -i "s/Последнее обновление: .*/Последнее обновление: $CURRENT_DATE | Авто-обновление: ✅ (GitHub Actions)/" docs/STATUS.md
           
+          # Обновляем строку "Последнее обновление"
+          sed -i "s/^\*\*Последнее обновление\*\*: .*/\*\*Последнее обновление\*\*: $CURRENT_DATE/" docs/STATUS.md
+          
+          # Добавляем запись в журнал изменений
+          echo "" >> docs/STATUS.md
+          echo "| $CURRENT_DATE | Авто-обновление timestamp | github-actions[bot] |" >> docs/STATUS.md
+          
+          echo "✅ Updated timestamp to: $CURRENT_DATE"
+      
+      - name: Validate STATUS.md structure
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          # Проверка обязательных разделов
+          REQUIRED_SECTIONS=("Состояние 14 доменов" "Состояние манифестов" "Ключевые метрики" "Активные риски")
+          
+          for section in "${REQUIRED_SECTIONS[@]}"; do
+            if grep -q "$section" docs/STATUS.md; then
+              echo "✅ Found section: $section"
+            else
+              echo "❌ Missing section: $section"
+              exit 1
+            fi
+          done
+      
       - name: Commit and push
+        if: steps.check.outputs.exists == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/STATUS.md
-          git diff --quiet && git diff --staged --quiet || (git commit -m "docs: auto-update STATUS.md timestamp" && git push)
+          
+          if git diff --staged --quiet; then
+            echo "📋 No changes to commit"
+          else
+            git commit -m "docs: auto-update STATUS.md timestamp
+            
+            Automated update via GitHub Actions
+            Workflow run: ${{ github.run_id }}
+            Trigger: ${{ github.event_name }}
+            
+            Ref: САМ v1.3 п. 1.5, СУМКа v1.5 п. 7.2"
+            git push
+            echo "✅ STATUS.md updated successfully"
+          fi
+      
+      - name: Report metrics
+        if: always()
+        run: |
+          echo "## 📊 STATUS.md Update Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_STEP_SUMMARY
+          echo "- **Metric**: status_md_autoupdate_success_rate" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target**: ≥ 99%" >> $GITHUB_STEP_SUMMARY
+          echo "- **File exists**: ${{ steps.check.outputs.exists }}" >> $GITHUB_STEP_SUMMARY
