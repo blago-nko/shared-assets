@@ -1,23 +1,164 @@
-# ⛔ ВРЕМЕННО: ЗАПРЕТ ИНДЕКСАЦИИ
-User-agent: *
-Disallow: /
+# robots.txt для экосистемы 14 доменов НП «Общественное благополучие Воронежа»
+# Источник требования: САМ v1.3 п. 3.5, САН V21.4 п. 7.2.5
+# Версия: 1.0 | Дата: 01.08.2026
+#
+# Данный файл должен быть размещён в корне всех 14 доменов:
+# - blagorussia.ru, obrazslov.ru, partnerstvo.blagorussia.ru
+# - grekpanteon.obrazslov.ru, can.blagorussia.ru, gallery.obrazslov.ru
+# - obavlenia.blagorussia.ru, interesnye-mesta.obrazslov.ru, ot-gorozan.blagorussia.ru
+# - novosti.blagorussia.ru, moisites.blagorussia.ru, joga.blagorussia.ru
+# - ideologia.obrazslov.ru, nasa-istoria.blagorussia.ru
 
-# Разрешаем ресурсы для рендеринга
-User-agent: *
-Allow: /css/
-Allow: /js/
-Allow: /shared-assets/
-Allow: /images/
+# ═══════════════════════════════════════════════════════════════
+# ГЛОБАЛЬНЫЕ ПРАВИЛА ДЛЯ ВСЕХ БОТОВ
+# ═══════════════════════════════════════════════════════════════
 
-# ИИ-краулерам тоже запрет
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /internal/
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=*&sort=
+Crawl-delay: 1
+
+# ═══════════════════════════════════════════════════════════════
+# ИИ-ПОИСКОВИКИ (GEO Readiness)
+# Явное разрешение на индексацию для цитирования в LLM
+# Источник: САМ п. 3.5, САН п. 7.2.5
+# ═══════════════════════════════════════════════════════════════
+
+# OpenAI (ChatGPT, GPT-4)
 User-agent: GPTBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /admin/
 
+# OpenAI (поиск в ChatGPT)
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+
+# Anthropic (Claude)
 User-agent: ClaudeBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /admin/
 
+# Anthropic (веб-краулер)
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+
+# Perplexity AI
 User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Google (Gemini, AI Overviews)
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Google (стандартный поиск)
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Яндекс (Нейро и стандартный поиск)
+User-agent: Yandex
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Яндекс (дополнительный бот для ИИ-сервисов)
+User-agent: YandexAdditional
+Allow: /
+
+# Bing (Copilot AI)
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Bing (AI-поиск)
+User-agent: adidxbot
+Allow: /
+Disallow: /api/
+
+# Common Crawl (исследовательский)
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+
+# Apple (Siri, Spotlight)
+User-agent: Applebot
+Allow: /
+Disallow: /api/
+
+# ByteDance (TikTok Search)
+User-agent: Bytespider
+Allow: /
+Disallow: /api/
+
+# ═══════════════════════════════════════════════════════════════
+# БЛОКИРОВКА НЕЖЕЛАТЕЛЬНЫХ БОТОВ
+# ═══════════════════════════════════════════════════════════════
+
+# Боты, собирающие данные для обучения без разрешения
+User-agent: PetalBot
 Disallow: /
 
-User-agent: YandexAdditional
+User-agent: meta-externalagent
 Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+# ═══════════════════════════════════════════════════════════════
+# SITEMAP
+# ═══════════════════════════════════════════════════════════════
+
+Sitemap: https://blagorussia.ru/sitemap-index.xml
+Sitemap: https://obrazslov.ru/sitemap-index.xml
+Sitemap: https://partnerstvo.blagorussia.ru/sitemap-index.xml
+Sitemap: https://grekpanteon.obrazslov.ru/sitemap-index.xml
+Sitemap: https://can.blagorussia.ru/sitemap-index.xml
+Sitemap: https://gallery.obrazslov.ru/sitemap.xml
+Sitemap: https://obavlenia.blagorussia.ru/sitemap-index.xml
+Sitemap: https://interesnye-mesta.obrazslov.ru/sitemap-index.xml
+Sitemap: https://ot-gorozan.blagorussia.ru/sitemap-index.xml
+Sitemap: https://novosti.blagorussia.ru/sitemap-index.xml
+Sitemap: https://moisites.blagorussia.ru/sitemap-index.xml
+Sitemap: https://joga.blagorussia.ru/sitemap-index.xml
+Sitemap: https://ideologia.obrazslov.ru/sitemap-index.xml
+Sitemap: https://nasa-istoria.blagorussia.ru/sitemap-index.xml
+
+# ═══════════════════════════════════════════════════════════════
+# ПРИМЕЧАНИЯ
+# ═══════════════════════════════════════════════════════════════
+#
+# 1. Файл ai-hints.txt содержит дополнительные инструкции для ИИ-краулеров
+#    о порядке цитирования материалов (с обязательной обратной ссылкой).
+#
+# 2. Cloudflare WAF настроен на явное ALLOW для GPTBot, ClaudeBot,
+#    PerplexityBot, YandexAdditional, Google-Extended (JS Challenge = OFF).
+#
+# 3. Для can.blagorussia.ru (САН) дополнительно защищается реляционное ядро
+#    через Circuit Breaker при пуле соединений Supabase ≥ 15.
+#
+# 4. Обновления файла синхронизируются через shared-assets/seo/robots.txt
+#    и применяются ко всем 14 доменам экосистемы.
+#
+# Контакты: blagorussia@yandex.ru
+# Политика конфиденциальности: /p/privacy-policy.html
