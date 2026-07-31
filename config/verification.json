@@ -1,20 +1,20 @@
 {
-  "description": "Файлы верификации в поисковых системах",
-  "version": "1.0",
-  "domains": {
-    "blagorussia.ru": {
-      "yandex": "yandex_XXXXX.html",
-      "google": "googleXXXXX.html",
-      "bing": "BingSiteAuth.xml",
-      "mail": "mail_XXXXX.html"
-    },
-    "obrazslov.ru": {
-      "yandex": "yandex_XXXXX.html",
-      "google": "googleXXXXX.html"
-    }
+  "domains": [
+    "blagorussia.ru", "obrazslov.ru", "partnerstvo.blagorussia.ru",
+    "grekpanteon.obrazslov.ru", "can.blagorussia.ru", "gallery.obrazslov.ru",
+    "obavlenia.blagorussia.ru", "interesnye-mesta.obrazslov.ru", "ot-gorozan.blagorussia.ru",
+    "novosti.blagorussia.ru", "moisites.blagorussia.ru", "joga.blagorussia.ru",
+    "ideologia.obrazslov.ru", "nasa-istoria.blagorussia.ru"
+  ],
+  "verification_files": {
+    "yandex": "yandex_XXXXX.html",
+    "google": "googleXXXXX.html",
+    "bing": "BingSiteAuth.xml",
+    "mail": "mail_XXXXX.html"
   },
   "dns_txt_records": {
     "yandex": "yandex-verification: XXXXX",
-    "google": "google-site-verification: XXXXX"
+    "google": "google-site-verification: XXXXX",
+    "bing": "MS=msXXXXX"
   }
 }
