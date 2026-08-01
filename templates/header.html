@@ -1,0 +1,64 @@
+<header class="site-header" role="banner">
+  <div class="header-container">
+    <div class="logo">
+      <a href="/" aria-label="{{ site_name }} - Главная">
+        <img src="/shared-assets/images/logo-{{ site_id }}.svg" 
+             alt="{{ site_name }}" 
+             width="200" 
+             height="50"
+             loading="eager">
+      </a>
+    </div>
+    
+    <nav class="main-nav" role="navigation" aria-label="Основная навигация">
+      <button class="nav-toggle" 
+              aria-expanded="false" 
+              aria-controls="nav-menu"
+              aria-label="Открыть меню">
+        <span class="nav-toggle-icon"></span>
+      </button>
+      
+      <ul id="nav-menu" class="nav-menu">
+        {% for item in navigation %}
+          <li class="nav-item">
+            <a href="{{ item.url }}" 
+               class="nav-link {% if item.active %}active{% endif %}"
+               {% if item.external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+              {{ item.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    
+    <div class="header-actions">
+      <button class="theme-toggle" 
+              aria-label="Переключить тему"
+              title="Переключить светлую/тёмную тему">
+        <span class="theme-icon-light">☀️</span>
+        <span class="theme-icon-dark">🌙</span>
+      </button>
+      
+      {% if search_enabled %}
+        <button class="search-toggle" 
+                aria-label="Поиск по сайту"
+                title="Поиск">
+          🔍
+        </button>
+      {% endif %}
+    </div>
+  </div>
+  
+  {% if search_enabled %}
+    <div class="search-panel" hidden>
+      <form action="/search" method="get" role="search">
+        <input type="search" 
+               name="q" 
+               placeholder="Поиск по сайту..." 
+               aria-label="Поисковый запрос"
+               autocomplete="off">
+        <button type="submit">Найти</button>
+      </form>
+    </div>
+  {% endif %}
+</header>
