@@ -33,8 +33,6 @@ WHERE ST_DWithin(
   $max_distance_km * 1000
 );
 
-Формула скора
-
 Итоговый скор = Базовое значение (расстояние) ×
   Коэф_рейтинга × Коэф_нагрузки × Коэф_специализации × Коэф_бонуса
 
@@ -73,124 +71,144 @@ lead_selection_mode
 
 ---
 
-## 📦 ЧАСТЬ B: Python-скрипты (11 файлов)
+## 📦 ЧАСТЬ B: Python-скрипты (10 файлов)
 
-### Файл B.1: `scripts/image_sanitizer.py`
-
-**Источник требования**: САМ v1.3 п. 2.5, СУМКа v1.5 п. 5.6
+### Файл B.1: `scripts/image_source_extractor.py`
 
 ```python
 #!/usr/bin/env python3
 """
-Image Sanitization Pipeline — 5-этапная обработка изображений
-Источник: САМ v1.3 п. 2.5, СУМКа v1.5 п. 5.6
-Протокол: SAM-26-А, SUMKA-22-Б
+Извлечение атрибуции изображений для grekpanteon.obrazslov.ru
+Источник: Грек-Пантеон v1.4 п. 4.3, п. 7.1
+Протокол: GP-2607-003
 """
 
-import os
-import argparse
+import sqlite3
+import json
+import requests
 import logging
-from pathlib import Path
-from PIL import Image
-import imagehash
-import subprocess
+import argparse
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class ImageSanitizer:
-    """5-этапный конвейер обработки изображений."""
+class ImageSourceExtractor:
+    """Извлечение источника изображения из БД + Wikidata API."""
     
-    def __init__(self, sizes=(400, 800, 1200, 1600), format='webp', quality=85):
-        self.sizes = sizes
-        self.format = format
-        self.quality = quality
-        self.hashes = {}
+    def __init__(self, db_path: str):
+        self.db_path = db_path
+        self.conn = sqlite3.connect(db_path)
     
-    def sanitize(self, input_path: Path, output_dir: Path, watermark=False):
-        """Полный 5-этапный конвейер."""
-        logger.info(f"Обработка: {input_path}")
+    def extract(self, character_id: int) -> dict:
+        """Извлечение атрибуции для персонажа."""
+        # Уровень 1: Google Таблица (основной)
+        source = self._get_from_db(character_id)
         
-        # Этап 1: EXIF-очистка
-        self._clean_exif(input_path)
+        # Уровень 2: Wikidata API (обогащение)
+        if source.get('wikidata_id'):
+            wikidata_data = self._get_from_wikidata(source['wikidata_id'])
+            source.update(wikidata_data)
         
-        # Этап 2-3: Конвертация и ресайз
-        img = Image.open(input_path)
+        # Уровень 3: Ручная атрибуция (для фото Боброва А.В.)
+        if source.get('photographer') == 'Бобров А.В.':
+            source['author'] = 'Бобров Александр Валентинович'
+            source['license'] = 'https://creativecommons.org/licenses/by-sa/4.0/'
         
-        for size in self.sizes:
-            resized = img.copy()
-            resized.thumbnail((size, size), Image.Resampling.LANCZOS)
-            
-            output_path = output_dir / f"{input_path.stem}_{size}.{self.format}"
-            
-            if self.format == 'webp':
-                resized.save(output_path, 'WEBP', quality=self.quality)
-            else:
-                resized.save(output_path, 'AVIF', quality=self.quality)
-            
-            # Этап 4: Детекция дубликатов
-            img_hash = imagehash.phash(resized)
-            if self._is_duplicate(img_hash):
-                logger.warning(f"Дубликат обнаружен: {output_path}")
-                output_path.unlink()
-                continue
-            
-            self.hashes[str(output_path)] = img_hash
-            
-            # Этап 5: Водяной знак (опционально)
-            if watermark:
-                self._apply_watermark(output_path)
-        
-        logger.info(f"✅ Завершено: {input_path.name}")
+        return self._generate_json_ld(source)
     
-    def _clean_exif(self, path: Path):
-        """Этап 1: Удаление EXIF-данных."""
+    def _get_from_db(self, character_id: int) -> dict:
+        """Уровень 1: Извлечение из БД."""
+        cursor = self.conn.execute(
+            "SELECT source_id, wikidata_id FROM characters WHERE id = ?",
+            (character_id,)
+        )
+        row = cursor.fetchone()
+        if not row:
+            return {}
+        
+        source_id, wikidata_id = row
+        
+        cursor = self.conn.execute(
+            "SELECT external_url, author_name, license_url FROM sources WHERE id = ?",
+            (source_id,)
+        )
+        source_row = cursor.fetchone()
+        
+        return {
+            'contentUrl': f"https://grekpanteon.obrazslov.ru/images/{character_id}.webp",
+            'source': source_row[0] if source_row else None,
+            'author': source_row[1] if source_row else 'Неизвестен',
+            'license': source_row[2] if source_row else 'https://creativecommons.org/licenses/by-sa/4.0/',
+            'wikidata_id': wikidata_id
+        }
+    
+    def _get_from_wikidata(self, wikidata_id: str) -> dict:
+        """Уровень 2: Обогащение через Wikidata API."""
         try:
-            subprocess.run(
-                ['exiftool', '-all=', str(path), '-overwrite_original'],
-                check=True, capture_output=True
-            )
-        except subprocess.CalledProcessError as e:
-            logger.error(f"Ошибка EXIF-очистки: {e}")
+            url = f"https://www.wikidata.org/wiki/Special:EntityData/{wikidata_id}.json"
+            response = requests.get(url, timeout=10)
+            data = response.json()
+            
+            entity = data['entities'][wikidata_id]
+            claims = entity.get('claims', {})
+            
+            result = {}
+            
+            # wdt:P18 — изображение
+            if 'P18' in claims:
+                image_claim = claims['P18'][0]
+                image_filename = image_claim['mainsnak']['datavalue']['value']
+                result['wikimedia_url'] = f"https://commons.wikimedia.org/wiki/File:{image_filename}"
+            
+            # wdt:P551 — место жительства
+            if 'P551' in claims:
+                residence_claim = claims['P551'][0]
+                result['residence_id'] = residence_claim['mainsnak']['datavalue']['value']['id']
+            
+            return result
+        except Exception as e:
+            logger.error(f"Ошибка Wikidata API: {e}")
+            return {}
     
-    def _is_duplicate(self, new_hash, threshold=10):
-        """Этап 4: Проверка на дубликат по Hamming distance."""
-        for existing_hash in self.hashes.values():
-            if new_hash - existing_hash < threshold:
-                return True
-        return False
+    def _generate_json_ld(self, source: dict) -> dict:
+        """Генерация JSON-LD ImageObject."""
+        return {
+            "@type": "ImageObject",
+            "contentUrl": source.get('contentUrl'),
+            "author": {
+                "@type": "Person",
+                "name": source.get('author', 'Неизвестен')
+            },
+            "license": source.get('license', 'https://creativecommons.org/licenses/by-sa/4.0/'),
+            "source": source.get('source')
+        }
     
-    def _apply_watermark(self, path: Path):
-        """Этап 5: Наложение водяного знака."""
-        # Реализация зависит от требований проекта
-        logger.info(f"Водяной знак: {path}")
+    def close(self):
+        self.conn.close()
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Image Sanitization Pipeline')
-    parser.add_argument('--input', required=True, help='Входная директория')
-    parser.add_argument('--output', required=True, help='Выходная директория')
-    parser.add_argument('--sizes', default='400,800,1200,1600', help='Размеры через запятую')
-    parser.add_argument('--format', default='webp', choices=['webp', 'avif'])
-    parser.add_argument('--quality', type=int, default=85)
-    parser.add_argument('--watermark', action='store_true')
-    
+    parser = argparse.ArgumentParser(description='Извлечение атрибуции изображений')
+    parser.add_argument('--db', required=True, help='Путь к БД')
+    parser.add_argument('--character-id', type=int, required=True)
+    parser.add_argument('--output', help='Выходной JSON-файл')
     args = parser.parse_args()
     
-    sizes = tuple(map(int, args.sizes.split(',')))
-    sanitizer = ImageSanitizer(sizes=sizes, format=args.format, quality=args.quality)
+    extractor = ImageSourceExtractor(args.db)
+    result = extractor.extract(args.character_id)
+    extractor.close()
     
-    input_dir = Path(args.input)
-    output_dir = Path(args.output)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output = json.dumps(result, ensure_ascii=False, indent=2)
     
-    for image_path in input_dir.glob('*.*'):
-        if image_path.suffix.lower() in ['.jpg', '.jpeg', '.png', '.webp']:
-            sanitizer.sanitize(image_path, output_dir, watermark=args.watermark)
+    if args.output:
+        with open(args.output, 'w', encoding='utf-8') as f:
+            f.write(output)
+        logger.info(f"✅ Результат сохранён: {args.output}")
+    else:
+        print(output)
 
 
 if __name__ == '__main__':
     main()
-
 
