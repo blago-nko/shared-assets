@@ -1,0 +1,42 @@
+/**
+ * Тема для ot-gorozan.blagorussia.ru
+ * Городские истории и мнения жителей
+ * САМ v1.3 п. 1.6.1
+ */
+
+:root {
+  --primary-color: #5d4037;
+  --primary-dark: #3e2723;
+  --primary-light: #795548;
+  --secondary-color: #ff7043;
+  --accent-color: #ffab91;
+  --bg-color: #fafafa;
+  --bg-secondary: #efebe9;
+  --bg-tertiary: #d7ccc8;
+  --text-color: #212121;
+  --text-muted: #6d4c41;
+  --text-light: #ffffff;
+  --border-color: #bcaaa4;
+  --border-radius: 4px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.site-ot-gorozan .site-header {
+  background: var(--primary-color);
+  color: var(--text-light);
+}
+
+.site-ot-gorozan .article-title {
+  color: var(--primary-dark);
+  font-family: Georgia, serif;
+}
+
+.site-ot-gorozan .btn-primary {
+  background-color: var(--secondary-color);
+}
+
+.site-ot-gorozan .btn-primary:hover {
+  background-color: var(--primary-dark);
+}
