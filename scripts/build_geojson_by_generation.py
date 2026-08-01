@@ -16,7 +16,6 @@ def build_geojson(db_path: str, output_dir: Path, generation: int = None):
     conn = sqlite3.connect(db_path)
     output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Получение локаций с персонажами
     if generation:
         cursor = conn.execute("""
             SELECT DISTINCT l.id, l.name, l.latitude, l.longitude, l.type
@@ -32,7 +31,6 @@ def build_geojson(db_path: str, output_dir: Path, generation: int = None):
     
     locations = cursor.fetchall()
     
-    # Генерация GeoJSON
     geojson = {
         "type": "FeatureCollection",
         "features": []
@@ -53,7 +51,6 @@ def build_geojson(db_path: str, output_dir: Path, generation: int = None):
         }
         geojson["features"].append(feature)
     
-    # Запись файла
     filename = f"geojson_generation_{generation}.json" if generation else "geojson_all.json"
     output_path = output_dir / filename
     output_path.write_text(
