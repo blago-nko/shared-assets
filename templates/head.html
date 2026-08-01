@@ -1,6 +1,77 @@
-<!-- Единый favicon для всей экосистемы -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- SEO Meta Tags -->
+<title>{% block title %}{{ page_title }} | {{ site_name }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ page_description }}{% endblock %}">
+<meta name="keywords" content="{% block keywords %}{{ page_keywords }}{% endblock %}">
+<meta name="author" content="{{ page_author | default('Бобров Александр Валентинович') }}">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ canonical_url }}">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_description }}">
+<meta property="og:image" content="{{ og_image | default('/shared-assets/images/og-default.jpg') }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ og_image_alt | default(page_title) }}">
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:locale" content="ru_RU">
+{% if article_published_time %}
+<meta property="article:published_time" content="{{ article_published_time }}">
+{% endif %}
+{% if article_modified_time %}
+<meta property="article:modified_time" content="{{ article_modified_time }}">
+{% endif %}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:description" content="{{ page_description }}">
+<meta name="twitter:image" content="{{ og_image | default('/shared-assets/images/og-default.jpg') }}">
+
+<!-- Google Discover -->
+<meta name="robots" content="max-image-preview:large">
+
+<!-- AI Hints для ИИ-поисковиков -->
+<link rel="ai-instructions" href="/ai-hints.txt">
+
+<!-- CSS Variables и темы -->
+<link rel="stylesheet" href="/shared-assets/css/variables.css">
+<link rel="stylesheet" href="/shared-assets/css/base.css">
+<link rel="stylesheet" href="/shared-assets/css/layout.css">
+<link rel="stylesheet" href="/shared-assets/css/components.css">
+<link rel="stylesheet" href="/shared-assets/css/navigation.css">
+<link rel="stylesheet" href="/shared-assets/css/mobile.css">
+<link rel="stylesheet" href="/shared-assets/css/print.css" media="print">
+
+<!-- Тема конкретного сайта -->
+<link rel="stylesheet" href="/shared-assets/css/themes/{{ site_theme }}.css">
+
+<!-- JSON-LD разметка -->
+{% block jsonld %}{% endblock %}
+
+<!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="/shared-assets/favicons/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="/shared-assets/favicons/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/shared-assets/favicons/favicon-32x32.png">
-<link rel="apple-touch-icon" href="/shared-assets/favicons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/shared-assets/favicons/apple-touch-icon.png">
 <link rel="manifest" href="/shared-assets/favicons/site.webmanifest">
+
+<!-- Preconnect для внешних ресурсов -->
+<link rel="preconnect" href="https://mc.yandex.ru">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://mc.yandex.ru">
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+
+<!-- Critical CSS для быстрого LCP -->
+<style>
+  /* Inline critical CSS для Hero-секции */
+  .hero-image { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; }
+  .sticky-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; }
+</style>
