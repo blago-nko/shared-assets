@@ -1,22 +1,94 @@
 {
-  "description": "Маршрутизация хранения изображений",
   "version": "1.0",
-  "storage": {
+  "updated": "2026-08-01T00:00:00Z",
+  "protocol": "SAM-26-А",
+  "description": "Маршрутизация хранения медиа согласно эволюционной модели (Blogger + R2)",
+  
+  "storage_layers": {
     "blogger": {
-      "enabled": true,
-      "max_size_px": 2048,
-      "formats": ["webp", "avif"],
-      "purpose": "Основное хранилище (безлимит)"
+      "role": "primary",
+      "provider": "Blogger (Google)",
+      "cost": "0 ₽ (безлимит при ресайзе ≤2048px)",
+      "max_dimension": 1600,
+      "note": "Обязательный ресайз ≤1600px для активации безлимита Google",
+      "usage": [
+        "Все изображения экосистемы (САН, Пантеон, RSS-сайты, gallery)",
+        "Вечный архив (Stage 1+)",
+        "Основное хранилище (Stage -1/0)"
+      ]
     },
     "r2": {
-      "enabled": true,
-      "max_size_gb": 10,
-      "purpose": "Только PDF и медиа-паспорта"
+      "role": "secondary",
+      "provider": "Cloudflare R2",
+      "cost": "0 ₽ до 10 ГБ, затем $0.015/ГБ/мес",
+      "usage": [
+        "PDF-документы",
+        "media_passport.json.gz (перцептивные хеши изображений)",
+        "LCP-ускорение карточек САН (Stage 1+)"
+      ],
+      "forbidden": [
+        "Видеофайлы (категорический запрет, САН V20.6)"
+      ]
+    },
+    "minio": {
+      "role": "warm",
+      "provider": "Self-hosted MinIO (S3-совместимое)",
+      "usage": [
+        "Сырые парсинги (JSON.gz)",
+        "История цен (в JSON-объектах)",
+        "Инфраструктурные паспорта",
+        "Отзывы (полные тексты)"
+      ]
     }
   },
-  "routing": {
-    "images": "blogger",
-    "pdf": "r2",
-    "media_passport": "r2"
+  
+  "routing_rules": {
+    "images": {
+      "stage_minus_1": "blogger",
+      "stage_0": "blogger",
+      "stage_1": {
+        "primary": "blogger",
+        "lcp_acceleration": "r2"
+      },
+      "stage_2": {
+        "primary": "blogger",
+        "lcp_acceleration": "r2+cdn"
+      }
+    },
+    "pdf": {
+      "all_stages": "r2"
+    },
+    "video": {
+      "all_stages": "external_platforms",
+      "platforms": ["vk_video", "rutube", "dzen", "youtube"],
+      "note": "Хранение в R2 и MinIO КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО (САН V20.6)"
+    },
+    "media_passport": {
+      "all_stages": "r2"
+    },
+    "raw_data": {
+      "all_stages": "minio"
+    }
+  },
+  
+  "migration": {
+    "emergency_script": "scripts/migrate_blogger_to_r2.py",
+    "backup_workflow": ".github/workflows/backup_blogger_metadata.yml",
+    "backup_file": "shared-assets/blogger_image_metadata.json",
+    "backup_frequency": "weekly (Sunday 03:00 UTC)",
+    "trigger": "manual (Архитектурный Комитет)"
+  },
+  
+  "gallery_obrazslov": {
+    "domain": "gallery.obrazslov.ru",
+    "platform": "Blogger",
+    "images_per_page": 50,
+    "navigation": "labels (теги)",
+    "total_capacity": {
+      "san": { "objects": 100000, "images": 800000, "pages": 16000 },
+      "grekpanteon": { "objects": 16505, "images": 24758, "pages": 496 },
+      "rss_sites": { "objects": 3000, "images": 6000, "pages": 120 },
+      "total": { "images": 830758, "pages": 16616, "size_gb": 166 }
+    }
   }
 }
