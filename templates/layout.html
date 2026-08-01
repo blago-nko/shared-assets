@@ -1,49 +1,51 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}} | {{site_name}}</title>
-
-    <!-- ⛔ ВРЕМЕННО: ЗАПРЕТ ИНДЕКСАЦИИ -->
-    <meta name="robots" content="noindex, nofollow">
-
-    <link rel="stylesheet" href="/shared-assets/css/base.css">
-    <link rel="stylesheet" href="/shared-assets/css/mobile.css">
-    <link rel="stylesheet" href="/shared-assets/css/themes/{{theme}}.css">
+  {% include "head.html" %}
 </head>
-<body>
-    <header class="site-header">
-        <div class="container">
-            <div class="logo"><a href="/">{{site_name}}</a></div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="/">Главная</a></li>
-                    <li><a href="/about.html">О нас</a></li>
-                    <li><a href="/contacts.html">Контакты</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <div class="container">
-            {{content}}
-        </div>
-    </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 НП «Общественное благополучие Воронежа»</p>
-            <p>blagorussia@yandex.ru</p>
-            <div id="social-links"></div>
-        </div>
-    </footer>
-
-    <div id="sticky-bottom-bar"></div>
-
-    <script src="/shared-assets/js/main.js"></script>
-    <script src="/shared-assets/components/StickyBottomBar.js"></script>
-    <script src="/shared-assets/components/SocialLinks.js"></script>
+<body class="site-{{ site_id }}">
+  <a href="#main-content" class="skip-link">Перейти к содержимому</a>
+  
+  {% include "header.html" %}
+  
+  <main id="main-content" class="main-content">
+    {% block breadcrumbs %}
+      {% include "breadcrumbs.html" %}
+    {% endblock %}
+    
+    <div class="content-wrapper">
+      {% block content %}
+        <!-- Основной контент страницы -->
+      {% endblock %}
+      
+      {% block sidebar %}
+        {% include "sidebar.html" %}
+      {% endblock %}
+    </div>
+  </main>
+  
+  {% include "footer.html" %}
+  
+  {% include "sticky-bottom-bar.html" %}
+  
+  <!-- Единый favicon для всей экосистемы -->
+  <link rel="icon" type="image/x-icon" href="/shared-assets/favicons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/shared-assets/favicons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/shared-assets/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/shared-assets/favicons/apple-touch-icon.png">
+  <link rel="manifest" href="/shared-assets/favicons/site.webmanifest">
+  
+  <!-- Базовые скрипты -->
+  <script src="/shared-assets/js/main.js" defer></script>
+  <script src="/shared-assets/js/navigation.js" defer></script>
+  <script src="/shared-assets/js/lazy-load.js" defer></script>
+  <script src="/shared-assets/js/analytics.js" defer></script>
+  
+  <!-- Компоненты -->
+  <script src="/shared-assets/components/StickyBottomBar.js" defer></script>
+  <script src="/shared-assets/components/ThemeSwitcher.js" defer></script>
+  <script src="/shared-assets/components/CookieConsent.js" defer></script>
+  
+  {% block scripts %}{% endblock %}
 </body>
 </html>
