@@ -1,0 +1,46 @@
+/**
+ * Тема для interesnye-mesta.obrazslov.ru
+ * Путешествия и достопримечательности
+ * САМ v1.3 п. 1.6.1
+ * ⚠️ ОСОБОЕ ПРАВИЛО: ОБЯЗАТЕЛЬНО фото Боброва А.В. с водяным знаком (СУМКа п. 5.6)
+ */
+
+:root {
+  --primary-color: #00695c;
+  --primary-dark: #004d40;
+  --primary-light: #00897b;
+  --secondary-color: #00bcd4;
+  --accent-color: #ffeb3b;
+  --bg-color: #ffffff;
+  --bg-secondary: #e0f2f1;
+  --bg-tertiary: #b2dfdb;
+  --text-color: #1b1b1b;
+  --text-muted: #546e7a;
+  --text-light: #ffffff;
+  --border-color: #80cbc4;
+  --border-radius: 8px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.site-interesnye-mesta {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.site-interesnye-mesta .site-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--text-light);
+}
+
+.site-interesnye-mesta .article-title {
+  color: var(--primary-dark);
+}
+
+.site-interesnye-mesta .btn-primary {
+  background-color: var(--primary-color);
+}
+
+.site-interesnye-mesta .btn-primary:hover {
+  background-color: var(--primary-dark);
+}
