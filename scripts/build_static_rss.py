@@ -19,18 +19,13 @@ def build_static_rss(feed_url: str, output_dir: Path, site_id: str):
     feed = feedparser.parse(feed_url)
     
     for entry in feed.entries:
-        # Извлечение данных
         title = entry.title
         content = entry.content[0].value if hasattr(entry, 'content') else entry.summary
         published = datetime(*entry.published_parsed[:6])
         
-        # Генерация slug
         slug = _generate_slug(title)
-        
-        # Генерация HTML
         html = _generate_html(title, content, published, slug, site_id)
         
-        # Запись файла
         output_path = output_dir / f"{slug}.html"
         output_path.write_text(html, encoding='utf-8')
         
