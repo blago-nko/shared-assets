@@ -43,6 +43,26 @@
     <lastmod>2026-08-01</lastmod>
   </sitemap>
   <sitemap>
+
+4. Запуск скрипта
+
+python scripts/generate_sitemaps.py \
+  --db-path ./data/grekpanteon.db \
+  --output-dir ./public/sitemaps/ \
+  --batch-size 5000 \
+  --base-url https://grekpanteon.obrazslov.ru
+
+5. Автоматический ping
+
+python scripts/ping_search_engines.py \
+  --sitemap https://grekpanteon.obrazslov.ru/sitemap-index.xml \
+  --domain grekpanteon.obrazslov.ru
+
+Связанные документы:
+САМ v1.3 п. 7.2.8
+СУМКа v1.5 п. 8.5
+Манифест САН V21.4 п. 11.34
+Манифест Грек-Пантеон v1.4 п. 5.2
     <loc>https://grekpanteon.obrazslov.ru/sitemap-historical-characters-001.xml</loc>
     <lastmod>2026-08-01</lastmod>
   </sitemap>
