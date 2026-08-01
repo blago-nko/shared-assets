@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "updated": "2026-08-01T00:00:00Z",
+  "protocol": "MIG-2607-003",
+  "description": "Очередь статей для ИИ-оптимизации slug (сжатие до 5-6 ключевых слов)",
+  
+  "queue": [
+    {
+      "id": "slug-001",
+      "site_id": "blagorussia.ru",
+      "original_slug": "o-vazhnosti-obsuzhdeniya-socialnyh-problem-v-sovremennom-obshchestve",
+      "optimized_slug": "socialnye-problemy-obsuzhdenie",
+      "status": "pending",
+      "priority": "high",
+      "created_at": "2026-08-01T00:00:00Z"
+    },
+    {
+      "id": "slug-002",
+      "site_id": "obrazslov.ru",
+      "original_slug": "istoricheskoe-znachenie-drevnegrecheskoy-mifologii-dlya-sovremennoy-kultury",
+      "optimized_slug": "drevnegrecheskaya-mifologiya-znachenie",
+      "status": "pending",
+      "priority": "medium",
+      "created_at": "2026-08-01T00:00:00Z"
+    }
+  ],
+  
+  "optimization_rules": {
+    "max_words": 6,
+    "min_words": 3,
+    "forbidden_words": ["o", "v", "na", "dlya", "i", "a"],
+    "ai_model": "gemini-pro",
+    "score_threshold": 8
+  },
+  
+  "statistics": {
+    "total_articles": 15000,
+    "optimized": 0,
+    "pending": 15000,
+    "failed": 0
+  }
+}
