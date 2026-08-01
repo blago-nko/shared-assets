@@ -1,0 +1,72 @@
+{
+  "version": "1.1",
+  "updated": "2026-08-01T00:00:00Z",
+  "protocol": "SAM-2607-003",
+  "description": "Файлы верификации поисковых систем для всех 14 доменов экосистемы",
+  
+  "domains": [
+    "blagorussia.ru",
+    "obrazslov.ru",
+    "partnerstvo.blagorussia.ru",
+    "grekpanteon.obrazslov.ru",
+    "can.blagorussia.ru",
+    "gallery.obrazslov.ru",
+    "obavlenia.blagorussia.ru",
+    "interesnye-mesta.obrazslov.ru",
+    "ot-gorozan.blagorussia.ru",
+    "novosti.blagorussia.ru",
+    "moisites.blagorussia.ru",
+    "joga.blagorussia.ru",
+    "ideologia.obrazslov.ru",
+    "nasa-istoria.blagorussia.ru"
+  ],
+  
+  "verification_files": {
+    "yandex": "yandex_XXXXX.html",
+    "google": "googleXXXXX.html",
+    "bing": "BingSiteAuth.xml",
+    "mail": "mail_XXXXX.html"
+  },
+  
+  "dns_txt_records": {
+    "yandex": "yandex-verification: XXXXX",
+    "google": "google-site-verification: XXXXX",
+    "bing": "MS=msXXXXX",
+    "mail": "mail-verification: XXXXX"
+  },
+  
+  "accounts": {
+    "yandex_webmaster": {
+      "email": "webmaster@blagorussia.ru",
+      "provider": "Яндекс 360 для НКО (бесплатно)",
+      "mandatory": true
+    },
+    "google_search_console": {
+      "email": "Личный Gmail А.В. Боброва",
+      "provider": "Google Workspace для .ru недоступен с марта 2022",
+      "mandatory": true
+    },
+    "bing_webmaster": {
+      "email": "Личный Microsoft-аккаунт",
+      "provider": "Единый для всех систем",
+      "mandatory": "desirable"
+    },
+    "mail_webmaster": {
+      "email": "webmaster@blagorussia.ru",
+      "provider": "Корпоративная почта НКО",
+      "mandatory": "desirable"
+    },
+    "baidu_webmaster": {
+      "email": "—",
+      "provider": "Только при экспансии в Китай",
+      "mandatory": "optional",
+      "scope": "can.blagorussia.ru only"
+    }
+  },
+  
+  "additional": {
+    "webmaster_team": "webmaster-team@blagorussia.ru",
+    "access": "А.В. Бобров + 2 членов Архитектурного Комитета",
+    "backup_location": "shared-assets/config/search_console_backups/"
+  }
+}
