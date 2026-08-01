@@ -37,7 +37,7 @@ def generate_causal_links(db_path: str, character_id: int):
     causal_links = [
         {
             'cause_character_id': character_id,
-            'effect_character_id': 2,  # Пример
+            'effect_character_id': 2,
             'event_description': f'{name} спровоцировал событие X',
             'causal_type': 'triggered',
             'confidence_score': 0.85
