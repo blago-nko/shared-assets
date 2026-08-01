@@ -1,0 +1,100 @@
+{
+  "version": "1.0",
+  "updated": "2026-08-01T00:00:00Z",
+  "protocol": "SUMKA-2607-001",
+  "description": "Начальный seed-список групп для СУМКа (Stage 0)",
+  
+  "communities": [
+    {
+      "id": "vk_npo_main",
+      "platform": "vk",
+      "community_id": "blagorussia",
+      "name": "НП «Общественное благополучие» — официальная группа",
+      "is_owned": true,
+      "topics": [1, 2, 3],
+      "status": "active",
+      "limits": {
+        "posts_per_day": 5,
+        "share_from_single_site": "unlimited",
+        "share_from_all_sites": "80%"
+      }
+    },
+    {
+      "id": "tg_npo_main",
+      "platform": "telegram",
+      "community_id": "blagorussia",
+      "name": "Общественное благополучие — Telegram-канал",
+      "is_owned": true,
+      "topics": [1, 2, 3],
+      "status": "active",
+      "limits": {
+        "posts_per_day": 10,
+        "share_from_single_site": "unlimited",
+        "share_from_all_sites": "80%"
+      }
+    },
+    {
+      "id": "vk_san_main",
+      "platform": "vk",
+      "community_id": "san_community",
+      "name": "САН — Сообщество Агентов Недвижимости",
+      "is_owned": true,
+      "topics": [10, 11, 12],
+      "status": "active",
+      "limits": {
+        "posts_per_day": 5,
+        "share_from_single_site": "unlimited",
+        "share_from_all_sites": "80%"
+      }
+    },
+    {
+      "id": "vk_realty_voronezh",
+      "platform": "vk",
+      "community_id": "realty_voronezh",
+      "name": "Недвижимость Воронеж",
+      "is_owned": false,
+      "topics": [10, 11],
+      "status": "pending_approval",
+      "limits": {
+        "posts_per_day": 2,
+        "share_from_single_site": "33%",
+        "share_from_all_sites": "50%"
+      }
+    },
+    {
+      "id": "ok_npo_main",
+      "platform": "ok",
+      "community_id": "blagorussia",
+      "name": "Общественное благополучие — Одноклассники",
+      "is_owned": true,
+      "topics": [1, 2, 3],
+      "status": "active"
+    },
+    {
+      "id": "dzen_npo",
+      "platform": "dzen",
+      "community_id": "blagorussia",
+      "name": "Общественное благополучие — Дзен",
+      "is_owned": true,
+      "topics": [1, 2, 3, 4],
+      "status": "active"
+    }
+  ],
+  
+  "topic_categories": {
+    "1": "Общественно-политический контент",
+    "2": "Историко-биографический контент",
+    "3": "Образование и культура",
+    "4": "Йога и здоровый образ жизни",
+    "10": "Недвижимость Воронеж",
+    "11": "Аналитика рынка недвижимости",
+    "12": "Новости САН"
+  },
+  
+  "global_limits": {
+    "total_posts_per_day": 70,
+    "cache_ttl_hours": 1,
+    "penalty_pause_days": 60,
+    "penalty_trigger": "3+ violations in 7 days"
+  }
+}
