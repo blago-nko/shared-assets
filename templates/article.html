@@ -1,0 +1,150 @@
+<article class="article" itemscope itemtype="https://schema.org/Article">
+  <header class="article-header">
+    <h1 class="article-title" itemprop="headline">{{ article.title }}</h1>
+    
+    <div class="article-meta">
+      <div class="article-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+        <img src="{{ article.author.avatar }}" 
+             alt="{{ article.author.name }}" 
+             class="author-avatar"
+             width="40"
+             height="40"
+             loading="lazy">
+        <div class="author-info">
+          <a href="{{ article.author.url }}" itemprop="url" class="author-name">
+            <span itemprop="name">{{ article.author.name }}</span>
+          </a>
+          <span class="author-role">{{ article.author.role }}</span>
+        </div>
+      </div>
+      
+      <time class="article-date" datetime="{{ article.published_date }}" itemprop="datePublished">
+        {{ article.published_date | date('d.m.Y') }}
+      </time>
+      
+      {% if article.modified_date %}
+        <time class="article-modified" datetime="{{ article.modified_date }}" itemprop="dateModified">
+          Обновлено: {{ article.modified_date | date('d.m.Y') }}
+        </time>
+      {% endif %}
+      
+      <span class="article-reading-time">
+        {{ article.reading_time }} мин. чтения
+      </span>
+    </div>
+    
+    <!-- Раскрытие конфликта интересов (для аналитических статей) -->
+    {% if article.conflict_of_interest %}
+      <div class="conflict-disclosure" role="note">
+        <strong>⚠️ Раскрытие интересов:</strong> {{ article.conflict_of_interest }}
+      </div>
+    {% endif %}
+  </header>
+  
+  <!-- Hero-изображение -->
+  {% if article.featured_image %}
+    <figure class="article-hero" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+      <img src="{{ article.featured_image.url }}" 
+           alt="{{ article.featured_image.alt }}"
+           title="{{ article.featured_image.caption }}"
+           class="hero-image"
+           width="{{ article.featured_image.width }}"
+           height="{{ article.featured_image.height }}"
+           loading="eager"
+           fetchpriority="high"
+           decoding="async"
+           itemprop="contentUrl">
+      {% if article.featured_image.caption %}
+        <figcaption class="hero-caption" itemprop="caption">
+          {{ article.featured_image.caption }}
+          {% if article.featured_image.source %}
+            <span class="image-source">
+              Источник: 
+              <a href="{{ article.featured_image.source }}" 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 itemprop="license">
+                {{ article.featured_image.source_name }}
+              </a>
+            </span>
+          {% endif %}
+        </figcaption>
+      {% endif %}
+      <meta itemprop="author" content="{{ article.featured_image.author }}">
+    </figure>
+  {% endif %}
+  
+  <!-- Основной контент статьи -->
+  <div class="article-content" itemprop="articleBody">
+    {{ article.content }}
+  </div>
+  
+  <!-- Теги статьи -->
+  {% if article.tags %}
+    <footer class="article-footer">
+      <div class="article-tags">
+        <span class="tags-label">Теги:</span>
+        <ul class="tags-list">
+          {% for tag in article.tags %}
+            <li class="tag-item">
+              <a href="{{ tag.url }}" class="tag-link">{{ tag.name }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      
+      <!-- Кнопки "Поделиться" -->
+      <div class="article-share">
+        {% include "components/ShareButtons.html" %}
+      </div>
+    </footer>
+  {% endif %}
+  
+  <!-- Блок автора -->
+  <section class="article-author-block" itemprop="author" itemscope itemtype="https://schema.org/Person">
+    <img src="{{ article.author.avatar }}" 
+         alt="{{ article.author.name }}" 
+         class="author-block-avatar"
+         width="80"
+         height="80"
+         loading="lazy">
+    <div class="author-block-info">
+      <h3 class="author-block-name" itemprop="name">{{ article.author.name }}</h3>
+      <p class="author-block-bio" itemprop="description">{{ article.author.bio }}</p>
+      <a href="{{ article.author.url }}" class="author-block-link">
+        Все публикации автора →
+      </a>
+    </div>
+  </section>
+</article>
+
+<!-- JSON-LD Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ article.title }}",
+  "description": "{{ article.description }}",
+  "image": "{{ article.featured_image.url }}",
+  "datePublished": "{{ article.published_date }}",
+  "dateModified": "{{ article.modified_date | default(article.published_date) }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ article.author.name }}",
+    "url": "{{ article.author.url }}",
+    "jobTitle": "{{ article.author.role }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site_name }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/shared-assets/images/logo-{{ site_id }}.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ canonical_url }}"
+  }
+}
+</script>
