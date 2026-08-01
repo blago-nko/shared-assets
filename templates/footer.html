@@ -1,4 +1,61 @@
-<footer>
-  <!-- Здесь может быть другой контент футера (логотип, соцсети, копирайт) -->
-  <p><a href="/shared-assets/legal/privacy-policy.html">Политика конфиденциальности</a></p>
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-container">
+    <div class="footer-section footer-about">
+      <h3>{{ site_name }}</h3>
+      <p>{{ site_description }}</p>
+      <div class="footer-contacts">
+        <a href="mailto:blagorussia@yandex.ru">blagorussia@yandex.ru</a>
+      </div>
+    </div>
+    
+    <div class="footer-section footer-links">
+      <h4>Навигация</h4>
+      <ul>
+        {% for item in footer_navigation %}
+          <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    
+    <div class="footer-section footer-social">
+      <h4>Мы в соцсетях</h4>
+      <div class="social-links">
+        {% include "components/SocialLinks.html" %}
+      </div>
+    </div>
+    
+    <div class="footer-section footer-legal">
+      <h4>Юридическая информация</h4>
+      <ul>
+        <li>
+          <a href="/p/privacy-policy.html">Политика конфиденциальности</a>
+        </li>
+        {% if site_id == 'can' %}
+          <li>
+            <a href="/p/offers/cooperation.html">Публичная оферта</a>
+          </li>
+        {% endif %}
+        <li>
+          <a href="/ai-hints.txt">Инструкции для ИИ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="footer-container">
+      <p class="copyright">
+        &copy; {{ current_year }} {{ site_name }}. 
+        Некоммерческое партнёрство «Общественное благополучие Воронежа».
+      </p>
+      <p class="license">
+        Материалы распространяются под лицензией 
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" 
+           target="_blank" 
+           rel="noopener noreferrer">
+          CC BY-SA 4.0
+        </a>
+      </p>
+    </div>
+  </div>
 </footer>
