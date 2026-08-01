@@ -1,0 +1,59 @@
+<aside class="sidebar" role="complementary">
+  {% block sidebar_content %}
+    
+    <!-- Блок "Последние статьи" -->
+    {% if recent_articles %}
+      <section class="sidebar-section sidebar-recent">
+        <h3 class="sidebar-title">Последние публикации</h3>
+        <ul class="recent-articles-list">
+          {% for article in recent_articles[:5] %}
+            <li class="recent-article-item">
+              <a href="{{ article.url }}" class="recent-article-link">
+                <span class="recent-article-title">{{ article.title }}</span>
+                <time class="recent-article-date" datetime="{{ article.date }}">
+                  {{ article.date | date('d.m.Y') }}
+                </time>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+    
+    <!-- Блок "Популярные теги" -->
+    {% if popular_tags %}
+      <section class="sidebar-section sidebar-tags">
+        <h3 class="sidebar-title">Популярные темы</h3>
+        <div class="tags-cloud">
+          {% for tag in popular_tags[:10] %}
+            <a href="{{ tag.url }}" 
+               class="tag-link" 
+               style="font-size: {{ tag.weight }}em;">
+              {{ tag.name }}
+            </a>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+    
+    <!-- Блок "Подписка на рассылку" -->
+    <section class="sidebar-section sidebar-subscribe">
+      <h3 class="sidebar-title">Подписка на обновления</h3>
+      <form action="/subscribe" method="post" class="subscribe-form">
+        <input type="email" 
+               name="email" 
+               placeholder="Ваш email" 
+               required
+               aria-label="Email для подписки">
+        <button type="submit">Подписаться</button>
+      </form>
+    </section>
+    
+    <!-- Блок "Социальные сети" -->
+    <section class="sidebar-section sidebar-social">
+      <h3 class="sidebar-title">Мы в соцсетях</h3>
+      {% include "components/SocialLinks.html" %}
+    </section>
+    
+  {% endblock %}
+</aside>
