@@ -29,7 +29,6 @@ def build_hugo(db_path: str, output_dir: Path, daily_limit: int = 200):
     characters = cursor.fetchall()
     
     for char_id, slug, name, description, char_type in characters:
-        # Генерация Markdown-файла
         content = f"""---
 title: "{name}"
 slug: "{slug}"
