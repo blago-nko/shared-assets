@@ -1,0 +1,43 @@
+{% if breadcrumbs and breadcrumbs|length > 0 %}
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol class="breadcrumbs-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+    {% for crumb in breadcrumbs %}
+      <li class="breadcrumbs-item" 
+          itemprop="itemListElement" 
+          itemscope 
+          itemtype="https://schema.org/ListItem">
+        {% if not loop.last %}
+          <a href="{{ crumb.url }}" itemprop="item" class="breadcrumbs-link">
+            <span itemprop="name">{{ crumb.title }}</span>
+          </a>
+          <meta itemprop="position" content="{{ loop.index }}">
+          <span class="breadcrumbs-separator" aria-hidden="true">›</span>
+        {% else %}
+          <span itemprop="name" class="breadcrumbs-current" aria-current="page">
+            {{ crumb.title }}
+          </span>
+          <meta itemprop="position" content="{{ loop.index }}">
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+</nav>
+
+<!-- JSON-LD BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {% for crumb in breadcrumbs %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+      "name": "{{ crumb.title }}",
+      "item": "{{ crumb.url }}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
