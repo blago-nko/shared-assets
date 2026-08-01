@@ -1,0 +1,50 @@
+/**
+ * Тема для obrazslov.ru
+ * Историко-биографическая база знаний
+ * САМ v1.3 п. 1.6.1
+ */
+
+:root {
+  /* Основные цвета - историческая тематика */
+  --primary-color: #8b4513;
+  --primary-dark: #654321;
+  --primary-light: #a0522d;
+  --secondary-color: #daa520;
+  --accent-color: #cd853f;
+  
+  /* Фоновые цвета - пергамент */
+  --bg-color: #faf8f5;
+  --bg-secondary: #f5f0e8;
+  --bg-tertiary: #ede5d8;
+  
+  /* Текст */
+  --text-color: #2c2416;
+  --text-muted: #6b5d4f;
+  --text-light: #ffffff;
+  
+  /* Границы */
+  --border-color: #d4c4a8;
+  --border-radius: 2px;
+  
+  /* Тени */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Специфичные стили для obrazslov.ru */
+.site-obrazslov {
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.site-obrazslov .site-header {
+  background: var(--bg-secondary);
+  border-bottom: 3px double var(--primary-color);
+}
+
+.site-obrazslov .article-title {
+  font-family: 'Georgia', serif;
+  color: var(--primary-dark);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5em;
+}
