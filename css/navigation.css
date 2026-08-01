@@ -1,0 +1,95 @@
+/**
+ * Меню, хлебные крошки
+ * САМ v1.3 п. 1.6.1
+ */
+
+.site-header {
+  padding: 1rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-md);
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: inherit;
+  padding: 0.5rem;
+  transition: color var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--primary-light);
+  text-decoration: none;
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+@media (max-width: 899px) {
+  .nav-toggle { display: block; }
+  
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: var(--bg-color);
+    flex-direction: column;
+    padding: var(--spacing-xl);
+    transition: right var(--transition-base);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-fixed);
+  }
+  
+  .nav-menu.open {
+    right: 0;
+  }
+}
+
+/* Хлебные крошки */
+.breadcrumbs {
+  padding: var(--spacing-sm) 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  overflow-x: auto;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, black 90%, transparent 100%);
+}
+
+.breadcrumbs-list {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbs-separator {
+  color: var(--text-muted);
+}
+
+.breadcrumbs-current {
+  color: var(--text-color);
+  font-weight: 500;
+}
