@@ -1,0 +1,47 @@
+/**
+ * Тема для ideologia.obrazslov.ru
+ * Идеи и философские концепции
+ * САМ v1.3 п. 1.6.1
+ */
+
+:root {
+  --primary-color: #283593;
+  --primary-dark: #1a237e;
+  --primary-light: #3949ab;
+  --secondary-color: #c62828;
+  --accent-color: #ffd54f;
+  --bg-color: #fafafa;
+  --bg-secondary: #e8eaf6;
+  --bg-tertiary: #c5cae9;
+  --text-color: #1a237e;
+  --text-muted: #455a64;
+  --text-light: #ffffff;
+  --border-color: #9fa8da;
+  --border-radius: 4px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.site-ideologia {
+  font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+}
+
+.site-ideologia .site-header {
+  background: var(--primary-color);
+  color: var(--text-light);
+  border-bottom: 4px double var(--accent-color);
+}
+
+.site-ideologia .article-title {
+  color: var(--primary-dark);
+  font-variant: small-caps;
+}
+
+.site-ideologia .btn-primary {
+  background-color: var(--primary-color);
+}
+
+.site-ideologia .btn-primary:hover {
+  background-color: var(--primary-dark);
+}
