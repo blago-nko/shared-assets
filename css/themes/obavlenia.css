@@ -1,0 +1,41 @@
+/**
+ * Тема для obavlenia.blagorussia.ru
+ * RSS-агрегатор объявлений
+ * САМ v1.3 п. 1.6.1
+ */
+
+:root {
+  --primary-color: #e65100;
+  --primary-dark: #bf360c;
+  --primary-light: #ff6d00;
+  --secondary-color: #263238;
+  --accent-color: #ffd600;
+  --bg-color: #ffffff;
+  --bg-secondary: #fff3e0;
+  --bg-tertiary: #ffe0b2;
+  --text-color: #212121;
+  --text-muted: #757575;
+  --text-light: #ffffff;
+  --border-color: #ffcc80;
+  --border-radius: 4px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.site-obavlenia .site-header {
+  background: var(--primary-color);
+  color: var(--text-light);
+}
+
+.site-obavlenia .article-title {
+  color: var(--primary-dark);
+}
+
+.site-obavlenia .btn-primary {
+  background-color: var(--primary-color);
+}
+
+.site-obavlenia .btn-primary:hover {
+  background-color: var(--primary-dark);
+}
