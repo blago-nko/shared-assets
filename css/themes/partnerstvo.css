@@ -1,0 +1,44 @@
+/**
+ * Тема для partnerstvo.blagorussia.ru
+ * Центральный хаб партнёрства
+ * САМ v1.3 п. 1.6.1
+ */
+
+:root {
+  --primary-color: #2e7d32;
+  --primary-dark: #1b5e20;
+  --primary-light: #4caf50;
+  --secondary-color: #ff9800;
+  --accent-color: #ffc107;
+  --bg-color: #ffffff;
+  --bg-secondary: #f1f8e9;
+  --bg-tertiary: #dcedc8;
+  --text-color: #1b1b1b;
+  --text-muted: #616161;
+  --text-light: #ffffff;
+  --border-color: #c8e6c9;
+  --border-radius: 6px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.site-partnerstvo .site-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: var(--text-light);
+}
+
+.site-partnerstvo .article-title {
+  color: var(--primary-dark);
+  border-left: 4px solid var(--secondary-color);
+  padding-left: 0.75em;
+}
+
+.site-partnerstvo .btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.site-partnerstvo .btn-primary:hover {
+  background-color: var(--primary-dark);
+}
