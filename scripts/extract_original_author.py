@@ -8,6 +8,7 @@
 import feedparser
 import json
 import argparse
+import re
 from pathlib import Path
 
 
@@ -15,35 +16,21 @@ def extract_author(entry) -> dict:
     """Извлечение автора из RSS-записи."""
     # Приоритет 1: author из RSS
     if hasattr(entry, 'author'):
-        return {
-            'name': entry.author,
-            'source': 'rss_author'
-        }
+        return {'name': entry.author, 'source': 'rss_author'}
     
     # Приоритет 2: dc:creator
     if hasattr(entry, 'dc_creator'):
-        return {
-            'name': entry.dc_creator,
-            'source': 'dc_creator'
-        }
+        return {'name': entry.dc_creator, 'source': 'dc_creator'}
     
     # Приоритет 3: Извлечение из content
     if hasattr(entry, 'content'):
         content = entry.content[0].value
-        # Поиск паттернов "Автор: ..."
-        import re
         match = re.search(r'Автор[:\s]+([^\n<]+)', content)
         if match:
-            return {
-                'name': match.group(1).strip(),
-                'source': 'content_extraction'
-            }
+            return {'name': match.group(1).strip(), 'source': 'content_extraction'}
     
     # Приоритет 4: Матрица v4.7 (по умолчанию)
-    return {
-        'name': 'Бобров А.В.',
-        'source': 'default_matrix'
-    }
+    return {'name': 'Бобров А.В.', 'source': 'default_matrix'}
 
 
 def process_feed(feed_url: str, output_file: Path):
