@@ -1,8 +1,28 @@
 {
+  "version": "1.1",
+  "updated": "2026-08-01T00:00:00Z",
+  "protocol": "SUMKA-2607-001",
+  "description": "Матрица каналов по брендам (архитектура «Двух Брендов» + опциональный 3-й)",
+  
   "brands": {
     "npo": {
-      "name": "НП «Общественное благополучие»",
-      "domains": ["blagorussia.ru", "obrazslov.ru", "partnerstvo.blagorussia.ru", "grekpanteon.obrazslov.ru", "gallery.obrazslov.ru"],
+      "name": "НП «Общественное благополучие Воронежа»",
+      "scope": "11 RSS-сайтов основной сети + grekpanteon + gallery",
+      "domains": [
+        "blagorussia.ru",
+        "obrazslov.ru",
+        "partnerstvo.blagorussia.ru",
+        "grekpanteon.obrazslov.ru",
+        "gallery.obrazslov.ru",
+        "obavlenia.blagorussia.ru",
+        "interesnye-mesta.obrazslov.ru",
+        "ot-gorozan.blagorussia.ru",
+        "novosti.blagorussia.ru",
+        "moisites.blagorussia.ru",
+        "joga.blagorussia.ru",
+        "ideologia.obrazslov.ru",
+        "nasa-istoria.blagorussia.ru"
+      ],
       "links": {
         "vk": "https://vk.com/blagorussia",
         "telegram": "https://t.me/blagorussia",
@@ -12,13 +32,39 @@
       }
     },
     "san": {
-      "name": "САН (Сообщество Агентов Недвижимости)",
-      "domains": ["can.blagorussia.ru"],
+      "name": "САН — Сообщество Агентов Недвижимости",
+      "scope": "Платформа САН (can.blagorussia.ru)",
+      "domains": [
+        "can.blagorussia.ru"
+      ],
       "links": {
         "vk": "https://vk.com/san_community",
         "telegram": "https://t.me/san_community",
         "youtube": "https://youtube.com/@san_community"
       }
+    },
+    "partnership": {
+      "name": "Партнёрство (опциональный бренд)",
+      "scope": "partnerstvo.blagorussia.ru и novosti.blagorussia.ru — при смысловом отделении контента",
+      "domains": [
+        "partnerstvo.blagorussia.ru",
+        "novosti.blagorussia.ru"
+      ],
+      "links": {
+        "vk": "https://vk.com/partnerstvo_npo",
+        "telegram": "https://t.me/partnerstvo_npo"
+      },
+      "note": "Активируется только при необходимости смыслового отделения контента от основного бренда НКО"
     }
+  },
+  
+  "display_rules": {
+    "default_brand": "npo",
+    "brand_by_domain": {
+      "can.blagorussia.ru": "san",
+      "partnerstvo.blagorussia.ru": "partnership",
+      "novosti.blagorussia.ru": "partnership"
+    },
+    "fallback": "npo"
   }
 }
