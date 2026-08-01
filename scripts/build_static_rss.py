@@ -1,70 +1,86 @@
 #!/usr/bin/env python3
 """
-Парсинг RSS/XML-фидов Blogger и генерация статических HTML-страниц.
-Использование: python build_static_rss.py --feed path/to/feed.xml --output ./public
+Парсинг RSS/XML Blogger и генерация статических HTML-страниц
+Источник: Манифест Миграции v5.4 п. 9
+Протокол: MIG-2607-003
 """
+
+import feedparser
 import argparse
-import xml.etree.ElementTree as ET
-import os
-import json
-from datetime import datetime
 from pathlib import Path
+from datetime import datetime
+import re
 
-def parse_rss(feed_path):
-    tree = ET.parse(feed_path)
-    root = tree.getroot()
-    ns = {'atom': 'http://www.w3.org/2005/Atom'}
-    items = []
-    for item in root.findall('.//item'):
-        title = item.find('title').text
-        link = item.find('link').text
-        pub_date = item.find('pubDate').text
-        description = item.find('description').text
-        # Извлечение контента (может быть в content:encoded)
-        content = item.find('{http://purl.org/rss/1.0/modules/content/}encoded')
-        if content is not None:
-            content = content.text
-        else:
-            content = description
-        items.append({
-            'title': title,
-            'link': link,
-            'pub_date': pub_date,
-            'description': description,
-            'content': content,
-            'slug': link.split('/')[-1].replace('.html', '')  # упрощённо
-        })
-    return items
 
-def generate_html(item, output_dir, site_theme):
-    # Здесь нужно использовать шаблон из shared-assets/templates/layout.html
-    # Для простоты – заглушка
-    html = f"""<!DOCTYPE html>
-<html>
-<head><title>{item['title']}</title></head>
-<body>
-<h1>{item['title']}</h1>
-<p>Дата: {item['pub_date']}</p>
-<div>{item['content']}</div>
+def build_static_rss(feed_url: str, output_dir: Path, site_id: str):
+    """Парсинг RSS и генерация HTML."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    feed = feedparser.parse(feed_url)
+    
+    for entry in feed.entries:
+        # Извлечение данных
+        title = entry.title
+        content = entry.content[0].value if hasattr(entry, 'content') else entry.summary
+        published = datetime(*entry.published_parsed[:6])
+        
+        # Генерация slug
+        slug = _generate_slug(title)
+        
+        # Генерация HTML
+        html = _generate_html(title, content, published, slug, site_id)
+        
+        # Запись файла
+        output_path = output_dir / f"{slug}.html"
+        output_path.write_text(html, encoding='utf-8')
+        
+        print(f"✅ Создано: {output_path.name}")
+
+
+def _generate_slug(title: str) -> str:
+    """Генерация slug из заголовка."""
+    slug = title.lower()
+    slug = re.sub(r'[^a-zа-я0-9\s-]', '', slug)
+    slug = re.sub(r'[\s-]+', '-', slug)
+    return slug[:50]
+
+
+def _generate_html(title: str, content: str, published: datetime, slug: str, site_id: str) -> str:
+    """Генерация HTML-страницы."""
+    return f"""<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta property="og:title" content="{title}">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="{published.isoformat()}">
+  <meta name="robots" content="max-image-preview:large">
+  <link rel="stylesheet" href="/shared-assets/css/variables.css">
+  <link rel="stylesheet" href="/shared-assets/css/base.css">
+  <link rel="stylesheet" href="/shared-assets/css/themes/{site_id}.css">
+</head>
+<body class="site-{site_id}">
+  <article class="article">
+    <h1>{title}</h1>
+    <time datetime="{published.isoformat()}">{published.strftime('%d.%m.%Y')}</time>
+    <div class="content">{content}</div>
+  </article>
+  <script src="/shared-assets/js/main.js" defer></script>
 </body>
 </html>"""
-    slug = item['slug']
-    os.makedirs(output_dir, exist_ok=True)
-    with open(os.path.join(output_dir, f"{slug}.html"), 'w', encoding='utf-8') as f:
-        f.write(html)
+
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--feed', required=True, help='Путь к RSS/XML фиду')
-    parser.add_argument('--output', default='./public', help='Выходная папка')
-    parser.add_argument('--theme', default='default', help='Тема оформления')
+    parser.add_argument('--feed', required=True, help='URL RSS-фида')
+    parser.add_argument('--output', required=True, help='Выходная директория')
+    parser.add_argument('--site-id', required=True, help='ID сайта (для темы CSS)')
     args = parser.parse_args()
+    
+    build_static_rss(args.feed, Path(args.output), args.site_id)
 
-    items = parse_rss(args.feed)
-    print(f"Найдено записей: {len(items)}")
-    for item in items:
-        generate_html(item, args.output, args.theme)
-    print(f"Генерация завершена. Файлы сохранены в {args.output}")
 
 if __name__ == '__main__':
     main()
