@@ -1,0 +1,41 @@
+/**
+ * Тема для moisites.blagorussia.ru
+ * Каталог сайтов и ресурсов
+ * САМ v1.3 п. 1.6.1
+ */
+
+:root {
+  --primary-color: #1565c0;
+  --primary-dark: #0d47a1;
+  --primary-light: #1976d2;
+  --secondary-color: #7b1fa2;
+  --accent-color: #00e5ff;
+  --bg-color: #ffffff;
+  --bg-secondary: #e3f2fd;
+  --bg-tertiary: #bbdefb;
+  --text-color: #0d47a1;
+  --text-muted: #546e7a;
+  --text-light: #ffffff;
+  --border-color: #90caf9;
+  --border-radius: 6px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.16);
+}
+
+.site-moisites .site-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--text-light);
+}
+
+.site-moisites .article-title {
+  color: var(--primary-dark);
+}
+
+.site-moisites .btn-primary {
+  background-color: var(--primary-color);
+}
+
+.site-moisites .btn-primary:hover {
+  background-color: var(--primary-dark);
+}
