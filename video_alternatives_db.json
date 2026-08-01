@@ -1,0 +1,101 @@
+{
+  "version": "1.0",
+  "updated": "2026-08-01T00:00:00Z",
+  "protocol": "SAN-20.6",
+  "description": "Единый реестр соответствий между URL одного и того же видео на разных платформах",
+  
+  "videos": [
+    {
+      "id": "vid-001",
+      "canonical_title": "Обзор рынка недвижимости Воронежа Q2 2026",
+      "brand": "san",
+      "content_type": "analytics",
+      "primary_platform": "dzen",
+      "primary_url": "https://dzen.ru/media/id/xxxxx/obzor-rynka-voronezh-q2-2026",
+      "primary_video_id": "dzen_xxxxx",
+      "alternatives": {
+        "youtube": {
+          "url": "https://youtube.com/watch?v=abc123",
+          "video_id": "abc123",
+          "oembed": "https://youtube.com/oembed?url=..."
+        },
+        "rutube": {
+          "url": "https://rutube.ru/video/def456/",
+          "video_id": "def456",
+          "oembed": "https://rutube.ru/api/oembed/..."
+        },
+        "vk": {
+          "url": "https://vk.com/video-xxxxx_456",
+          "video_id": "-xxxxx_456",
+          "oembed": null
+        }
+      },
+      "priority": "critical",
+      "verified_at": "2026-08-01T00:00:00Z",
+      "verified_by": "auto_publisher"
+    },
+    {
+      "id": "vid-002",
+      "canonical_title": "Новости рынка недвижимости за неделю",
+      "brand": "san",
+      "content_type": "news",
+      "primary_platform": "vk",
+      "primary_url": "https://vk.com/video-san_news",
+      "primary_video_id": "vk_news_001",
+      "alternatives": {
+        "youtube": {
+          "url": "https://youtube.com/watch?v=news001",
+          "video_id": "news001",
+          "oembed": "https://youtube.com/oembed?url=..."
+        }
+      },
+      "priority": "high",
+      "verified_at": "2026-08-01T00:00:00Z",
+      "verified_by": "auto_publisher"
+    },
+    {
+      "id": "vid-003",
+      "canonical_title": "Зевс — верховный бог древнегреческого пантеона",
+      "brand": "npo",
+      "content_type": "educational",
+      "primary_platform": "rutube",
+      "primary_url": "https://rutube.ru/video/zeus/",
+      "primary_video_id": "zeus_001",
+      "alternatives": {
+        "youtube": {
+          "url": "https://youtube.com/watch?v=zeus001",
+          "video_id": "zeus001",
+          "oembed": "https://youtube.com/oembed?url=..."
+        },
+        "dzen": {
+          "url": "https://dzen.ru/media/id/zeus",
+          "video_id": "dzen_zeus",
+          "oembed": null
+        }
+      },
+      "priority": "normal",
+      "verified_at": "2026-08-01T00:00:00Z",
+      "verified_by": "manual"
+    }
+  ],
+  
+  "video_matrix_rf": {
+    "analytics": { "primary": "dzen", "mirror": "youtube" },
+    "blogs": { "primary": "dzen", "mirror": "youtube" },
+    "grekpanteon": { "primary": "dzen", "mirror": "youtube" },
+    "news": { "primary": "vk", "mirror": "youtube" },
+    "rss_aggregators": { "primary": "vk", "mirror": "youtube" },
+    "san_cards": { "primary": "vk", "mirror": "youtube" },
+    "educational": { "primary": "dzen,rutube", "mirror": "youtube" }
+  },
+  
+  "platforms": {
+    "dzen": { "priority": "P0", "free_limit": "unlimited", "oembed": "partial" },
+    "rutube": { "priority": "P0", "free_limit": "unlimited", "oembed": true },
+    "vk": { "priority": "P0", "free_limit": "unlimited", "oembed": true },
+    "youtube": { "priority": "P1", "free_limit": "unlimited", "oembed": true },
+    "vimeo": { "priority": "P2", "free_limit": "500MB/week", "oembed": true },
+    "dailymotion": { "priority": "P2", "free_limit": "unlimited", "oembed": true },
+    "archive": { "priority": "P2", "free_limit": "unlimited", "oembed": false }
+  }
+}
