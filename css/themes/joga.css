@@ -1,0 +1,48 @@
+/**
+ * Тема для joga.blagorussia.ru
+ * Образовательный проект по йоге
+ * САМ v1.3 п. 1.6.1
+ */
+
+:root {
+  --primary-color: #7e57c2;
+  --primary-dark: #512da8;
+  --primary-light: #9575cd;
+  --secondary-color: #26a69a;
+  --accent-color: #ffca28;
+  --bg-color: #fdfaf5;
+  --bg-secondary: #f3e5f5;
+  --bg-tertiary: #e1bee7;
+  --text-color: #311b92;
+  --text-muted: #6a1b9a;
+  --text-light: #ffffff;
+  --border-color: #ce93d8;
+  --border-radius: 12px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.site-joga {
+  font-family: 'Georgia', serif;
+  line-height: 1.8;
+}
+
+.site-joga .site-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--text-light);
+}
+
+.site-joga .article-title {
+  color: var(--primary-dark);
+  font-style: italic;
+}
+
+.site-joga .btn-primary {
+  background-color: var(--primary-color);
+  border-radius: 20px;
+}
+
+.site-joga .btn-primary:hover {
+  background-color: var(--primary-dark);
+}
