@@ -1,0 +1,47 @@
+/**
+ * Стили для печати
+ * САМ v1.3 п. 1.6.1
+ */
+
+@media print {
+  body {
+    background: white;
+    color: black;
+    font-size: 12pt;
+  }
+  
+  .site-header,
+  .site-footer,
+  .sticky-bottom-bar,
+  .sidebar,
+  .breadcrumbs,
+  .share-buttons,
+  .nav-toggle,
+  .search-panel {
+    display: none !important;
+  }
+  
+  .main-content {
+    padding: 0;
+  }
+  
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+  
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+  
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+  
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+}
