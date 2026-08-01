@@ -1,0 +1,13 @@
+{
+  "allowedOrigins": [
+    "https://blagorussia.ru",
+    "https://obrazslov.ru",
+    "https://partnerstvo.blagorussia.ru",
+    "https://grekpanteon.obrazslov.ru",
+    "https://can.blagorussia.ru",
+    "https://gallery.obrazslov.ru"
+  ],
+  "allowedMethods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  "allowedHeaders": ["Content-Type", "Authorization"],
+  "maxAge": 86400
+}
