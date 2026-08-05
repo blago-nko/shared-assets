@@ -1,9 +1,9 @@
 {
-  "version": "1.0",
-  "updated": "2026-08-01T00:00:00Z",
+  "version": "1.1",
+  "updated": "2026-08-05T00:00:00Z",
   "protocol": "SAN-20.6",
-  "description": "Единый реестр соответствий между URL одного и того же видео на разных платформах",
-  
+  "description": "Единый реестр соответствий между URL одного и того же видео на разных платформах. Все значения primary/mirror в video_matrix_rf — массивы строк (не CSV).",
+
   "videos": [
     {
       "id": "vid-001",
@@ -78,24 +78,26 @@
       "verified_by": "manual"
     }
   ],
-  
+
   "video_matrix_rf": {
-    "analytics": { "primary": "dzen", "mirror": "youtube" },
-    "blogs": { "primary": "dzen", "mirror": "youtube" },
-    "grekpanteon": { "primary": "dzen", "mirror": "youtube" },
-    "news": { "primary": "vk", "mirror": "youtube" },
-    "rss_aggregators": { "primary": "vk", "mirror": "youtube" },
-    "san_cards": { "primary": "vk", "mirror": "youtube" },
-    "educational": { "primary": "dzen,rutube", "mirror": "youtube" }
+    "_rationale": "Каждый ключ — content_type (совпадает с videos[].content_type). Значения primary/mirror — массивы. Порядок в primary важен: [0] = предпочтительная платформа, [1..n] = равнозначные альтернативы.",
+
+    "analytics":       { "primary": ["dzen"],             "mirror": ["youtube"] },
+    "blogs":           { "primary": ["dzen"],             "mirror": ["youtube"] },
+    "grekpanteon":     { "primary": ["dzen"],             "mirror": ["youtube"] },
+    "news":            { "primary": ["vk"],               "mirror": ["youtube"] },
+    "rss_aggregators": { "primary": ["vk"],               "mirror": ["youtube"] },
+    "san_cards":       { "primary": ["vk"],               "mirror": ["youtube"] },
+    "educational":     { "primary": ["dzen", "rutube"],   "mirror": ["youtube"] }
   },
-  
+
   "platforms": {
-    "dzen": { "priority": "P0", "free_limit": "unlimited", "oembed": "partial" },
-    "rutube": { "priority": "P0", "free_limit": "unlimited", "oembed": true },
-    "vk": { "priority": "P0", "free_limit": "unlimited", "oembed": true },
-    "youtube": { "priority": "P1", "free_limit": "unlimited", "oembed": true },
-    "vimeo": { "priority": "P2", "free_limit": "500MB/week", "oembed": true },
-    "dailymotion": { "priority": "P2", "free_limit": "unlimited", "oembed": true },
-    "archive": { "priority": "P2", "free_limit": "unlimited", "oembed": false }
+    "dzen":        { "priority": "P0", "free_limit": "unlimited",  "oembed": "partial" },
+    "rutube":      { "priority": "P0", "free_limit": "unlimited",  "oembed": true },
+    "vk":          { "priority": "P0", "free_limit": "unlimited",  "oembed": true },
+    "youtube":     { "priority": "P1", "free_limit": "unlimited",  "oembed": true },
+    "vimeo":       { "priority": "P2", "free_limit": "500MB/week", "oembed": true },
+    "dailymotion": { "priority": "P2", "free_limit": "unlimited",  "oembed": true },
+    "archive":     { "priority": "P2", "free_limit": "unlimited",  "oembed": false }
   }
 }
