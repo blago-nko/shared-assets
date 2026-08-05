@@ -1,0 +1,57 @@
+name: Repo Consistency Lint
+
+# Единая проверка согласованности: матрица доменов + очередь слаго.
+# На pull_request — строгий линт (блокирует merge при дрейфе).
+# На push в main — автопересчёт статистики очереди слаго.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'config/verification.json'
+      - 'config/blogger_blog_ids.json'
+      - 'security/cors-config.json'
+      - 'docs/SLUG_OPTIMIZATION_QUEUE.json'
+  pull_request:
+    paths:
+      - 'config/verification.json'
+      - 'config/blogger_blog_ids.json'
+      - 'security/cors-config.json'
+      - 'docs/SLUG_OPTIMIZATION_QUEUE.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Domain matrix lint
+        run: python scripts/check_domain_matrix.py
+
+      - name: SLUG queue — lint or autofix
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            python scripts/slug_queue_tool.py --fix
+          else
+            python scripts/slug_queue_tool.py
+          fi
+
+      - name: Commit autofix if changed
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/SLUG_OPTIMIZATION_QUEUE.json
+          if git diff --cached --quiet; then
+            echo "📋 Изменений статистики нет"
+          else
+            git commit -m "chore: auto-recalculate SLUG queue statistics [skip ci]"
+            git push
+          fi
