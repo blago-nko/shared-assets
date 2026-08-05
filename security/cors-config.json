@@ -1,13 +1,25 @@
 {
+  "version": "1.1",
+  "updated": "2026-08-05T00:00:00Z",
+  "description": "CORS для shared-assets: все 14 доменов экосистемы. Источник правды по списку — config/verification.json",
   "allowedOrigins": [
     "https://blagorussia.ru",
     "https://obrazslov.ru",
     "https://partnerstvo.blagorussia.ru",
     "https://grekpanteon.obrazslov.ru",
     "https://can.blagorussia.ru",
-    "https://gallery.obrazslov.ru"
+    "https://gallery.obrazslov.ru",
+    "https://obavlenia.blagorussia.ru",
+    "https://interesnye-mesta.obrazslov.ru",
+    "https://ot-gorozan.blagorussia.ru",
+    "https://novosti.blagorussia.ru",
+    "https://moisites.blagorussia.ru",
+    "https://joga.blagorussia.ru",
+    "https://ideologia.obrazslov.ru",
+    "https://nasa-istoria.blagorussia.ru"
   ],
-  "allowedMethods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  "allowedHeaders": ["Content-Type", "Authorization"],
-  "maxAge": 86400
+  "allowedMethods": ["GET", "HEAD", "OPTIONS"],
+  "allowedHeaders": ["Content-Type"],
+  "maxAge": 86400,
+  "note": "POST/PUT/DELETE и Authorization убраны: shared-assets отдаёт только статические ресурсы. Если какой-то домен используется с www — добавьте отдельный origin https://www.<домен>."
 }
