@@ -1,28 +1,64 @@
 {
-  "description": "Шаблоны расширенной JSON-LD разметки для ИИ-поисковиков",
-  "version": "1.0",
+  "description": "Шаблоны расширенной JSON-LD разметки для ИИ-поисковиков и Rich Results",
+  "version": "1.1",
+  "updated": "2026-08-05T00:00:00Z",
+  "global": {
+    "publisher": {
+      "@type": "Organization",
+      "name": "НП «Общественное благополучие Воронежа»",
+      "url": "https://blagorussia.ru",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://blagorussia.ru/shared-assets/favicons/logo-512x512.png",
+        "width": 512,
+        "height": 512
+      },
+      "sameAs": [
+        "https://vk.com/blagorussia",
+        "https://t.me/blagorussia",
+        "https://ok.ru/blagorussia",
+        "https://dzen.ru/blagorussia",
+        "https://youtube.com/@blagorussia"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "webmaster@blagorussia.ru",
+        "contactType": "customer support"
+      }
+    }
+  },
   "templates": {
     "Article": {
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "{{title}}",
       "description": "{{description}}",
+      "image": "{{image_url}}",
+      "url": "{{canonical_url}}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{canonical_url}}"
+      },
       "author": {
         "@type": "Person",
         "name": "{{author_name}}",
-        "url": "{{author_url}}"
+        "url": "{{author_url}}",
+        "sameAs": "{{author_same_as}}"
       },
-      "publisher": {
-        "@type": "Organization",
-        "name": "НП «Общественное благополучие Воронежа»"
-      },
+      "publisher": "{{global.publisher}}",
       "datePublished": "{{date_published}}",
-      "dateModified": "{{date_modified}}"
+      "dateModified": "{{date_modified}}",
+      "inLanguage": "ru-RU",
+      "articleSection": "{{category}}",
+      "keywords": "{{keywords_csv}}",
+      "wordCount": "{{word_count}}"
     },
+
     "ImageObject": {
       "@context": "https://schema.org",
       "@type": "ImageObject",
       "contentUrl": "{{image_url}}",
+      "url": "{{canonical_page_url}}",
       "width": "{{width}}",
       "height": "{{height}}",
       "caption": "{{caption}}",
@@ -30,20 +66,22 @@
         "@type": "Person",
         "name": "{{author_name}}"
       },
-      "license": "https://creativecommons.org/licenses/by-sa/4.0/"
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "acquireLicensePage": "{{canonical_page_url}}",
+      "creditText": "НП «Общественное благополучие Воронежа»"
     },
+
     "BreadcrumbList": {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "{{item1_name}}",
-          "item": "{{item1_url}}"
-        }
-      ]
+        { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://{{domain}}/" },
+        { "@type": "ListItem", "position": 2, "name": "{{section_name}}", "item": "https://{{domain}}/{{section_path}}/" },
+        { "@type": "ListItem", "position": 3, "name": "{{title}}" }
+      ],
+      "note": "Последний элемент — без item (это текущая страница, Google рекомендует его не линковать)"
     },
+
     "FAQPage": {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -53,8 +91,56 @@
           "name": "{{question}}",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "{{answer}}"
+            "text": "{{answer_html}}"
           }
+        }
+      ],
+      "sameAs": "{{canonical_url}}"
+    },
+
+    "Organization": "{{global.publisher}}",
+
+    "WebSite": {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "{{site_name}}",
+      "url": "https://{{domain}}/",
+      "inLanguage": "ru-RU",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://{{domain}}/search/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": "{{global.publisher}}"
+    },
+
+    "WebPage": {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": "{{canonical_url}}",
+      "name": "{{title}}",
+      "description": "{{description}}",
+      "url": "{{canonical_url}}",
+      "inLanguage": "ru-RU",
+      "isPartOf": { "@type": "WebSite", "@id": "https://{{domain}}/#website" },
+      "breadcrumb": "{{@id of BreadcrumbList}}"
+    },
+
+    "ItemList": {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "{{list_title}}",
+      "description": "{{list_description}}",
+      "numberOfItems": "{{count}}",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": "{{pos}}",
+          "url": "{{item_url}}",
+          "name": "{{item_title}}"
         }
       ]
     }
