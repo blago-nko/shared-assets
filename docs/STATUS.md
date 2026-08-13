@@ -4,7 +4,7 @@
 > Двусторонняя синхронизация: Google Таблица `ecosystem_status` ↔ Git
 > Метрика мониторинга: `status_md_autoupdate_success_rate` (цель ≥ 99%)
 
-**Последнее обновление**: 13.08.2026 12:53 UTC
+**Последнее обновление**: 13.08.2026 18:53 UTC
 **Авто-обновление**: ✅ (GitHub Actions: `.github/workflows/update-status.yml`)
 **Версии манифестов**: САМ v1.3 | Миграция v5.4 | САН V21.4 | СУМКа v1.5 | Грек-Пантеон v1.4
 
@@ -187,3 +187,5 @@
 | 13.08.2026 07:16 UTC | Авто-обновление timestamp | github-actions[bot] |
 
 | 13.08.2026 12:53 UTC | Авто-обновление timestamp | github-actions[bot] |
+
+| 13.08.2026 18:53 UTC | Авто-обновление timestamp | github-actions[bot] |
