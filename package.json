@@ -1,0 +1,36 @@
+{
+  "name": "@blago-nko/shared-assets",
+  "version": "1.0.0",
+  "description": "Общие артефакты (шаблоны, стили, скрипты, JSON-LD) для всех сайтов экосистемы blago-nko",
+  "main": "index.js",
+  "files": [
+    "components/",
+    "css/",
+    "js/",
+    "templates/",
+    "jsonld/",
+    "seo/",
+    "config/",
+    "schemas/",
+    "favicons/",
+    "legal/",
+    "security/",
+    "optimization/"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blago-nko/shared-assets.git"
+  },
+  "keywords": [
+    "hugo",
+    "astro",
+    "templates",
+    "blago-nko",
+    "shared-assets"
+  ],
+  "author": "НП «Общественное благополучие Воронежа»",
+  "license": "AGPL-3.0"
+}
