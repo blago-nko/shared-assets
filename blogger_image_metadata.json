@@ -1,0 +1,8 @@
+{
+  "last_backup": null,
+  "total_images": 0,
+  "images": [],
+  "backup_history": [],
+  "description": "Metadata backup for Blogger images (gallery.obrazslov.ru and other sites). Updated weekly by GitHub Actions workflow.",
+  "schema_version": "1.0"
+}

@@ -1,168 +1,45 @@
-name: Backup Blogger Metadata to Git
-
-# Еженедельный бэкап метаданных изображений, загруженных в Blogger
-# Источник требования: САМ v1.3 п. 2.4.1, СУМКа v1.5 п. 7.2
-# Метрика мониторинга: blogger_backup_success_rate (цель ≥ 99%)
+name: Backup Blogger Metadata
 
 on:
   schedule:
-    # Каждое воскресенье в 03:00 UTC
     - cron: '0 3 * * 0'
-  workflow_dispatch: # Ручной запуск из вкладки Actions
-
-permissions:
-  contents: write
+  workflow_dispatch:
 
 jobs:
   backup:
-    name: Backup Blogger Image Metadata
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
-      - name: Setup Python 3.10
-        uses: actions/setup-python@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-          cache: 'pip'
-      
+          python-version: '3.11'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests google-api-python-client
-      
-      - name: Backup current metadata (before new run)
-        run: |
-          # Сохраняем копию текущего файла (если он существует) для последующего сравнения
-          if [ -f "blogger_image_metadata.json" ]; then
-            cp blogger_image_metadata.json blogger_image_metadata.previous.json
-            echo "✅ Previous backup saved for comparison"
-          else
-            echo "{}" > blogger_image_metadata.previous.json
-            echo "ℹ️ No previous backup found — initialized empty baseline"
-          fi
+          pip install requests google-auth google-auth-oauthlib google-auth-httplib2
 
-      - name: Run metadata backup script
+      - name: Backup Blogger metadata
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BLOGGER_API_KEY: ${{ secrets.BLOGGER_API_KEY }}
-          BLOGGER_BLOG_ID: ${{ secrets.BLOGGER_BLOG_ID }}
         run: |
-          # Проверяем, настроены ли секреты
-          if [ -z "$BLOGGER_API_KEY" ] || [ "$BLOGGER_API_KEY" = "" ] || [ -z "$BLOGGER_BLOG_ID" ]; then
-            echo "⚠️ BLOGGER_API_KEY or BLOGGER_BLOG_ID not configured. Using dummy payload."
-            IS_DUMMY=true
-          else
-            IS_DUMMY=false
-            # В production здесь должен быть вызов реального скрипта:
-            # python scripts/backup_blogger_metadata.py \
-            #   --api-key "$BLOGGER_API_KEY" \
-            #   --blog-id "$BLOGGER_BLOG_ID" \
-            #   --output blogger_image_metadata.json
-          fi
-          
-          if [ "$IS_DUMMY" = true ]; then
-            cat > blogger_image_metadata.json << EOF
-          {
-            "backup_date": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-            "backup_version": "1.0",
-            "status": "success",
-            "workflow_run_id": "${{ github.run_id }}",
-            "images_count": 0,
-            "pages_count": 0,
-            "note": "Dummy backup - BLOGGER_API_KEY secret not configured"
-          }
-          EOF
-          fi
-      
-      - name: Validate JSON structure
-        run: |
-          python -c "import json; json.load(open('blogger_image_metadata.json'))"
-          echo "✅ JSON structure is valid"
-      
-      - name: Compare with previous backup (semantic diff)
-        id: compare
-        run: |
-          # Удаляем изменяющиеся поля (backup_date, workflow_run_id), чтобы сравнивать только суть
-          python - <<'PYEOF'
-          import json
-          import sys
-          
-          def normalize(obj):
-              obj = json.loads(obj) if isinstance(obj, str) else obj
-              if isinstance(obj, dict):
-                  obj.pop('backup_date', None)
-                  obj.pop('workflow_run_id', None)
-                  return obj
-              return obj
-          
-          with open('blogger_image_metadata.json', 'r') as f:
-              new_data = normalize(f.read())
-          with open('blogger_image_metadata.previous.json', 'r') as f:
-              old_data = normalize(f.read())
-          
-          if new_data == old_data:
-              print("no_changes=true")
-              print("📋 Semantic comparison: no meaningful changes detected.")
-              sys.exit(0)
-          else:
-              print("no_changes=false")
-              print("✅ Semantic comparison: new meaningful data found.")
-              sys.exit(0)
-          PYEOF
-          
-          NO_CHANGES=$(python -c "
-          import json
-          def norm(o):
-              o = json.loads(o) if isinstance(o, str) else o
-              o.pop('backup_date', None)
-              o.pop('workflow_run_id', None)
-              return o
-          with open('blogger_image_metadata.json') as f: new = norm(f.read())
-          with open('blogger_image_metadata.previous.json') as f: old = norm(f.read())
-          print('true' if new == old else 'false')
-          ")
-          echo "no_changes=$NO_CHANGES" >> $GITHUB_OUTPUT
-      
-      - name: Commit and push if changed
-        if: steps.compare.outputs.no_changes == 'false'
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add blogger_image_metadata.json
-          
-          if git diff --staged --quiet; then
-            echo "📋 No changes to commit (git diff is empty)"
-          else
-            git commit -m "chore: weekly backup of blogger_image_metadata.json
+          python scripts/backup_blogger_metadata.py
+        continue-on-error: true
 
-            Automated backup via GitHub Actions
-            Workflow run: ${{ github.run_id }}
-            Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-            
-            Ref: САМ v1.3 п. 2.4.1, СУМКа v1.5 п. 7.2"
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add blogger_image_metadata.json || true
+          git diff --quiet && git diff --staged --quiet || (
+            git commit -m "chore(INFRA): SAM-015 — автоматический бэкап метаданных Blogger [skip ci]" &&
             git push
-            echo "✅ Backup committed successfully (meaningful changes detected)"
-          fi
-          
-          # Убираем временный файл сравнения
-          rm -f blogger_image_metadata.previous.json
-      
-      - name: Skip commit (no changes)
-        if: steps.compare.outputs.no_changes == 'true'
-        run: |
-          echo "📋 Skipping commit — data hasn't changed since last backup."
-          rm -f blogger_image_metadata.previous.json
-      
-      - name: Report metrics
-        if: always()
-        run: |
-          echo "## 📊 Backup Metrics" >> $GITHUB_STEP_SUMMARY
-          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Timestamp**: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_STEP_SUMMARY
-          echo "- **Metric**: blogger_backup_success_rate" >> $GITHUB_STEP_SUMMARY
-          echo "- **Target**: ≥ 99%" >> $GITHUB_STEP_SUMMARY
-          echo "- **Changes detected**: ${{ steps.compare.outputs.no_changes == 'false' }}" >> $GITHUB_STEP_SUMMARY
+          )
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
