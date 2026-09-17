@@ -1,0 +1,9 @@
+name = "Shared Assets"
+license = "AGPLv3"
+licenselink = "https://www.gnu.org/licenses/agpl-3.0.html"
+description = "Общая Hugo-тема для экосистемы blago-nko"
+min_version = "0.120.0"
+
+[author]
+  name = "blago-nko"
+  homepage = "https://github.com/blago-nko"

@@ -1,0 +1,9 @@
+node_modules/
+.hugo_cache/
+.astro/
+dist/
+.env
+.env.local
+.DS_Store
+Thumbs.db
+*.log
