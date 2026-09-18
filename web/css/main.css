@@ -52,3 +52,7 @@ figure img { max-width: 100%; height: auto; }
 figcaption { font-size: 0.875rem; color: #555; margin-top: 0.5rem; }
 .post-author, .post-categories, .post-tags { font-size: 0.875rem; color: #555; }
 .post-content iframe { max-width: 100%; }
+
+/* INFRA-064: центрирование как в оригинале + описание сайта */
+.text-center { text-align: center; }
+.site-description { color: #555; margin: 0 0 1.5rem 0; }
