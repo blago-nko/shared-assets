@@ -2,6 +2,13 @@
 <article>
   <h1>{{ .Title }}</h1>
   <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+  {{ with .Params.author }}<p class="post-author">Автор: {{ . }}</p>{{ end }}
+  {{ with .GetTerms "categories" }}
+  <p class="post-categories">Рубрики: {{ range $i, $t := . }}{{ if $i }}, {{ end }}<a href="{{ $t.Permalink }}">{{ $t.LinkTitle }}</a>{{ end }}</p>
+  {{ end }}
+  {{ with .GetTerms "tags" }}
+  <p class="post-tags">Ярлыки: {{ range $i, $t := . }}{{ if $i }}, {{ end }}<a href="{{ $t.Permalink }}">{{ $t.LinkTitle }}</a>{{ end }}</p>
+  {{ end }}
   <div class="post-content">{{ .Content }}</div>
 </article>
 {{ end }}

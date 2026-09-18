@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ .Title }} | {{ .Site.Title }}</title>
-  <meta name="description" content="{{ .Description }}">
+  <meta name="description" content="{{ .Description | default .Site.Params.description }}">
   {{ partial "head-meta.html" . }}
   <link rel="stylesheet" href="/css/main.css">
 </head>
@@ -15,5 +15,6 @@
   </main>
   {{ partial "footer.html" . }}
   <script src="/js/CookieConsent.js"></script>
+  <script src="/js/external-links.js"></script>
 </body>
 </html>
