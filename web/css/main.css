@@ -56,3 +56,6 @@ figcaption { font-size: 0.875rem; color: #555; margin-top: 0.5rem; }
 /* INFRA-064: центрирование как в оригинале + описание сайта */
 .text-center { text-align: center; }
 .site-description { color: #555; margin: 0 0 1.5rem 0; }
+
+/* INFRA-066: мета-строки и подписи в размер основного текста */
+figcaption, .post-author, .post-categories, .post-tags { font-size: 1rem; }
