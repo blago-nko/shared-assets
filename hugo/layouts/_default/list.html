@@ -4,7 +4,11 @@
 <p class="site-description">{{ .Site.Params.description }}</p>
 {{ end }}
 <ul class="post-list">
-  {{ range .Pages }}
+  {{ $pages := .Pages }}
+  {{ if .IsHome }}
+  {{ $pages = .Site.RegularPages }}
+  {{ end }}
+  {{ range $pages }}
   <li>
     <a href="{{ .Permalink }}">{{ .Title }}</a>
     <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
