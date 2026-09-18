@@ -1,0 +1,12 @@
+{{- $u := urls.Parse .Destination -}}
+{{- $host := $u.Host -}}
+{{- $internal := true -}}
+{{- if $host -}}
+  {{- $internal = false -}}
+  {{- range $d := site.Params.internalDomains -}}
+    {{- if or (eq $host $d) (strings.HasSuffix $host (printf ".%s" $d)) -}}
+      {{- $internal = true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+<a href="{{ .Destination }}"{{ if not $internal }} target="_blank" rel="noopener noreferrer"{{ end }}>{{ .Text | safeHTML }}</a>
