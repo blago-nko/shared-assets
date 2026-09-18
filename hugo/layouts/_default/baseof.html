@@ -3,12 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ .Title }}</title>
-  {{ partial "head.html" . }}
+  <title>{{ .Title }} | {{ .Site.Title }}</title>
+  <meta name="description" content="{{ .Description }}">
+  {{ partial "head-meta.html" . }}
+  <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
   {{ partial "header.html" . }}
-  <main>{{ block "main" . }}{{ end }}</main>
+  <main>
+    {{ block "main" . }}{{ end }}
+  </main>
   {{ partial "footer.html" . }}
+  <script src="/js/CookieConsent.js"></script>
 </body>
 </html>
