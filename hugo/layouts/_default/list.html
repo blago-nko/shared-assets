@@ -1,5 +1,8 @@
 {{ define "main" }}
 <h1>{{ .Title }}</h1>
+{{ if .IsHome }}
+<p class="site-description">{{ .Site.Params.description }}</p>
+{{ end }}
 <ul class="post-list">
   {{ range .Pages }}
   <li>
