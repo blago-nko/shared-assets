@@ -1,9 +1,9 @@
 <header>
   <nav>
-    <a href="/">{{ .Site.Title }}</a>
+    <a href="{{ "" | relURL }}">{{ .Site.Title }}</a>
     <ul>
-      <li><a href="/posts/">Статьи</a></li>
-      <li><a href="/about/">О нас</a></li>
+      <li><a href="{{ "posts/" | relURL }}">Статьи</a></li>
+      <li><a href="{{ "about/" | relURL }}">О нас</a></li>
     </ul>
   </nav>
 </header>
