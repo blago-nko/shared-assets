@@ -62,3 +62,6 @@ figcaption, .post-author, .post-categories, .post-tags { font-size: 1rem; }
 
 /* INFRA-069: отступ списков от края на мобильных */
 main ul, main ol { padding-left: 1.5rem; }
+
+/* INFRA-070: центрирование изображений и подписей в figure (как в Blogger) */
+figure { text-align: center; }
