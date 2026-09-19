@@ -59,3 +59,6 @@ figcaption { font-size: 0.875rem; color: #555; margin-top: 0.5rem; }
 
 /* INFRA-066: мета-строки и подписи в размер основного текста */
 figcaption, .post-author, .post-categories, .post-tags { font-size: 1rem; }
+
+/* INFRA-069: отступ списков от края на мобильных */
+main ul, main ol { padding-left: 1.5rem; }
