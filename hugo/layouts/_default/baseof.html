@@ -9,7 +9,7 @@
   <meta name="robots" content="noindex, nofollow">
   {{ end }}
   {{ partial "head-meta.html" . }}
-  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 </head>
 <body>
   {{ partial "header.html" . }}
@@ -17,6 +17,6 @@
     {{ block "main" . }}{{ end }}
   </main>
   {{ partial "footer.html" . }}
-  <script src="/js/CookieConsent.js"></script>
+  <script src="{{ "js/CookieConsent.js" | relURL }}"></script>
 </body>
 </html>
