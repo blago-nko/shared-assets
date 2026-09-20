@@ -72,3 +72,6 @@ figcaption, .post-author, .post-categories, .post-tags { font-size: inherit; }
 /* INFRA-071: однородные вертикальные отступы блоков контента */
 .post-content p, .post-content ul, .post-content ol, .post-content figure { margin: 0 0 1rem; }
 .post-content li { margin: 0; }
+
+/* INFRA-073: ссылки наследуют метрики строки, не растягивая line-box */
+a { line-height: inherit; font-size: inherit; vertical-align: baseline; }
