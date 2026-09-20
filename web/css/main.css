@@ -75,3 +75,6 @@ figcaption, .post-author, .post-categories, .post-tags { font-size: inherit; }
 
 /* INFRA-073: ссылки наследуют метрики строки, не растягивая line-box */
 a { line-height: inherit; font-size: inherit; vertical-align: baseline; }
+
+/* INFRA-074: 44px tap-target только для навигации/кнопок; ссылки в контенте — обычный inline */
+.post-content a { display: inline; min-height: 0; }
