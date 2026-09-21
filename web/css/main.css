@@ -27,7 +27,10 @@ nav ul {
     flex-direction: row;
     gap: 1rem;
   }
-  header, main, footer {
+  header, footer {
+    padding: 2rem;
+  }
+  main {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -246,7 +249,7 @@ footer a:hover {
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .post-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -384,4 +387,10 @@ header nav ul li a:hover {
 
 #cookie-consent-banner button:hover {
   background: var(--color-primary-light);
+}
+
+/* INFRA-078: комфортная длина строки для чтения */
+.post-content {
+  max-width: 75ch;
+  margin: 0 auto;
 }
