@@ -80,7 +80,6 @@ a { line-height: inherit; font-size: inherit; vertical-align: baseline; }
 .post-content a { display: inline; min-height: 0; }
 
 /* INFRA-075: Дизайн-система "Образ слов" */
-@import url('design-tokens.css');
 
 body {
   font-family: var(--font-body);
@@ -221,4 +220,12 @@ footer a {
 
 footer a:hover {
   color: var(--color-neutral-50);
+}
+
+/* INFRA-076: мобильные отступы шапки и подвала */
+@media (max-width: 767px) {
+  header, footer {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
 }
