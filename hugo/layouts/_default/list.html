@@ -3,16 +3,24 @@
 {{ if .IsHome }}
 <p class="site-description">{{ .Site.Params.description }}</p>
 {{ end }}
-<ul class="post-list">
+<div class="post-grid">
   {{ $pages := .Pages }}
   {{ if .IsHome }}
   {{ $pages = .Site.RegularPages }}
   {{ end }}
   {{ range $pages }}
-  <li>
-    <a href="{{ .Permalink }}">{{ .Title }}</a>
-    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
-  </li>
+  <article class="post-card">
+    <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+    <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
+    {{ if .Summary }}
+    <p class="post-card-summary">{{ .Summary | truncate 150 }}</p>
+    {{ end }}
+    {{ with .GetTerms "tags" }}
+    <div class="post-card-tags">
+      {{ range . }}<span class="tag">{{ .LinkTitle }}</span>{{ end }}
+    </div>
+    {{ end }}
+  </article>
   {{ end }}
-</ul>
+</div>
 {{ end }}
