@@ -1,0 +1,54 @@
+/* INFRA-075: Дизайн-система "Образ слов" */
+
+:root {
+  /* Primary: глубокий индиго — интеллект, надёжность, глубина */
+  --color-primary: #2c3e50;
+  --color-primary-light: #34495e;
+  
+  /* Secondary: терракотовый — античность, земля, тепло */
+  --color-secondary: #c0392b;
+  --color-secondary-light: #e74c3c;
+  
+  /* Accent: янтарный — цитаты, выделения, акценты */
+  --color-accent: #d4a017;
+  --color-accent-light: #f4c430;
+  
+  /* Neutral: тёплая серая шкала — мягкость, не холодная */
+  --color-neutral-900: #2d3436;  /* основной текст */
+  --color-neutral-700: #636e72;  /* вторичный текст */
+  --color-neutral-500: #b2bec3;  /* границы */
+  --color-neutral-300: #dfe6e9;  /* фоны */
+  --color-neutral-100: #f5f6fa;  /* светлый фон */
+  --color-neutral-50: #ffffff;   /* белый */
+  
+  /* Typography */
+  --font-heading: 'PT Serif', Georgia, serif;
+  --font-body: 'PT Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', 'Courier New', monospace;
+  
+  /* Spacing (4px base) */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 1rem;     /* 16px */
+  --space-4: 1.5rem;   /* 24px */
+  --space-5: 2rem;     /* 32px */
+  --space-6: 3rem;     /* 48px */
+  
+  /* Line heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.8;
+  
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+/* Google Fonts preload */
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
