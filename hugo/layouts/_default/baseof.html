@@ -23,8 +23,20 @@
   {{ partial "footer.html" . }}
   <script src="{{ "js/CookieConsent.js" | relURL }}"></script>
 
+    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Меню" hidden>
+    <div class="mobile-menu__backdrop" data-menu-close></div>
+    <nav class="mobile-menu__panel">
+      <button class="mobile-menu__close" data-menu-close aria-label="Закрыть меню">&times;</button>
+      <ul>
+        <li><a href="{{ "" | relURL }}">Главная</a></li>
+        <li><a href="{{ "posts/" | relURL }}">Статьи</a></li>
+        <li><a href="{{ "about/" | relURL }}">О нас</a></li>
+        <li><a href="{{ "tags/" | relURL }}">Ярлыки</a></li>
+      </ul>
+    </nav>
+  </div>
   <nav class="sticky-bottom-bar" aria-label="Мобильная навигация">
-    <button class="sticky-btn" id="sticky-menu-btn" aria-label="Меню">
+    <button class="sticky-btn" id="sticky-menu-btn" aria-label="Меню" aria-controls="mobile-menu" aria-expanded="false">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
