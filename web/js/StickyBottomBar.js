@@ -1,67 +1,49 @@
-// INFRA-082: Sticky Bottom Bar с автоскрытием при скролле
-(function() {
-  const bar = document.querySelector('.sticky-bottom-bar');
-  if (!bar) return;
-
-  let lastScrollY = window.scrollY;
-  let ticking = false;
-
-  function updateBar() {
-    const currentScrollY = window.scrollY;
-    const scrollDelta = currentScrollY - lastScrollY;
-
-    // Скрываем при скролле вниз (больше 50px), показываем при скролле вверх
-    if (scrollDelta > 50 && currentScrollY > 200) {
-      bar.classList.add('sticky-bottom-bar--hidden');
-    } else if (scrollDelta < -50 || currentScrollY < 200) {
-      bar.classList.remove('sticky-bottom-bar--hidden');
-    }
-
-    lastScrollY = currentScrollY;
-    ticking = false;
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(updateBar);
-      ticking = true;
-    }
-  });
-
-  // Кнопка "Наверх"
-  const topBtn = document.getElementById('sticky-top-btn');
+// INFRA-082: Sticky Bottom Bar (всегда виден) + мобильное меню-drawer
+(function () {
+  // Кнопка "Наверх": плавный скролл к началу страницы
+  var topBtn = document.getElementById('sticky-top-btn');
   if (topBtn) {
-    topBtn.addEventListener('click', () => {
+    topBtn.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  // Кнопка "Меню" (пока просто скролл к шапке)
-  const menuBtn = document.getElementById('sticky-menu-btn');
-  if (menuBtn) {
-    menuBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-
-  // Кнопка "Поделиться" (Web Share API если доступен)
-  const shareBtn = document.getElementById('sticky-share-btn');
+  // Кнопка "Поделиться": Web Share API, fallback — копирование ссылки
+  var shareBtn = document.getElementById('sticky-share-btn');
   if (shareBtn) {
-    shareBtn.addEventListener('click', async () => {
+    shareBtn.addEventListener('click', function () {
       if (navigator.share) {
-        try {
-          await navigator.share({
-            title: document.title,
-            url: window.location.href
-          });
-        } catch (err) {
-          console.log('Share cancelled');
-        }
-      } else {
-        // Fallback: копировать URL
-        navigator.clipboard.writeText(window.location.href);
-        alert('Ссылка скопирована в буфер обмена');
+        navigator.share({ title: document.title, url: window.location.href }).catch(function () {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href).then(function () {
+          alert('Ссылка скопирована в буфер обмена');
+        });
       }
+    });
+  }
+
+  // Кнопка "Меню": открытие/закрытие drawer-панели
+  var menu = document.getElementById('mobile-menu');
+  var menuBtn = document.getElementById('sticky-menu-btn');
+  if (menu && menuBtn) {
+    var open = function () {
+      menu.hidden = false;
+      requestAnimationFrame(function () { menu.classList.add('mobile-menu--open'); });
+      document.body.classList.add('no-scroll');
+      menuBtn.setAttribute('aria-expanded', 'true');
+    };
+    var close = function () {
+      menu.classList.remove('mobile-menu--open');
+      document.body.classList.remove('no-scroll');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      setTimeout(function () { menu.hidden = true; }, 250);
+    };
+    menuBtn.addEventListener('click', function () { menu.hidden ? open() : close(); });
+    menu.querySelectorAll('[data-menu-close]').forEach(function (el) {
+      el.addEventListener('click', close);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !menu.hidden) close();
     });
   }
 })();
