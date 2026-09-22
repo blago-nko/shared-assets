@@ -402,3 +402,56 @@ header nav ul li a:hover {
   max-width: 75ch;
   margin: 0 auto;
 }
+
+/* INFRA-080: бренд-блок шапки, рабочие теги, цвета полос в бренд */
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.site-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  border-bottom: none;
+  margin: 0;
+}
+
+a.site-title:hover {
+  color: var(--color-secondary);
+}
+
+.site-tagline {
+  color: var(--color-neutral-700);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+header nav ul li a {
+  color: var(--color-primary);
+}
+
+header nav ul li a:hover {
+  color: var(--color-secondary);
+  border-bottom-color: var(--color-secondary);
+}
+
+footer {
+  background-color: var(--color-primary);
+}
+
+#cookie-consent-banner {
+  background: var(--color-primary);
+}
+
+a.tag {
+  color: var(--color-neutral-700);
+  border-bottom: none;
+}
+
+a.tag:hover {
+  color: var(--color-secondary);
+  background: var(--color-neutral-300);
+}

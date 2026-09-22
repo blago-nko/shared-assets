@@ -1,7 +1,6 @@
 {{ define "main" }}
+{{ if not .IsHome }}
 <h1>{{ .Title }}</h1>
-{{ if .IsHome }}
-<p class="site-description">{{ .Site.Params.description }}</p>
 {{ end }}
 <div class="post-grid">
   {{ $pages := .Pages }}
@@ -17,7 +16,7 @@
     {{ end }}
     {{ with .GetTerms "tags" }}
     <div class="post-card-tags">
-      {{ range . }}<span class="tag">{{ .LinkTitle }}</span>{{ end }}
+      {{ range . }}<a class="tag" href="{{ .Permalink }}">{{ .LinkTitle }}</a>{{ end }}
     </div>
     {{ end }}
   </article>
