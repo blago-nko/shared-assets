@@ -22,5 +22,33 @@
   </main>
   {{ partial "footer.html" . }}
   <script src="{{ "js/CookieConsent.js" | relURL }}"></script>
+
+  <nav class="sticky-bottom-bar" aria-label="Мобильная навигация">
+    <button class="sticky-btn" id="sticky-menu-btn" aria-label="Меню">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+      <span>Меню</span>
+    </button>
+    <button class="sticky-btn" id="sticky-share-btn" aria-label="Поделиться">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="18" cy="5" r="3"/>
+        <circle cx="6" cy="12" r="3"/>
+        <circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+      <span>Поделиться</span>
+    </button>
+    <button class="sticky-btn" id="sticky-top-btn" aria-label="Наверх">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
+      <span>Наверх</span>
+    </button>
+  </nav>
+  <script src="{{ "js/StickyBottomBar.js" | relURL }}"></script>
 </body>
 </html>
