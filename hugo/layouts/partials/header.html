@@ -1,7 +1,10 @@
 <header>
   <div class="container">
   <nav>
-    <a href="{{ "" | relURL }}">{{ .Site.Title }}</a>
+    <div class="brand">
+      {{ if .IsHome }}<h1 class="site-title">{{ .Site.Title }}</h1>{{ else }}<a class="site-title" href="{{ "" | relURL }}">{{ .Site.Title }}</a>{{ end }}
+      {{ if .IsHome }}<p class="site-tagline">{{ .Site.Params.description }}</p>{{ end }}
+    </div>
     <ul>
       <li><a href="{{ "posts/" | relURL }}">Статьи</a></li>
       <li><a href="{{ "about/" | relURL }}">О нас</a></li>
