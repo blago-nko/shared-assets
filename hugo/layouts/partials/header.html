@@ -15,7 +15,7 @@
         {{ end }}
       </a>
       <div class="brand-text">
-        {{ if .IsHome }}<h1 class="site-title">{{ .Site.Title }}</h1>{{ else }}<a class="site-title" href="{{ "" | relURL }}">{{ .Site.Title }}</a>{{ end }}
+        {{ partial "site-title.html" . }}
         {{ if .IsHome }}<p class="site-tagline">{{ .Site.Params.description }}</p>{{ end }}
       </div>
     </div>

@@ -1,0 +1,9 @@
+{{- $title := .Site.Title -}}
+{{- $words := split $title " " -}}
+{{- $n := len $words -}}
+{{ if $.IsHome }}<h1 class="site-title">{{ else }}<a class="site-title" href="{{ "" | relURL }}">{{ end }}
+{{- range $i, $w := $words }}
+  {{- if and (gt $n 1) (eq $i (sub $n 1)) }}<span class="site-title-accent">{{ $w }}</span>{{ else }}<span class="site-title-main">{{ $w }}</span>{{ end }}
+  {{- if lt $i (sub $n 1) }} {{ end }}
+{{- end }}
+{{ if $.IsHome }}</h1>{{ else }}</a>{{ end }}
