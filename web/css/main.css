@@ -89,6 +89,13 @@ body {
   color: var(--color-neutral-900);
   line-height: var(--line-height-normal);
   background-color: var(--color-neutral-50);
+  font-size: 1rem; /* 16px — мобильный */
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 0.875rem; /* 14px — десктоп, как YouTube */
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -498,7 +505,7 @@ a.tag:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--color-neutral-900);
+  background: var(--color-primary);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -656,5 +663,18 @@ body.no-scroll {
 @media (min-width: 768px) {
   .mobile-menu {
     display: none;
+  }
+}
+
+/* INFRA-084: бар индиго; cookie над баром; YouTube-шрифт */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 72px; /* контент/подвал не прячутся под бар */
+  }
+  #cookie-consent-banner {
+    bottom: 72px; /* строго над баром, без нахлёста */
+    left: var(--space-3);
+    right: var(--space-3);
+    border-radius: var(--radius-md);
   }
 }
