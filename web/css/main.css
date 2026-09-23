@@ -87,15 +87,9 @@ a { line-height: inherit; font-size: inherit; vertical-align: baseline; }
 body {
   font-family: var(--font-body);
   color: var(--color-neutral-900);
-  line-height: var(--line-height-normal);
+  line-height: 1.43; /* ~20px при 14px — YouTube */
   background-color: var(--color-neutral-50);
-  font-size: 1rem; /* 16px — мобильный */
-}
-
-@media (min-width: 768px) {
-  body {
-    font-size: 0.875rem; /* 14px — десктоп, как YouTube */
-  }
+  font-size: 14px; /* YouTube: тело везде 14px */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -678,3 +672,37 @@ body.no-scroll {
     border-radius: var(--radius-md);
   }
 }
+
+/* INFRA-086: типографика по плотности YouTube (14/20/18/16/12) */
+h1 { font-size: 20px; font-weight: 400; line-height: 1.25; margin: 0 0 var(--space-2); }
+h2 { font-size: 18px; font-weight: 400; line-height: 1.33; margin: var(--space-4) 0 var(--space-2); }
+h3 { font-size: 16px; font-weight: 500; line-height: 1.25; margin: var(--space-4) 0 var(--space-2); }
+h4, h5, h6 { font-size: 14px; font-weight: 500; line-height: 1.43; margin: var(--space-3) 0 var(--space-2); }
+
+.site-title { font-size: 16px; font-weight: 500; }
+
+.post-card-title { font-size: 16px; font-weight: 400; line-height: 1.25; }
+.post-card-summary { font-size: 14px; line-height: 1.43; }
+.post-card-summary h1,
+.post-card-summary h2,
+.post-card-summary h3,
+.post-card-summary h4,
+.post-card-summary h5,
+.post-card-summary h6 { font-size: 14px; font-weight: 500; line-height: 1.43; margin: 0 0 var(--space-2); }
+
+.post-card-date,
+time,
+.post-author,
+.post-categories,
+.post-tags { font-size: 12px; color: var(--color-neutral-700); }
+
+.sticky-btn span { font-size: 12px; }
+
+#cookie-consent-banner { font-size: 14px; }
+#cookie-consent-banner button { font-size: 14px; font-weight: 500; }
+
+/* INFRA-086: горизонтальное верхнее меню на всех экранах */
+header nav ul { flex-direction: row; }
+
+/* INFRA-086: drawer-меню поверх cookie-баннера (навигация важнее согласия) */
+.mobile-menu { z-index: 1300; }
