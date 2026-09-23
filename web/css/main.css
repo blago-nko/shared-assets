@@ -89,7 +89,7 @@ body {
   color: var(--color-neutral-900);
   line-height: 1.5;
   background-color: var(--color-neutral-50);
-  font-size: 16px;
+  font-size: 18px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -673,33 +673,35 @@ body.no-scroll {
   }
 }
 
-/* INFRA-087: пресет типографики Основателя (Вариант А): тело 16, h1 24, h2 20, h3 18, мета 14, lh 1.5 */
-h1 { font-size: 24px; font-weight: 500; line-height: 1.25; margin: 0 0 var(--space-2); }
-h2 { font-size: 20px; font-weight: 500; line-height: 1.3; margin: var(--space-4) 0 var(--space-2); }
-h3 { font-size: 18px; font-weight: 500; line-height: 1.35; margin: var(--space-4) 0 var(--space-2); }
-h4, h5, h6 { font-size: 16px; font-weight: 500; line-height: 1.5; margin: var(--space-3) 0 var(--space-2); }
+/* INFRA-088: возврат жирности (доступные веса 400/700) + тело 18px, h1 28px */
+h1 { font-size: 28px; font-weight: 700; line-height: 1.2; margin: 0 0 var(--space-2); }
+h2 { font-size: 24px; font-weight: 700; line-height: 1.25; margin: var(--space-4) 0 var(--space-2); }
+h3 { font-size: 20px; font-weight: 700; line-height: 1.3; margin: var(--space-4) 0 var(--space-2); }
+h4, h5, h6 { font-size: 18px; font-weight: 700; line-height: 1.4; margin: var(--space-3) 0 var(--space-2); }
 
-.site-title { font-size: 18px; font-weight: 500; }
+.site-title { font-size: 18px; font-weight: 700; }
 
-.post-card-title { font-size: 18px; font-weight: 500; line-height: 1.3; }
-.post-card-summary { font-size: 16px; line-height: 1.5; }
+.post-card-title { font-size: 20px; font-weight: 700; line-height: 1.25; }
+.post-card-summary { font-size: 16px; font-weight: 400; line-height: 1.5; }
 .post-card-summary h1,
 .post-card-summary h2,
 .post-card-summary h3,
 .post-card-summary h4,
 .post-card-summary h5,
-.post-card-summary h6 { font-size: 16px; font-weight: 500; line-height: 1.5; margin: 0 0 var(--space-2); }
+.post-card-summary h6 { font-size: 16px; font-weight: 700; line-height: 1.4; margin: 0 0 var(--space-2); }
 
 .post-card-date,
 time,
 .post-author,
 .post-categories,
-.post-tags { font-size: 14px; color: var(--color-neutral-700); }
+.post-tags { font-size: 15px; font-weight: 400; color: var(--color-neutral-700); }
 
-.sticky-btn span { font-size: 14px; }
+.sticky-btn span { font-size: 14px; font-weight: 400; }
 
-#cookie-consent-banner { font-size: 16px; }
-#cookie-consent-banner button { font-size: 16px; font-weight: 500; }
+#cookie-consent-banner { font-size: 16px; font-weight: 400; }
+#cookie-consent-banner button { font-size: 16px; font-weight: 700; }
+
+header nav ul li a { font-weight: 400; }
 
 /* INFRA-086: горизонтальное верхнее меню на всех экранах */
 header nav ul { flex-direction: row; }
