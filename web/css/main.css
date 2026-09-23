@@ -733,6 +733,7 @@ header nav ul { flex-direction: row; }
 /* INFRA-090: логотип в шапке слева от названия */
 .brand {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--space-3);
 }
