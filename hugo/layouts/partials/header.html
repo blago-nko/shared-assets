@@ -2,8 +2,22 @@
   <div class="container">
   <nav>
     <div class="brand">
-      {{ if .IsHome }}<h1 class="site-title">{{ .Site.Title }}</h1>{{ else }}<a class="site-title" href="{{ "" | relURL }}">{{ .Site.Title }}</a>{{ end }}
-      {{ if .IsHome }}<p class="site-tagline">{{ .Site.Params.description }}</p>{{ end }}
+      <a class="site-logo-link" href="{{ "" | relURL }}" aria-label="{{ .Site.Title }} — на главную">
+        {{ with .Site.Params.logo }}
+        <img class="site-logo" src="{{ . | relURL }}" alt="" loading="eager" decoding="async">
+        {{ else }}
+        <svg class="site-logo" viewBox="0 0 48 48" role="img" aria-hidden="true" focusable="false">
+          <rect x="2" y="2" width="44" height="44" rx="12" fill="#2c3e50"/>
+          <circle cx="18" cy="24" r="8" fill="none" stroke="#ffffff" stroke-width="3"/>
+          <path d="M35 17.5a8.5 8.5 0 1 0 0 13" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="38" cy="14" r="3" fill="#e67e22"/>
+        </svg>
+        {{ end }}
+      </a>
+      <div class="brand-text">
+        {{ if .IsHome }}<h1 class="site-title">{{ .Site.Title }}</h1>{{ else }}<a class="site-title" href="{{ "" | relURL }}">{{ .Site.Title }}</a>{{ end }}
+        {{ if .IsHome }}<p class="site-tagline">{{ .Site.Params.description }}</p>{{ end }}
+      </div>
     </div>
     <ul>
       <li><a href="{{ "posts/" | relURL }}">Статьи</a></li>
