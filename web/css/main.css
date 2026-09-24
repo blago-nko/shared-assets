@@ -804,3 +804,6 @@ header nav ul {
 
 /* INFRA-094a: .site-title — ширина по контенту, фикс align-items:stretch в .brand-text */
 .site-title { align-self: flex-start; width: max-content; max-width: 100%; }
+
+/* INFRA-094b: сохранение пропорций логотипа (2736x1520 -> вписывается в 36x36 без искажения) */
+.site-logo { object-fit: contain; }
