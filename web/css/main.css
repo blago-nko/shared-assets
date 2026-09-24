@@ -782,22 +782,22 @@ header nav ul { flex-direction: row; }
   padding-bottom: 2px;
 }
 
-/* INFRA-093: бар адаптивный — portrait снизу (база 082), landscape телефона справа вертикально */
-/* Append позже 082 min-width:768 display:none => в узком ландшафте перебивает на flex;
-   на >=1024 условие не активно => десктоп без бара. Portrait не тронут (orientation:landscape). */
-@media (max-width: 1023px) and (orientation: landscape) {
-  .sticky-bottom-bar {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-3);
-    bottom: auto; top: 0; left: auto; right: 0;
-    width: 64px; height: 100%;
-    padding: var(--space-2);
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);   /* тень слева, не сверху */
+/* INFRA-095: меню column на всех устройствах (расширение 091 4b с <768 на все брейкпоинты) */
+header nav {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+/* Пункты меню в ряд внутри опущенного блока, с переносом на узких экранах */
+header nav ul {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (max-width: 767px) {
+  header nav ul {
+    gap: var(--space-2);
   }
-  .sticky-btn span { display: none; }                    /* подписи не влезают в 64px; иконки + aria-label */
-  body { padding-bottom: 0; padding-right: 64px; }       /* контент/подвал не под правым баром */
-  #cookie-consent-banner { bottom: 0; left: 0; right: 64px; }  /* не залезает под правый бар */
 }
