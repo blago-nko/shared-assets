@@ -4,12 +4,14 @@
 
 ## Структура
 
-- `hugo/` — общая Hugo-тема для 11 RSS-сайтов
-- `astro/` — Astro-компоненты для 2 сайтов (Астро-витрины)
+- `hugo/` — общая Hugo-тема для 13 сайтов (все мигрируют на Hugo)
+- `astro/` — Astro-компоненты (post-wave переработка Пантеона после полной Hugo-миграции)
 - `web/` — общий CSS/JS бандл, CookieConsent.js
 - `rss/` — шаблоны и генераторы RSS-фидов
 
 ## Подключение к проекту (Hugo)
+
+### Основной механизм: [module.mounts] (рекомендуется)
 
 Как git submodule:
 
@@ -17,6 +19,21 @@
     git submodule update --init --recursive
 
 В `config.toml`:
+
+    [module]
+      [[module.mounts]]
+        source = "themes/shared-assets/hugo/layouts"
+        target = "layouts"
+      [[module.mounts]]
+        source = "themes/shared-assets/web/css"
+        target = "static/css"
+      [[module.mounts]]
+        source = "themes/shared-assets/web/js"
+        target = "static/js"
+
+### Альтернатива: theme = "shared-assets"
+
+Для простых случаев без переопределения layouts:
 
     theme = "shared-assets"
 
@@ -38,7 +55,7 @@
 ## Связанные репозитории
 
 - [blago-nko/manifests](https://github.com/blago-nko/manifests) — реестр манифестов и задач
-- 11 Hugo-сайтов + 2 Astro-сайта (подключают этот репозиторий как submodule)
+- 13 Hugo-сайтов подключают этот репозиторий как submodule; Astro/Next — post-wave этапы для Пантеона и САН
 
 ## Контрибуция
 
