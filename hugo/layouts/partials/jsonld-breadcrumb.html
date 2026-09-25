@@ -1,0 +1,42 @@
+{{/* 
+  JSON-LD BreadcrumbList Schema Generator
+  Method: Using native Hugo dict/slice serialization.
+*/}}
+{{ if not .IsHome }}
+{{ $items := slice }}
+{{ $position := 1 }}
+
+{{ $items = $items | append (dict 
+    "@type" "ListItem"
+    "position" $position
+    "name" "Главная"
+    "item" ("/" | absURL)
+) }}
+{{ $position = add $position 1 }}
+
+{{ range $ancestor := .Ancestors.Reverse }}
+{{ $items = $items | append (dict 
+    "@type" "ListItem"
+    "position" $position
+    "name" $ancestor.Title
+    "item" $ancestor.Permalink
+) }}
+{{ $position = add $position 1 }}
+{{ end }}
+
+{{ $items = $items | append (dict 
+    "@type" "ListItem"
+    "position" $position
+    "name" .Title
+    "item" .Permalink
+) }}
+
+{{ $breadcrumbDict := dict 
+    "@context" "https://schema.org"
+    "@type" "BreadcrumbList"
+    "itemListElement" $items
+}}
+<script type="application/ld+json">
+{{ $breadcrumbDict }}
+</script>
+{{ end }}
