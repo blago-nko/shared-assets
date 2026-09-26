@@ -14,7 +14,6 @@
       {{ if .Params.image }}
         <img src="{{ .Params.image }}" alt="{{ .Title }}" loading="lazy">
       {{ else }}
-        <!-- Placeholder icon when no image -->
         <svg class="post-card-image-placeholder-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
           <circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -23,18 +22,21 @@
       {{ end }}
     </div>
 
-    <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-    <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
-    
-    {{ if .Summary }}
-    <p class="post-card-summary">{{ .Summary | truncate 150 }}</p>
-    {{ end }}
-    
-    {{ with .GetTerms "tags" }}
-    <div class="post-card-tags">
-      {{ range . }}<a class="tag" href="{{ .Permalink }}">{{ .LinkTitle }}</a>{{ end }}
+    <!-- Content Wrapper -->
+    <div class="post-card-content">
+      <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+      <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
+      
+      {{ if .Summary }}
+      <p class="post-card-summary">{{ .Summary | truncate 150 }}</p>
+      {{ end }}
+      
+      {{ with .GetTerms "tags" }}
+      <div class="post-card-tags">
+        {{ range . }}<a class="tag" href="{{ .Permalink }}">{{ .LinkTitle }}</a>{{ end }}
+      </div>
+      {{ end }}
     </div>
-    {{ end }}
   </article>
   {{ end }}
 </div>
