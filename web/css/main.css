@@ -1028,3 +1028,15 @@ a.tag:hover {
   background-color: var(--color-neutral-200);
   color: var(--color-secondary);
 }
+
+/* === LINKS INSIDE POST CARD SUMMARIES (Fix for v8) === */
+.post-card-summary a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  font-weight: 600; /* Делаем ссылки чуть жирнее для акцента */
+}
+
+.post-card-summary a:hover {
+  color: var(--color-secondary);
+  text-decoration: none; /* Убираем подчеркивание при ховере для эффекта "кнопки" */
+}

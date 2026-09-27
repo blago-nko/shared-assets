@@ -15,9 +15,30 @@
       <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
       <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
       
-      <!-- Описание: Используем очищенное поле description -->
-      {{ with .Params.description }}
-        <p class="post-card-summary">{{ . | truncate 150 }}</p>
+      <!-- 
+        Логика описания:
+        1. Пробуем взять автогенерируемый .Summary (он содержит HTML и ссылки).
+        2. Если он пустой или очень короткий (менее 50 символов без пробелов), 
+           берем начало .Content и обрезаем до 250 символов.
+        3. Оборачиваем в safeHTML, чтобы ссылки кликались.
+      -->
+      {{ $summary := "" }}
+      {{ if gt (len (.Summary | plainify)) 50 }}
+        {{ $summary = .Summary }}
+      {{ else }}
+        {{ /* Fallback: берем сырой контент, обрезаем грубо */}}
+        {{ $raw := .Content }}
+        {{ if gt (len $raw) 250 }}
+          {{ $summary = printf "%s..." (substr $raw 0 250) }}
+        {{ else }}
+          {{ $summary = $raw }}
+        {{ end }}
+      {{ end }}
+
+      {{ if $summary }}
+      <div class="post-card-summary">
+        {{ $summary | safeHTML }}
+      </div>
       {{ end }}
       
       {{ with .GetTerms "tags" }}
