@@ -26,7 +26,6 @@
       {{ if gt (len (.Summary | plainify)) 50 }}
         {{ $summary = .Summary }}
       {{ else }}
-        {{ /* Fallback: берем сырой контент, обрезаем грубо */}}
         {{ $raw := .Content }}
         {{ if gt (len $raw) 250 }}
           {{ $summary = printf "%s..." (substr $raw 0 250) }}
