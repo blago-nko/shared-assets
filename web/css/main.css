@@ -1030,16 +1030,7 @@ a.tag:hover {
 }
 
 /* === LINKS INSIDE POST CARD SUMMARIES (Fix for v8) === */
-.post-card-summary a {
-  color: var(--color-primary);
-  text-decoration: underline;
-  font-weight: 600; /* Делаем ссылки чуть жирнее для акцента */
-}
 
-.post-card-summary a:hover {
-  color: var(--color-secondary);
-  text-decoration: none; /* Убираем подчеркивание при ховере для эффекта "кнопки" */
-}
 
 
 /* === HIDE DUPLICATE IMAGES IN SUMMARIES (v10 Fix) === */
@@ -1060,30 +1051,42 @@ a.tag:hover {
 }
 
 /* Стилизация ссылок внутри описания */
-.post-card-summary a {
-  color: inherit; /* Наследуем цвет текста по умолчанию */
-  text-decoration: underline;
-  font-weight: bold;
-  transition: color 0.2s ease;
-}
 
-.post-card-summary a:hover {
-  color: var(--color-primary); /* При наведении меняем на основной бренд-цвет */
-}
 
 /* === FINAL LINK POLISH FOR CARD SUMMARIES (v14) === */
-.post-card-summary a {
-  /* Наследуем цвет основного текста карточки для естественности */
-  color: var(--color-text-primary); 
-  text-decoration: underline;
-  text-decoration-color: rgba(0, 0, 0, 0.3); /* Мягкое серое подчеркивание */
-  font-weight: inherit; /* Не делаем жирнее, если не задано глобально */
-  transition: all 0.2s ease-in-out;
-}
-
 .post-card-summary a:hover,
 .post-card-summary a:focus {
   /* При наведении меняем только оттенок/яркость, оставляя структуру */
   color: var(--color-primary); /* Или другой акцентный цвет бренда */
   text-decoration-color: currentColor; /* Подчеркивание становится того же цвета, что и текст */
+}
+
+
+/* === FINAL LINK STYLES FOR CARDS (v15 Clean Slate) === */
+.post-card-summary a {
+  /* 1. Цвет: наследуем основной текст, но делаем его чуть темнее/ярче для различимости */
+  color: var(--color-text-primary); 
+  
+  /* 2. Декорация: только одно подчеркивание */
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  
+  /* 3. Убираем border-bottom, который мог создавать вторую линию */
+  border-bottom: none !important; 
+  
+  /* 4. Плавность перехода */
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.post-card-summary a:hover,
+.post-card-summary a:focus {
+  /* При наведении меняем цвет на акцентный (синий/зеленый бренда) */
+  color: var(--color-primary); 
+  
+  /* Подчеркивание становится того же цвета, что и текст */
+  text-decoration-color: currentColor;
+  
+  /* Опционально: можно добавить легкий фон или жирность, если нужно сильнее выделить */
+  font-weight: 600; 
 }
