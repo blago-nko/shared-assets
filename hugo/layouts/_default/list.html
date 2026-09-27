@@ -3,7 +3,7 @@
   {{ range .Site.RegularPages }}
   <article class="post-card">
     
-    <!-- Изображение -->
+    <!-- Изображение (Обложка) -->
     {{ with .Params.image }}
     <div class="post-card-image-wrapper">
       <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
@@ -16,28 +16,31 @@
       <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
       
       <!-- 
-        Логика описания:
-        1. Пробуем взять автогенерируемый .Summary (он содержит HTML и ссылки).
-        2. Если он пустой или очень короткий (менее 50 символов без пробелов), 
-           берем начало .Content и обрезаем до 250 символов.
-        3. Оборачиваем в safeHTML, чтобы ссылки кликались.
+        Логика описания (v9 - Fix Duplicates):
+        1. Берем .Summary (автогенерация Hugo сохраняет HTML/ссылки).
+        2. Если пусто/коротко, берем .Content.
+        3. ВАЖНО: Удаляем все теги <img ...>, чтобы картинка не дублировалась с обложкой сверху.
+        4. Обрезаем до 250 символов для компактности.
       -->
-      {{ $summary := "" }}
+      {{ $rawSummary := "" }}
+      
       {{ if gt (len (.Summary | plainify)) 50 }}
-        {{ $summary = .Summary }}
+        {{ $rawSummary = .Summary }}
       {{ else }}
-        {{ $raw := .Content }}
-        {{ if gt (len $raw) 250 }}
-          {{ $summary = printf "%s..." (substr $raw 0 250) }}
-        {{ else }}
-          {{ $summary = $raw }}
-        {{ end }}
+        {{ $rawSummary = .Content }}
       {{ end }}
 
-      {{ if $summary }}
-      <div class="post-card-summary">
-        {{ $summary | safeHTML }}
-      </div>
+      <!-- Фильтрация: удаляем img теги регулярным выражением -->
+      {{ $cleanSummary := replaceRE "<img[^>]*>" "" $rawSummary }}
+      
+      <!-- Очистка лишних пробелов после удаления тегов -->
+      {{ $cleanSummary = replaceRE "\s+" " " $cleanSummary }}
+      {{ $cleanSummary = trim $cleanSummary " " }}
+
+      {{ if gt (len $cleanSummary) 20 }}
+         <div class="post-card-summary">
+           {{ $cleanSummary | truncate 250 | safeHTML }}
+         </div>
       {{ end }}
       
       {{ with .GetTerms "tags" }}
