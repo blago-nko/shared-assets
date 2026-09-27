@@ -16,7 +16,7 @@
   {{ else if .Params.description }}
     {{ $desc = .Params.description | truncate 150 }}
   {{ else }}
-    {{ /* Fallback: берем первые слова из контента, удаляя разметку */}}
+    
     {{ $rawContent := .Plain | plainify }}
     {{ $desc = substr $rawContent 0 150 }}
   {{ end }}
