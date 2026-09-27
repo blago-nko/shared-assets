@@ -1040,3 +1040,9 @@ a.tag:hover {
   color: var(--color-secondary);
   text-decoration: none; /* Убираем подчеркивание при ховере для эффекта "кнопки" */
 }
+
+
+/* === HIDE DUPLICATE IMAGES IN SUMMARIES (v10 Fix) === */
+.post-card-summary img {
+  display: none !important;
+}
