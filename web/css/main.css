@@ -1046,3 +1046,27 @@ a.tag:hover {
 .post-card-summary img {
   display: none !important;
 }
+
+/* === FINAL TEXT CLAMPING & LINK STYLING FOR CARD SUMMARIES (v13 Hotfix) === */
+.post-card-summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Показываем максимум 4 строки */
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.5rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Стилизация ссылок внутри описания */
+.post-card-summary a {
+  color: inherit; /* Наследуем цвет текста по умолчанию */
+  text-decoration: underline;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.post-card-summary a:hover {
+  color: var(--color-primary); /* При наведении меняем на основной бренд-цвет */
+}
