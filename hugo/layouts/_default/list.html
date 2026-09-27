@@ -18,7 +18,7 @@
       <!-- Описание: Берем ТОЛЬКО чистое поле excerpt_clean -->
       {{ with .Params.excerpt_clean }}
          <div class="post-card-summary">
-           {{ . }}
+           {{ . | safeHTML }}
          </div>
       {{ end }}
       
