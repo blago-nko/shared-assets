@@ -8,6 +8,19 @@
   {{ $pages = .Site.RegularPages }}
   {{ end }}
   {{ range $pages }}
+  
+  <!-- Определяем источник текста для описания -->
+  {{ $desc := "" }}
+  {{ if .Summary }}
+    {{ $desc = .Summary | truncate 150 }}
+  {{ else if .Params.description }}
+    {{ $desc = .Params.description | truncate 150 }}
+  {{ else }}
+    {{ /* Fallback: берем первые слова из контента, удаляя разметку */}}
+    {{ $rawContent := .Plain | plainify }}
+    {{ $desc = substr $rawContent 0 150 }}
+  {{ end }}
+
   <article class="post-card">
     <!-- Image Wrapper -->
     <div class="post-card-image-wrapper">
@@ -27,8 +40,9 @@
       <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
       <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
       
-      {{ if .Summary }}
-      <p class="post-card-summary">{{ .Summary | truncate 150 }}</p>
+      <!-- Вывод описания только если оно не пустое -->
+      {{ if $desc }}
+      <p class="post-card-summary">{{ $desc }}...</p>
       {{ end }}
       
       {{ with .GetTerms "tags" }}
