@@ -15,17 +15,10 @@
       <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
       <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
       
-      <!-- 
-        Логика описания (v11 - First Paragraph):
-        Используем .FirstParagraph — это самый надежный способ получить первый текстовый блок,
-        автоматически пропуская любые картинки, div'ы и служебную разметку Blogger.
-        Сохраняем ссылки внутри текста благодаря safeHTML.
-      -->
-      {{ $desc := .FirstParagraph }}
-      
-      {{ if $desc }}
+      <!-- Описание: Берем ТОЛЬКО чистое поле excerpt_clean -->
+      {{ with .Params.excerpt_clean }}
          <div class="post-card-summary">
-           {{ $desc | truncate 250 | safeHTML }}
+           {{ . }}
          </div>
       {{ end }}
       
