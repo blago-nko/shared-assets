@@ -1,3 +1,8 @@
+/* INFRA-098: Remove default blue/grey tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Mobile-First CSS (INFRA-057) */
 * {
   margin: 0;
