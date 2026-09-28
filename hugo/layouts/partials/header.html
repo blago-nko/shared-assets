@@ -22,7 +22,9 @@
     <ul>
       <li><a href="{{ "posts/" | relURL }}">Статьи</a></li>
       <li><a href="{{ "about/" | relURL }}">О нас</a></li>
-    </ul>
-  </nav>
+      <li class="nav-search-item">
+        {{ partial "search-trigger.html" . }}
+      </li>
+    </ul></nav>
   </div>
 </header>
