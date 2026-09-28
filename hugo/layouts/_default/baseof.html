@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
 <link rel="stylesheet" href="{{ "css/design-tokens.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/components/_search.css" | relURL }}">
   {{ partial "jsonld-article.html" . }}
   {{ partial "jsonld-breadcrumb.html" . }}
 </head>
@@ -64,5 +65,7 @@
     </button>
   </nav>
   <script src="{{ "js/StickyBottomBar.js" | relURL }}"></script>
+  {{ partial "search-modal.html" . }}
+  <script type="module" src="{{ "js/PagefindInit.js" | relURL }}"></script>
 </body>
 </html>
