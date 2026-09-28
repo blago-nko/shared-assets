@@ -398,8 +398,13 @@ header nav ul li a:hover {
 }
 
 a.site-title:hover {
-  color: var(--color-secondary);
+  color: var(--color-primary-light);
+  opacity: 0.9;
 }
+.site-title:active {
+  transform: scale(0.98);
+}
+
 
 .site-tagline {
   color: var(--color-neutral-700);
