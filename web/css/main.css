@@ -402,7 +402,7 @@ a.site-title:hover {
   opacity: 0.9;
 }
 .site-title:active {
-  transform: scale(0.98);
+  opacity: 0.85;
 }
 
 
