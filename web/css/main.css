@@ -1127,3 +1127,33 @@ a.tag:hover {
   /* Опционально: можно добавить легкий фон или жирность, если нужно сильнее выделить */
   font-weight: 600; 
 }
+
+/* INFRA-095-FINAL: Absolute prevention of logo/title jitter on click */
+/* 1. Запрет любых обводок и теней при фокусе/клике для обоих элементов */
+.site-logo-link,
+.site-title {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.site-logo-link:active, .site-logo-link:focus, .site-logo-link:focus-visible,
+.site-title:active, .site-title:focus, .site-title:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+/* 2. Промоутим элементы в отдельные слои композитинга, чтобы избежать reflow/repaint */
+.site-logo {
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.site-title {
+  will-change: opacity;
+}
