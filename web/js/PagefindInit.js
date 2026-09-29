@@ -1,92 +1,101 @@
-// INFRA-097: Pagefind Initialization Script
+// INFRA-097: Pagefind Initialization (Official Vanilla JS approach)
 
 (function() {
-  // Проверка наличия элементов DOM
+  'use strict';
+  
   const overlay = document.getElementById('search-overlay');
   const openBtn = document.getElementById('open-search-btn');
   const closeBtn = document.querySelector('.close-search-btn');
   
   if (!overlay || !openBtn) {
-    console.warn('Search elements not found in DOM. Skipping initialization.');
+    console.warn('Search DOM elements not found. Skipping Pagefind init.');
     return;
   }
 
-  let pagefindInstance = null;
-  let isLoaded = false;
+  let isInitialized = false;
 
-  // Функция загрузки библиотеки Pagefind
-  async function loadPagefind() {
-    if (isLoaded) return;
+  const initPagefind = () => {
+    if (isInitialized) return;
+
+    // 1. Определяем базовый путь для подкаталога GitHub Pages
+    const isSubdir = window.location.pathname.startsWith('/obrazslov/');
+    const basePath = isSubdir ? '/obrazslov/pagefind/' : '/pagefind/';
+    const baseUrl = isSubdir ? '/obrazslov/' : '/';
+
+    console.log(`[Pagefind] Initializing with basePath: ${basePath}`);
+
+    // 2. Динамически загружаем CSS интерфейса
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = basePath + 'pagefind-ui.css';
+    document.head.appendChild(link);
+
+    // 3. Динамически загружаем JS интерфейс (он сам подтянет pagefind.js и WASM)
+    const script = document.createElement('script');
+    script.src = basePath + 'pagefind-ui.js';
     
-    try {
-      // Динамическая импортирование модуля ES
-      // Путь /pagefind/pagefind.js предполагает, что индекс лежит в корне сайта после билда
-      const module = await import(new URL('../pagefind/pagefind.js', import.meta.url).href);
-      
-      // Инициализация экземпляра
-      pagefindInstance = new module.PagefindUI({
-        element: '#pagefind-ui-root',
-        showSubResults: true,
-        translations: {
-          placeholder: 'Введите запрос...',
-          clear_search_label: 'Очистить',
-          load_more: 'Загрузить ещё',
-          no_results: 'Ничего не найдено',
-          results_count_1: '{count} результат',
-          results_count_n: '{count} результата',
-        },
-        excerptLength: 20,
-        sort: {
-          field: 'date',
-          direction: 'desc'
-        }
-      });
-      
-      isLoaded = true;
-      console.log('✅ Pagefind initialized successfully.');
-    } catch (error) {
-      console.error('❌ Failed to load Pagefind:', error);
-      // Fallback: можно показать сообщение об ошибке пользователю
+    script.onload = () => {
+      if (typeof window.PagefindUI !== 'undefined') {
+        // 4. Инициализируем UI в нашем контейнере
+        new window.PagefindUI({
+          element: "#pagefind-ui-root",
+          baseUrl: baseUrl,
+          showSubResults: true,
+          excerptLength: 30,
+          highlightParam: 'highlight',
+          translations: {
+            placeholder: 'Введите запрос...',
+            clear_search_label: 'Очистить',
+            load_more: 'Загрузить ещё',
+            no_results: 'Ничего не найдено',
+            results_count_1: '{count} результат',
+            results_count_n: '{count} результата',
+          }
+        });
+        isInitialized = true;
+        console.log('✅ Pagefind UI successfully initialized');
+      } else {
+        console.error('❌ PagefindUI is not defined after script load');
+      }
+    };
+
+    script.onerror = (e) => {
+      console.error('❌ Failed to load Pagefind UI script:', e);
       const root = document.getElementById('pagefind-ui-root');
-      if(root) root.innerHTML = '<p style="color:red;">Ошибка загрузки поиска. Попробуйте позже.</p>';
-    }
-  }
+      if (root) {
+        root.innerHTML = '<p style="color:red; padding: 1rem;">Ошибка загрузки скрипта поиска. Проверьте консоль (F12).</p>';
+      }
+    };
 
-  // Обработчик открытия оверлея
-  openBtn.addEventListener('click', async () => {
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Блокируем скролл страницы
-    
-    // Ленивая загрузка: грузим Pagefind только при первом открытии
-    if (!isLoaded) {
-      await loadPagefind();
-    } else {
-      // Если уже загружено, просто фокусируем поле ввода
-      setTimeout(() => {
-        const input = document.querySelector('.pagefind-ui__search-input');
-        if(input) input.focus();
-      }, 100);
-    }
-  });
-
-  // Обработчик закрытия
-  const closeModal = () => {
-    overlay.classList.remove('active');
-    document.body.style.overflow = ''; // Возвращаем скролл
+    document.head.appendChild(script);
   };
 
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeModal);
-  }
-
-  // Закрытие по клику вне контейнера
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      closeModal();
-    }
+  // Обработчик открытия
+  openBtn.addEventListener('click', () => {
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    initPagefind(); // Ленивая загрузка при первом клике
+    
+    // Фокус на поле ввода после рендера
+    setTimeout(() => {
+      const input = document.querySelector('.pagefind-ui__search-input');
+      if (input) input.focus();
+    }, 200);
   });
 
-  // Закрытие по клавише Escape
+  // Обработчики закрытия
+  const closeModal = () => {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlay.classList.contains('active')) {
       closeModal();
