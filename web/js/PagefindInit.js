@@ -21,7 +21,7 @@
     try {
       // Динамическая импортирование модуля ES
       // Путь /pagefind/pagefind.js предполагает, что индекс лежит в корне сайта после билда
-      const module = await import('../pagefind/pagefind.js');
+      const module = await import(new URL('../pagefind/pagefind.js', import.meta.url).href);
       
       // Инициализация экземпляра
       pagefindInstance = new module.PagefindUI({

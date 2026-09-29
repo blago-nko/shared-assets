@@ -1,3 +1,24 @@
+/* INFRA-095-FINAL: Strictly prevent logo jitter on click/hover */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.site-logo-link {
+  display: block;
+  text-decoration: none;
+  outline: none;
+}
+.site-logo-link:active, .site-logo-link:focus {
+  transform: none !important;
+  opacity: 1 !important;
+  outline: none !important;
+}
+.site-logo {
+  display: block;
+  pointer-events: none;
+}
+
 /* INFRA-095-FIX: Prevent SVG logo from intercepting clicks and shifting */
 .site-title .site-logo {
   pointer-events: none;
