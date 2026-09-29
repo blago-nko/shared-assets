@@ -1157,3 +1157,17 @@ a.tag:hover {
 .site-title {
   will-change: opacity;
 }
+
+/* INFRA-095-ULTIMATE: Lock flex dimensions to prevent ANY baseline/size shift */
+.site-logo-link {
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+}
+
+.site-logo {
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}

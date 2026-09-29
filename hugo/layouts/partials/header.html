@@ -4,7 +4,7 @@
     <div class="brand">
       <a class="site-logo-link" href="{{ "" | relURL }}" aria-label="{{ .Site.Title }} — на главную">
         {{ with .Site.Params.logo }}
-        <img class="site-logo" src="{{ . | relURL }}" alt="" loading="eager" decoding="async">
+        <img class="site-logo" src="{{ . | relURL }}" alt="" loading="eager" decoding="sync">
         {{ else }}
         <svg class="site-logo" viewBox="0 0 48 48" role="img" aria-hidden="true" focusable="false">
           <rect x="2" y="2" width="44" height="44" rx="12" fill="#2c3e50"/>

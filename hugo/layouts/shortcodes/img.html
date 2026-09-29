@@ -28,7 +28,7 @@
     {{ with $heightStr }}height="{{ . }}"{{ end }}
     loading="{{ if $isPriority }}eager{{ else }}lazy{{ end }}"
     fetchpriority="{{ if $isPriority }}high{{ else }}auto{{ end }}"
-    decoding="async"
+    decoding="sync"
     itemprop="image"
   >
   {{ with $caption }}
