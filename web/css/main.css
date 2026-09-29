@@ -1,3 +1,9 @@
+/* INFRA-095-FIX: Prevent SVG logo from intercepting clicks and shifting */
+.site-title .site-logo {
+  pointer-events: none;
+  display: block;
+}
+
 /* INFRA-098: Remove default blue/grey tap highlight on mobile */
 * {
   -webkit-tap-highlight-color: transparent;
