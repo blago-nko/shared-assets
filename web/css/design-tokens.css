@@ -267,3 +267,23 @@ html, body, * {
 
 [data-theme="dark"] .icon-sun { display: block !important; }
 [data-theme="dark"] .icon-moon { display: none !important; }
+
+/* INFRA-100: Logo styling for dark mode */
+.site-logo {
+  background: transparent !important;
+}
+
+[data-theme="dark"] .site-logo {
+  background: transparent !important;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+/* Альтернативный вариант - если логотип в контейнере */
+[data-theme="dark"] .site-logo-link {
+  background: transparent !important;
+}
+
+[data-theme="dark"] .brand {
+  background: transparent !important;
+}

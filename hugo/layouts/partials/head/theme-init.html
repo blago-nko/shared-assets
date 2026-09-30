@@ -1,15 +1,23 @@
 <script>
-  // INFRA-100: Prevent FOUC and persist theme across page navigations
+  // INFRA-100: Initialize theme immediately to prevent FOUC
   (function() {
     try {
+      // Сначала проверяем localStorage
       const storedTheme = localStorage.getItem('theme');
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
       
-      if (theme === 'dark') {
+      // Если есть сохраненная тема - применяем её
+      if (storedTheme) {
+        if (storedTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+        return;
+      }
+      
+      // Если нет сохраненной темы - проверяем системные настройки
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.setAttribute('data-theme', 'dark');
-      } else {
-        document.documentElement.removeAttribute('data-theme');
       }
     } catch (e) {
       console.error('Theme initialization error:', e);
