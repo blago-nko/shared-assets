@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+<script>
+(function() {
+  console.log('%c[THEME-INIT] Запуск...', 'color: #fbbc04; font-weight: bold;');
+  const stored = localStorage.getItem('theme');
+  console.log('[THEME-INIT] Тема в localStorage:', stored);
+  
+  if (stored === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    console.log('%c[THEME-INIT] Применена ТЕМНАЯ тема из памяти', 'color: #8ab4f4;');
+  } else if (stored === 'light') {
+    document.documentElement.removeAttribute('data-theme');
+    console.log('%c[THEME-INIT] Применена СВЕТЛАЯ тема из памяти', 'color: #8ab4f4;');
+  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    console.log('%c[THEME-INIT] Применена ТЕМНАЯ тема из настроек системы', 'color: #8ab4f4;');
+  } else {
+    console.log('%c[THEME-INIT] Тема не задана, используется СВЕТЛАЯ по умолчанию', 'color: #8ab4f4;');
+  }
+})();
+</script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if eq .Title .Site.Title }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>

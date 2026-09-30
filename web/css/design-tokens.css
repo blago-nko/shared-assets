@@ -318,3 +318,66 @@ html, body, * {
   display: block !important;
   object-fit: contain !important;
 }
+
+/* INFRA-100: Dual Logo & Square Background (Hardcoded for reliability) */
+.site-logo-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px !important; /* Отступ между краем квадрата и логотипом */
+  background-color: #ffffff !important; /* Белый фон для светлой темы */
+  border-radius: 6px !important;
+  transition: background-color 0.3s ease !important;
+}
+
+[data-theme="dark"] .site-logo-link {
+  background-color: #1e1e1e !important; /* Темно-серый фон как у шапки */
+}
+
+.site-logo {
+  width: 120px !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: contain !important;
+}
+
+
+
+/* INFRA-100: Dual Logo & Square Background (Hardcoded for reliability) */
+.site-logo-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px !important; /* Отступ между краем квадрата и логотипом */
+  background-color: #ffffff !important; /* Белый фон для светлой темы */
+  border-radius: 6px !important;
+  transition: background-color 0.3s ease !important;
+}
+
+[data-theme="dark"] .site-logo-link {
+  background-color: #1e1e1e !important; /* Темно-серый фон как у шапки */
+}
+
+.site-logo {
+  width: 120px !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: contain !important;
+}
+
+/* INFRA-100: Logo with ALWAYS WHITE square background */
+.site-logo-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px !important;
+  background-color: #ffffff !important; /* ВСЕГДА белый, даже в темной теме */
+  border-radius: 6px !important;
+}
+
+.site-logo {
+  width: 120px !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: contain !important;
+}
