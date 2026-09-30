@@ -296,3 +296,25 @@ html, body, * {
   filter: none !important;
   opacity: 1 !important;
 }
+
+/* INFRA-100: Logo with square background */
+.site-logo-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px !important;
+  background-color: var(--color-bg, #ffffff) !important;
+  border-radius: 4px !important;
+  transition: background-color 0.3s ease !important;
+}
+
+[data-theme="dark"] .site-logo-link {
+  background-color: var(--color-bg-secondary, #1e1e1e) !important;
+}
+
+.site-logo {
+  width: 144px !important;
+  height: 144px !important;
+  display: block !important;
+  object-fit: contain !important;
+}

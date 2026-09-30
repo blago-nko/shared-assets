@@ -1,33 +1,18 @@
 <script>
-  // INFRA-100: Initialize theme immediately to prevent FOUC
+  // INFRA-100: Initialize theme IMMEDIATELY (before any rendering)
   (function() {
+    'use strict';
     try {
-      console.log('Theme init starting...');
-      
-      // Проверяем localStorage
       const storedTheme = localStorage.getItem('theme');
-      console.log('Stored theme:', storedTheme);
-      
-      if (storedTheme) {
-        if (storedTheme === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          console.log('Applied dark theme from localStorage');
-        } else {
-          document.documentElement.removeAttribute('data-theme');
-          console.log('Applied light theme from localStorage');
-        }
-        return;
-      }
-      
-      // Если нет сохраненной темы - проверяем системные настройки
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      if (storedTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
-        console.log('Applied dark theme from system preferences');
-      } else {
-        console.log('Using default light theme');
+      } else if (storedTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
       }
     } catch (e) {
-      console.error('Theme initialization error:', e);
+      console.error('Theme init error:', e);
     }
   })();
 </script>

@@ -148,3 +148,52 @@ mark.pagefind-highlight {
 .pagefind-ui__label {
   display: none;
 }
+
+/* INFRA-097-FIX: Force search button visibility */
+.nav-search-item {
+  display: list-item !important;
+  visibility: visible !important;
+}
+.search-trigger {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: auto !important;
+  height: auto !important;
+}
+.search-trigger svg {
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* INFRA-100: Dark mode styles for search modal */
+[data-theme="dark"] .search-overlay {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="dark"] .search-container {
+  background-color: var(--color-bg-secondary, #1e1e1e);
+  color: var(--color-text, #e0e0e0);
+}
+
+[data-theme="dark"] #pagefind-ui-root {
+  background-color: var(--color-bg-secondary, #1e1e1e);
+}
+
+/* Pagefind UI dark mode overrides */
+[data-theme="dark"] .pagefind-ui__search-input {
+  background-color: var(--color-bg, #121212);
+  color: var(--color-text, #e0e0e0);
+  border-color: var(--color-border, #333);
+}
+
+[data-theme="dark"] .pagefind-ui__result-card {
+  background-color: var(--color-bg, #121212);
+  border-color: var(--color-border, #333);
+}
+
+[data-theme="dark"] .pagefind-ui__result-title,
+[data-theme="dark"] .pagefind-ui__result-excerpt {
+  color: var(--color-text, #e0e0e0);
+}
