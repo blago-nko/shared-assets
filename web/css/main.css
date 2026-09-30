@@ -1171,3 +1171,23 @@ a.tag:hover {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
+
+/* INFRA-100: Theme toggle positioning in navigation */
+nav ul li:last-child {
+  margin-left: auto;
+}
+
+nav ul li .theme-toggle-btn {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    flex-wrap: wrap;
+    gap: var(--space-2, 8px);
+  }
+  nav ul li:last-child {
+    margin-left: auto;
+    order: 100;
+  }
+}
