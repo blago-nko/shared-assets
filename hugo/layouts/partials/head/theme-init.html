@@ -1,10 +1,18 @@
 <script>
-  // INFRA-100: Prevent FOUC (Flash of Unstyled Content) for Dark Mode
+  // INFRA-100: Prevent FOUC and persist theme across page navigations
   (function() {
-    const theme = localStorage.getItem('theme') || 
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    if (theme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
+    try {
+      const storedTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+      
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+    } catch (e) {
+      console.error('Theme initialization error:', e);
     }
   })();
 </script>
