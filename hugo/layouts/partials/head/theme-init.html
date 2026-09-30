@@ -1,0 +1,10 @@
+<script>
+  // INFRA-100: Prevent FOUC (Flash of Unstyled Content) for Dark Mode
+  (function() {
+    const theme = localStorage.getItem('theme') || 
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
