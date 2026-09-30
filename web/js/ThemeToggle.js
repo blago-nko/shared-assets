@@ -6,18 +6,21 @@
   const themeToggleBtn = document.getElementById('theme-toggle');
   const html = document.documentElement;
 
-  if (!themeToggleBtn) return;
+  if (!themeToggleBtn) {
+    console.warn('Theme toggle button not found');
+    return;
+  }
 
   // Функция применения темы
   const applyTheme = (theme) => {
+    console.log('Applying theme:', theme);
     if (theme === 'dark') {
       html.setAttribute('data-theme', 'dark');
     } else {
       html.removeAttribute('data-theme');
     }
-    // Сохраняем в localStorage
     localStorage.setItem('theme', theme);
-    console.log('Theme applied and saved:', theme);
+    console.log('Theme saved to localStorage:', theme);
   };
 
   // Функция получения текущей темы
@@ -29,6 +32,7 @@
   themeToggleBtn.addEventListener('click', () => {
     const currentTheme = getCurrentTheme();
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    console.log('Toggle clicked. Current:', currentTheme, 'New:', newTheme);
     applyTheme(newTheme);
   });
 
@@ -38,5 +42,7 @@
       applyTheme(e.matches ? 'dark' : 'light');
     }
   });
+
+  console.log('ThemeToggle.js loaded. Current theme:', getCurrentTheme());
 
 })();
