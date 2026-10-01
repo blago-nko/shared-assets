@@ -2,11 +2,11 @@
 
 (function() {
   'use strict';
-  
+
   const overlay = document.getElementById('search-overlay');
   const openBtn = document.getElementById('open-search-btn');
   const closeBtn = document.querySelector('.close-search-btn');
-  
+
   if (!overlay || !openBtn) {
     console.warn('Search DOM elements not found. Skipping Pagefind init.');
     return;
@@ -30,30 +30,29 @@
     link.href = basePath + 'pagefind-ui.css';
     document.head.appendChild(link);
 
-    // 3. Динамически загружаем JS интерфейс (он сам подтянет pagefind.js и WASM)
+    // 3. Динамически загружаем JS интерфейс
     const script = document.createElement('script');
     script.src = basePath + 'pagefind-ui.js';
-    
+
     script.onload = () => {
       if (typeof window.PagefindUI !== 'undefined') {
-        // 4. Инициализируем UI в нашем контейнере
+        // 4. Инициализируем UI с ЯВНЫМ указанием русского языка
         new window.PagefindUI({
           element: "#pagefind-ui-root",
           baseUrl: baseUrl,
+          language: 'ru', // КРИТИЧЕСКИ ВАЖНО: правильный токенайзер и стемминг для русского языка
           showSubResults: true,
           excerptLength: 30,
           highlightParam: 'highlight',
           translations: {
             placeholder: 'Введите запрос...',
-            clear_search_label: 'Очистить',
+            clear_search: 'Очистить',
             load_more: 'Загрузить ещё',
             no_results: 'Ничего не найдено',
-            results_count_1: '{count} результат',
-            results_count_n: '{count} результата',
           }
         });
         isInitialized = true;
-        console.log('✅ Pagefind UI successfully initialized');
+        console.log('✅ Pagefind UI successfully initialized with Russian language support');
       } else {
         console.error('❌ PagefindUI is not defined after script load');
       }
@@ -74,10 +73,8 @@
   openBtn.addEventListener('click', () => {
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
-    
-    initPagefind(); // Ленивая загрузка при первом клике
-    
-    // Фокус на поле ввода после рендера
+    initPagefind();
+
     setTimeout(() => {
       const input = document.querySelector('.pagefind-ui__search-input');
       if (input) input.focus();
@@ -91,7 +88,7 @@
   };
 
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  
+
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeModal();
   });
