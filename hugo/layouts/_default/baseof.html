@@ -41,7 +41,7 @@
 </head>
 <body>
   {{ partial "header.html" . }}
-  <main>
+  <main data-pagefind-body>
     {{ block "main" . }}{{ end }}
   </main>
   {{ partial "footer.html" . }}
@@ -59,7 +59,7 @@
       </ul>
     </nav>
   </div>
-  <nav class="sticky-bottom-bar" aria-label="Мобильная навигация">
+  <nav class="sticky-bottom-bar" data-pagefind-ignore> aria-label="Мобильная навигация">
     <button class="sticky-btn" id="sticky-menu-btn" aria-label="Меню" aria-controls="mobile-menu" aria-expanded="false">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/>
