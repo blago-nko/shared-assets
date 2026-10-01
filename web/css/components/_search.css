@@ -313,3 +313,27 @@ mark.pagefind-highlight {
   padding: 1px 3px !important;
   border-radius: 2px !important;
 }
+
+/* INFRA-100: High Contrast Result Count */
+
+/* Счетчик результатов - светлая тема */
+.pagefind-ui__result-count {
+  color: #000000 !important;
+  background-color: #4fc3f7 !important; /* Яркий голубой фон */
+  font-weight: 700 !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin-bottom: 12px !important;
+}
+
+/* Счетчик результатов - темная тема */
+[data-theme="dark"] .pagefind-ui__result-count {
+  color: #ffffff !important;
+  background-color: #0288d1 !important; /* Более темный, но контрастный голубой */
+  font-weight: 700 !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin-bottom: 12px !important;
+}
