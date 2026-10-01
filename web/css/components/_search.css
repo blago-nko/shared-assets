@@ -197,3 +197,119 @@ mark.pagefind-highlight {
 [data-theme="dark"] .pagefind-ui__result-excerpt {
   color: var(--color-text, #e0e0e0);
 }
+
+/* INFRA-100: Pagefind Search Modal High Contrast Dark Mode */
+[data-theme="dark"] .pagefind-ui__search-input {
+  color: #ffffff !important;
+  background-color: #121212 !important;
+  border-color: #444444 !important;
+}
+[data-theme="dark"] .pagefind-ui__search-input::placeholder {
+  color: #888888 !important;
+}
+[data-theme="dark"] .pagefind-ui__result-title {
+  color: #8ab4f8 !important; /* Акцентный голубой для заголовков */
+}
+[data-theme="dark"] .pagefind-ui__result-excerpt,
+[data-theme="dark"] .pagefind-ui__result-link {
+  color: #e0e0e0 !important; /* Светло-серый для читаемости текста */
+}
+[data-theme="dark"] .pagefind-ui__result-excerpt mark,
+[data-theme="dark"] .pagefind-ui__result-title mark {
+  color: #121212 !important;
+  background-color: #fbbc04 !important; /* Желтый маркер для темной темы */
+}
+
+/* INFRA-100: Pagefind Search Modal High Contrast Dark Mode */
+[data-theme="dark"] .pagefind-ui__search-input {
+  color: #ffffff !important;
+  background-color: #121212 !important;
+  border-color: #444444 !important;
+}
+[data-theme="dark"] .pagefind-ui__search-input::placeholder {
+  color: #888888 !important;
+}
+[data-theme="dark"] .pagefind-ui__result-title {
+  color: #8ab4f8 !important; /* Акцентный голубой для заголовков */
+}
+[data-theme="dark"] .pagefind-ui__result-excerpt,
+[data-theme="dark"] .pagefind-ui__result-link {
+  color: #e0e0e0 !important; /* Светло-серый для читаемости текста */
+}
+[data-theme="dark"] .pagefind-ui__result-excerpt mark,
+[data-theme="dark"] .pagefind-ui__result-title mark {
+  color: #121212 !important;
+  background-color: #fbbc04 !important; /* Желтый маркер для темной темы */
+}
+
+/* INFRA-100: High Contrast Search Modal */
+
+/* Поле поиска - светлая тема */
+.pagefind-ui__search-input {
+  color: #1a1a1a !important;
+  background-color: #ffffff !important;
+  border-color: #cccccc !important;
+  font-weight: 500 !important;
+}
+
+.pagefind-ui__search-input::placeholder {
+  color: #666666 !important; /* Тёмно-серый для хорошей видимости */
+  opacity: 1 !important;
+}
+
+/* Поле поиска - тёмная тема */
+[data-theme="dark"] .pagefind-ui__search-input {
+  color: #ffffff !important;
+  background-color: #1a1a1a !important;
+  border-color: #555555 !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="dark"] .pagefind-ui__search-input::placeholder {
+  color: #aaaaaa !important; /* Светло-серый для тёмной темы */
+  opacity: 1 !important;
+}
+
+/* Результаты поиска - светлая тема */
+.pagefind-ui__result-title {
+  color: #1a1a1a !important;
+  font-weight: 600 !important;
+}
+
+.pagefind-ui__result-excerpt,
+.pagefind-ui__result-link {
+  color: #333333 !important;
+  font-weight: 400 !important;
+}
+
+/* Результаты поиска - тёмная тема */
+[data-theme="dark"] .pagefind-ui__result-title {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="dark"] .pagefind-ui__result-excerpt,
+[data-theme="dark"] .pagefind-ui__result-link {
+  color: #e0e0e0 !important;
+  font-weight: 400 !important;
+}
+
+/* Маркеры (highlight) - светлая тема */
+.pagefind-ui__result-excerpt mark,
+.pagefind-ui__result-title mark {
+  color: #000000 !important;
+  background-color: #ffeb3b !important; /* Ярко-жёлтый */
+  font-weight: 700 !important;
+  padding: 1px 3px !important;
+  border-radius: 2px !important;
+}
+
+/* Маркеры (highlight) - тёмная тема */
+[data-theme="dark"] .pagefind-ui__result-excerpt mark,
+[data-theme="dark"] .pagefind-ui__result-title mark {
+  color: #000000 !important;
+  background-color: #ffc107 !important; /* Яркий янтарный */
+  font-weight: 700 !important;
+  padding: 1px 3px !important;
+  border-radius: 2px !important;
+}

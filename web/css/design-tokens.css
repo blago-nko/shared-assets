@@ -381,3 +381,14 @@ html, body, * {
   display: block !important;
   object-fit: contain !important;
 }
+.site-title-accent {
+  color: #d4a017 !important; /* Тёмно-золотой для лучшей контрастности */
+  font-weight: 700 !important; /* Жирное начертание */
+}
+
+/* В тёмной теме делаем ещё ярче */
+[data-theme="dark"] .site-title-accent {
+  color: #ffc107 !important; /* Яркий янтарный */
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(255, 193, 7, 0.4) !important; /* Лёгкое свечение */
+}
