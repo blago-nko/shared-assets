@@ -337,3 +337,47 @@ mark.pagefind-highlight {
   display: inline-block !important;
   margin-bottom: 12px !important;
 }
+
+/* INFRA-100: High Contrast for ALL result count elements */
+
+/* Стандартный счетчик Pagefind */
+.pagefind-ui__result-count {
+  color: #000000 !important;
+  background-color: #FFEB3B !important; /* Ярко-желтый фон */
+  font-weight: 700 !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin-bottom: 12px !important;
+  font-size: 14px !important;
+}
+
+[data-theme="dark"] .pagefind-ui__result-count {
+  color: #000000 !important; /* Черный текст ВСЕГДА для контраста */
+  background-color: #FFEB3B !important; /* Яркий желтый фон ВСЕГДА */
+  font-weight: 700 !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin-bottom: 12px !important;
+  font-size: 14px !important;
+}
+
+/* Текст "результатов по запросу" - любой элемент с этим текстом */
+.pagefind-ui__search-result-count,
+.pagefind-ui-results-count,
+[class*="result-count"],
+[class*="results-count"] {
+  color: #000000 !important;
+  background-color: #FFEB3B !important;
+  font-weight: 700 !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+}
+
+/* Общий селектор для любого текста с результатами */
+.pagefind-ui-message,
+[class*="result"] {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}

@@ -382,13 +382,14 @@ html, body, * {
   object-fit: contain !important;
 }
 .site-title-accent {
-  color: #d4a017 !important; /* Тёмно-золотой для лучшей контрастности */
-  font-weight: 700 !important; /* Жирное начертание */
+  color: #E65100 !important; /* Яркий оранжевый - МАКСИМАЛЬНАЯ КОНТРАСТНОСТЬ */
+  font-weight: 700 !important;
+  text-shadow: 0 0 4px rgba(230, 81, 0, 0.3) !important;
 }
 
-/* В тёмной теме делаем ещё ярче */
 [data-theme="dark"] .site-title-accent {
-  color: #ffc107 !important; /* Яркий янтарный */
+  color: #FF6F00 !important; /* Ещё ярче в темной теме */
   font-weight: 700 !important;
-  text-shadow: 0 0 8px rgba(255, 193, 7, 0.4) !important; /* Лёгкое свечение */
+  text-shadow: 0 0 8px rgba(255, 111, 0, 0.6) !important;
 }
+
