@@ -112,7 +112,11 @@ figcaption, .post-author, .post-categories, .post-tags { font-size: inherit; }
 a { line-height: inherit; font-size: inherit; vertical-align: baseline; }
 
 /* INFRA-074: 44px tap-target только для навигации/кнопок; ссылки в контенте — обычный inline */
-.post-content a { display: inline; min-height: 0; }
+/* INFRA-074 (расш.): tap-target 44px нужен навигации/кнопкам, но НЕ инлайн-ссылкам
+   в потоке текста — иначе min-height:44px растягивает строку до 44px при lh:24px
+   и ломает ритм ("дыра" только где ссылка). Список контент-контейнеров расширяем
+   ПО ЗАМЕРУ (computed rectH ссылки > lh), а не на вырост, чтобы не ломать 13 сайтов. */
+.post-content a, .post-card-summary a { display: inline; min-height: 0; }
 
 /* INFRA-075: Дизайн-система "Образ слов" */
 
