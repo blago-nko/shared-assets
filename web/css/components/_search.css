@@ -381,3 +381,19 @@ mark.pagefind-highlight {
   color: #000000 !important;
   font-weight: 600 !important;
 }
+
+/* INFRA-100: dark search icon + message contrast (селекторы подтверждены DevTools: лупа=.pagefind-ui__form::before, счётчик=.pagefind-ui__message) */
+[data-theme="dark"] .pagefind-ui__form::before {
+  filter: brightness(0) invert(1) !important; /* монохромная лупа -> белая, не зависит от mask/bg/svg-заливки */
+}
+[data-theme="dark"] .pagefind-ui__form {
+  color: #ffffff !important; /* currentColor-fallback для любых svg-иконок формы */
+}
+[data-theme="dark"] .pagefind-ui__message {
+  color: #ffffff !important;          /* чинит мой прошлый чёрный message -> был невидим в dark */
+  background-color: transparent !important; /* гасит случайную жёлтую плашку-бэдж */
+  font-weight: 600 !important;
+}
+[data-theme="dark"] .search-overlay [class*="result"] {
+  color: #e0e0e0 !important; /* подстраховка: любой service-текст с "result" светлый в dark */
+}

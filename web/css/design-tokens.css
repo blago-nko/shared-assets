@@ -393,3 +393,22 @@ html, body, * {
   text-shadow: 0 0 8px rgba(255, 111, 0, 0.6) !important;
 }
 
+/* INFRA-100: site-tagline contrast (amber pair, согласовано с брендовым оранжевым акцентом) */
+.site-tagline {
+  color: #b45309 !important;   /* светлая: amber-700, контрастно к белому + "цветом" */
+  font-weight: 600 !important; /* усиление жирностью, как просили */
+}
+[data-theme="dark"] .site-tagline {
+  color: #ffcc80 !important;   /* тёмная: amber-200, ярко и цветно на тёмном фоне */
+  font-weight: 600 !important;
+}
+
+/* INFRA-100: responsive site-logo size (компактнее нынешних ~128px; квадрат webp сохранён через height:auto + object-fit:contain) */
+.site-logo {
+  width: clamp(44px, 8vw, 72px) !important;
+  height: auto !important;
+}
+[data-theme="dark"] .site-logo {
+  width: clamp(44px, 8vw, 72px) !important;
+  height: auto !important;
+}
