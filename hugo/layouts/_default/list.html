@@ -1,11 +1,12 @@
 {{ define "main" }}
 <div class="post-grid">
   {{ range .Site.RegularPages }}
+  {{ $article := . }}
   <article class="post-card">
     
     <!-- Изображение (Обложка) -->
     {{ with .Params.image }}
-    <a class="post-card-image-link" href="{{ .Permalink }}" tabindex="-1">
+    <a class="post-card-image-link" href="{{ $article.Permalink }}" tabindex="-1">
       <div class="post-card-image-wrapper">
       <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
     </div>
