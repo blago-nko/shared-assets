@@ -116,7 +116,7 @@ a { line-height: inherit; font-size: inherit; vertical-align: baseline; }
    в потоке текста — иначе min-height:44px растягивает строку до 44px при lh:24px
    и ломает ритм ("дыра" только где ссылка). Список контент-контейнеров расширяем
    ПО ЗАМЕРУ (computed rectH ссылки > lh), а не на вырост, чтобы не ломать 13 сайтов. */
-.post-content a, .post-card-summary a { display: inline; min-height: 0; }
+.post-content a, .post-card-summary a, .post-card-title a { display: inline; min-height: 0; }
 
 /* INFRA-075: Дизайн-система "Образ слов" */
 
