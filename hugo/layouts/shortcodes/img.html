@@ -1,59 +1,24 @@
 {{/* 
-  Advanced Image Shortcode for blago-nko ecosystem
-  Requirements: МИГРАЦИЯ.md p.5.1.1.7, 7.1.9; САМ p.2.4
-  Features: External URL support (Blogger CDN), JSON-LD ImageObject, Responsive attrs
+    Шорткод img для экосистемы blago-nko
+    Поддерживает: src, alt, width, height, class, caption
 */}}
-
 {{ $src := .Get "src" }}
 {{ $alt := .Get "alt" | default "" }}
-{{ $title := .Get "title" | default "" }}
-{{ $author := .Get "author" | default site.Params.author | default "blago-nko" }}
-{{ $license := .Get "license" | default "CC BY-NC 4.0" }}
-{{ $widthStr := .Get "width" }}
-{{ $heightStr := .Get "height" }}
-{{ $isPriority := eq (.Get "priority") "true" }}
+{{ $width := .Get "width" }}
+{{ $height := .Get "height" }}
+{{ $class := .Get "class" | default "post-image" }}
 {{ $caption := .Get "caption" }}
-{{ $sourceUrl := .Get "source" | default $src }}
 
-{{ if not $src }}
-  {{ errorf "Shortcode 'img': parameter 'src' is required." }}
-{{ end }}
-
-<figure class="post-image-container">
-  <img 
-    src="{{ $src }}" 
-    alt="{{ $alt }}" 
-    title="{{ $title }}"
-    {{ with $widthStr }}width="{{ . }}"{{ end }}
-    {{ with $heightStr }}height="{{ . }}"{{ end }}
-    loading="{{ if $isPriority }}eager{{ else }}lazy{{ end }}"
-    fetchpriority="{{ if $isPriority }}high{{ else }}auto{{ end }}"
-    decoding="sync"
-    itemprop="image"
-  >
-  {{ with $caption }}
+<figure class="{{ $class }}">
+    <img 
+        src="{{ $src }}" 
+        alt="{{ $alt }}"
+        {{ with $width }}width="{{ . }}"{{ end }}
+        {{ with $height }}height="{{ . }}"{{ end }}
+        loading="lazy"
+        decoding="async"
+    >
+    {{ with $caption }}
     <figcaption>{{ . }}</figcaption>
-  {{ end }}
-  
-  {{/* JSON-LD ImageObject Generation */}}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ImageObject",
-    "contentUrl": "{{ $src }}",
-    "name": "{{ $alt }}",
-    "description": "{{ $caption | default $alt }}",
-    "author": {
-      "@type": "Person",
-      "name": "{{ $author }}"
-    },
-    "license": "https://creativecommons.org/licenses/by-nc/4.0/",
-    "copyrightHolder": {
-      "@type": "Organization",
-      "name": "НП «Общественное благополучие»"
-    }{{ if or $widthStr $heightStr }},{{ end }}
-    {{ with $widthStr }}"width": {{ int . }}{{ if $heightStr }},{{ end }}{{ end }}
-    {{ with $heightStr }}"height": {{ int . }}{{ end }}
-  }
-  </script>
+    {{ end }}
 </figure>
