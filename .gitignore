@@ -8,3 +8,9 @@ dist/
 Thumbs.db
 *.log
 FETCH_HEAD
+
+# Hugo build output
+public/
+
+# Pagefind output
+pagefind/
