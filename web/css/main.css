@@ -1817,3 +1817,48 @@ nav ul li .theme-toggle-btn {
     padding-right: calc(48px + var(--space-3, 0.75rem)) !important;
   }
 }
+
+/* =========================================================
+   INFRA-082 SYMMETRY FIX: Align Theme Toggle & Dock Right Edge
+   Ensures visual alignment between header theme button and dock buttons.
+   ========================================================= */
+
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  
+  /* 1. Единый отступ от правого края для всего дока */
+  .sticky-bottom-bar {
+    right: var(--space-4, 1.5rem) !important; /* Фиксируем точное значение */
+    
+    /* Убираем лишние внутренние отступы по бокам, чтобы кнопки были плотнее к краю */
+    padding-left: 4px !important; 
+    padding-right: 4px !important;
+  }
+
+  /* 2. Выравнивание самой кнопки темы внутри дока */
+  /* Если в HTML есть отдельная кнопка #dock-theme-btn, центрируем её относительно других */
+  .sticky-bottom-bar #dock-theme-btn,
+  .sticky-bottom-bar .btn-theme-toggle {
+    margin: 0 auto !important; /* Центрирование по горизонтали внутри колонки */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important; /* Занимает всю доступную ширину ячейки дока */
+  }
+
+  /* 3. Синхронизация размеров иконок */
+  /* Делаем так, чтобы иконка темы была такого же размера, как Share/Top */
+  .sticky-bottom-bar svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* 4. Если нативная кнопка темы в шапке всё ещё где-то мелькает (fallback),
+     принудительно ставим её на тот же уровень right, что и док */
+  header [id*="theme"],
+  header [class*="theme-toggle"] {
+    position: absolute !important;
+    right: var(--space-4, 1.5rem) !important;
+    top: var(--space-3, 1rem) !important; /* Примерный вертикальный ориентир */
+    z-index: 900 !important; /* Ниже дока (998), но выше контента */
+  }
+}
