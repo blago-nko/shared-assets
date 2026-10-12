@@ -1,39 +1,59 @@
-// INFRA-082 HOTFIX v3: Universal Menu & Smart Share
+// INFRA-082 FINAL SPEC: Unified Dock Logic
 (function () {
-  // 1. Кнопка "Наверх"
-  var topBtn = document.getElementById('sticky-top-btn');
-  if (topBtn) {
-    topBtn.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Helper: Get current theme state
+  function getTheme() {
+    return document.documentElement.getAttribute('data-theme') || 
+           (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+
+  // Helper: Set theme
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    updateThemeIcon(theme);
+  }
+
+  // Update Icon inside the dock button
+  function updateThemeIcon(theme) {
+    const btn = document.getElementById('dock-theme-btn');
+    if (!btn) return;
+    
+    const svg = btn.querySelector('svg');
+    if (!svg) return;
+
+    if (theme === 'dark') {
+      // Sun icon for Dark Mode (click to go Light)
+      svg.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    } else {
+      // Moon icon for Light Mode (click to go Dark)
+      svg.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+  }
+
+  // 1. Init Theme Button in Dock
+  const dockThemeBtn = document.getElementById('dock-theme-btn');
+  if (dockThemeBtn) {
+    // Initial render based on saved/system preference
+    const initialTheme = localStorage.getItem('theme') || 
+                         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    setTheme(initialTheme);
+
+    dockThemeBtn.addEventListener('click', function () {
+      const current = getTheme();
+      const next = current === 'dark' ? 'light' : 'dark';
+      setTheme(next);
     });
   }
 
-  // 2. Кнопка "Поделиться" (Smart Detection)
-  var shareBtn = document.getElementById('sticky-share-btn');
+  // 2. Share Button (Custom Menu Only)
+  const shareBtn = document.getElementById('sticky-share-btn');
   if (shareBtn) {
-    shareBtn.addEventListener('click', async function () {
-      const url = window.location.href;
-      const title = document.title;
-
-      // Эвристика: Если устройство сенсорное ИЛИ есть нативный API -> Native Share
-      // Иначе (Desktop/Mouse) -> Custom HTML Menu
-      const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-      
-      if (isTouchDevice && navigator.share) {
-        try {
-          await navigator.share({ title: title, url: url });
-        } catch (err) {
-          console.log('Native share canceled or failed', err);
-          // Fallback to custom menu even on mobile if native fails unexpectedly
-          showCustomShareMenu(url, title); 
-        }
-      } else {
-        showCustomShareMenu(url, title);
-      }
+    shareBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      showCustomShareMenu(window.location.href, document.title);
     });
   }
 
-  // Функция рендера кастомного меню шаринга (для десктопа)
   function showCustomShareMenu(url, title) {
     const oldMenu = document.getElementById('custom-share-menu');
     if (oldMenu) oldMenu.remove();
@@ -42,84 +62,65 @@
     const encodedTitle = encodeURIComponent(title);
 
     const networks = [
-      { name: 'Telegram', icon: '<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>', href: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}` },
-      { name: 'VK', icon: '<rect x="2" y="2" width="20" height="20" rx="5"/><path d="M7 10h10v4H7z"/>', href: `https://vk.com/share.php?url=${encodedUrl}&title=${encodedTitle}` },
-      { name: 'WhatsApp', icon: '<circle cx="12" cy="12" r="10"/><path d="M8 12h8"/>', href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}` },
-      { name: 'X (Twitter)', icon: '<path d="M4 4l16 16M20 4L4 20"/>', href: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}` },
-      { name: 'Facebook', icon: '<path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` }
+      { name: 'Telegram', href: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}` },
+      { name: 'VK', href: `https://vk.com/share.php?url=${encodedUrl}&title=${encodedTitle}` },
+      { name: 'WhatsApp', href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}` },
+      { name: 'X (Twitter)', href: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}` },
+      { name: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` }
     ];
 
-    let html = `<div id="custom-share-menu" style="position: fixed; bottom: calc(var(--space-4, 1.5rem) + 60px); right: var(--space-4, 1.5rem); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 12px; z-index: 1001; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 8px;">`;
+    let html = `<div id="custom-share-menu" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--color-bg, #fff); border: 1px solid var(--color-border, #ddd); border-radius: 12px; padding: 16px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 8px; min-width: 200px;">`;
     
     networks.forEach(net => {
-      html += `<a href="${net.href}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text); font-size: 14px; padding: 6px; border-radius: 4px;" onmouseover="this.style.backgroundColor='var(--color-bg-secondary)'" onmouseout="this.style.backgroundColor='transparent'">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${net.icon}</svg>
-        ${net.name}
-      </a>`;
+      html += `<a href="${net.href}" target="_blank" rel="noopener noreferrer" style="display: block; text-decoration: none; color: var(--color-text, #333); font-size: 14px; padding: 8px; border-radius: 6px;" onmouseover="this.style.backgroundColor='var(--color-bg-secondary, #f5f5f5)'" onmouseout="this.style.backgroundColor='transparent'">${net.name}</a>`;
     });
 
-    html += `<button onclick="navigator.clipboard.writeText('${url}').then(()=>alert('Ссылка скопирована'));document.getElementById('custom-share-menu').remove();" style="margin-top: 4px; padding: 8px; border: 1px dashed var(--color-border); background: transparent; cursor: pointer; border-radius: 4px; font-size: 13px; color: var(--color-text);">📋 Скопировать ссылку</button>`;
-    html += `</div>`;
+    html += `<button onclick="navigator.clipboard.writeText('${url}').then(()=>alert('Ссылка скопирована'));document.getElementById('custom-share-menu').remove();" style="margin-top: 4px; padding: 8px; border: 1px dashed var(--color-border, #ddd); background: transparent; cursor: pointer; border-radius: 6px; font-size: 13px; color: var(--color-text, #333);">📋 Скопировать ссылку</button>`;
+    html += `</div><div id="share-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999;"></div>`;
 
     document.body.insertAdjacentHTML('beforeend', html);
 
-    setTimeout(() => {
-      document.addEventListener('click', function closeMenu(e) {
-        const menu = document.getElementById('custom-share-menu');
-        if (menu && !menu.contains(e.target) && e.target !== shareBtn && !shareBtn.contains(e.target)) {
-          menu.remove();
-          document.removeEventListener('click', closeMenu);
-        }
-      });
-    }, 0);
+    // Close handlers
+    const overlay = document.getElementById('share-overlay');
+    const menu = document.getElementById('custom-share-menu');
+    
+    function closeMenu() {
+      if (menu) menu.remove();
+      if (overlay) overlay.remove();
+    }
+
+    if (overlay) overlay.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', function escHandler(e) {
+      if (e.key === 'Escape') {
+        closeMenu();
+        document.removeEventListener('keydown', escHandler);
+      }
+    });
   }
 
-  // 3. Кнопка "Меню": РАБОТАЕТ ВЕЗДЕ (No width restrictions!)
-  var menu = document.getElementById('mobile-menu');
-  var menuBtn = document.getElementById('sticky-menu-btn');
+  // 3. Top Button
+  const topBtn = document.getElementById('sticky-top-btn');
+  if (topBtn) {
+    topBtn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
-  if (menu && menuBtn) {
-    var lastFocused = null;
-
-    var open = function () {
-      lastFocused = document.activeElement;
-      menu.hidden = false;
-      menu.setAttribute('aria-hidden', 'false');
-      
-      requestAnimationFrame(function () {
-        menu.classList.add('mobile-menu--open');
-      });
-      
-      document.body.classList.add('no-scroll');
-      menuBtn.setAttribute('aria-expanded', 'true');
-      
-      var focusable = menu.querySelector('button, a[href]');
-      if (focusable) focusable.focus();
-    };
-
-    var close = function () {
-      menu.classList.remove('mobile-menu--open');
-      document.body.classList.remove('no-scroll');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      
-      setTimeout(function () {
-        menu.hidden = true;
-        if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
-        else menuBtn.focus();
-      }, 250);
-    };
-
+  // 4. Menu Button (Only active on Mobile Portrait due to CSS hiding it elsewhere)
+  const menuBtn = document.getElementById('sticky-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (menuBtn && mobileMenu) {
     menuBtn.addEventListener('click', function () {
-      if (menu.hidden) open(); else close();
-    });
-
-    menu.querySelectorAll('[data-menu-close]').forEach(function (el) {
-      el.addEventListener('click', close);
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !menu.hidden) close();
+      if (mobileMenu.hidden) {
+        mobileMenu.hidden = false;
+        requestAnimationFrame(() => mobileMenu.classList.add('mobile-menu--open'));
+        document.body.classList.add('no-scroll');
+      } else {
+        mobileMenu.classList.remove('mobile-menu--open');
+        document.body.classList.remove('no-scroll');
+        setTimeout(() => { mobileMenu.hidden = true; }, 250);
+      }
     });
   }
 })();
