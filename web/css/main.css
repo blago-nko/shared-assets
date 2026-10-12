@@ -1717,3 +1717,40 @@ nav ul li .theme-toggle-btn {
     display: block !important;
   }
 }
+
+/* =========================================================
+   INFRA-082 FINAL POSITION: Bottom-Right Dock for Desktop/Landscape
+   Overrides previous top-positioning to avoid header conflicts
+   and follow standard FAB placement conventions.
+   ========================================================= */
+
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  .sticky-bottom-bar {
+    /* Переход от верхнего угла к нижнему */
+    top: auto !important;
+    bottom: var(--space-4, 1.5rem) !important;
+    
+    right: var(--space-4, 1.5rem) !important;
+    left: auto !important;
+    
+    /* Компактная вертикальная колонка */
+    flex-direction: column !important;
+    gap: var(--space-2, 0.5rem) !important;
+    padding: var(--space-3, 0.75rem) !important;
+    
+    /* Скругляем все углы, так как док больше не прижат к краю экрана */
+    border-radius: 12px !important;
+    
+    /* Тень направлена вверх-влево, подчеркивая положение внизу-справа */
+    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15) !important;
+    
+    /* Гарантируем, что док всегда поверх контента, но под модалками */
+    z-index: 998 !important;
+  }
+  
+  /* Адаптация тени для темной темы */
+  [data-theme="dark"] .sticky-bottom-bar {
+    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.4) !important;
+    border-color: #333333 !important;
+  }
+}
