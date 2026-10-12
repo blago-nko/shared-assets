@@ -1,4 +1,4 @@
-// INFRA-082 HOTFIX v2: Adaptive sticky dock + Custom Desktop Share
+// INFRA-082 HOTFIX v3: Universal Menu & Smart Share
 (function () {
   // 1. Кнопка "Наверх"
   var topBtn = document.getElementById('sticky-top-btn');
@@ -8,33 +8,33 @@
     });
   }
 
-  // 2. Кнопка "Поделиться" (Web Share API + Desktop Fallback)
+  // 2. Кнопка "Поделиться" (Smart Detection)
   var shareBtn = document.getElementById('sticky-share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', async function () {
       const url = window.location.href;
       const title = document.title;
 
-      // Проверяем, мобильное ли это устройство
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || 
-                       (window.innerWidth < 768 && 'ontouchstart' in window);
-
-      if (isMobile && navigator.share) {
+      // Эвристика: Если устройство сенсорное ИЛИ есть нативный API -> Native Share
+      // Иначе (Desktop/Mouse) -> Custom HTML Menu
+      const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      
+      if (isTouchDevice && navigator.share) {
         try {
           await navigator.share({ title: title, url: url });
         } catch (err) {
-          console.log('Share canceled or failed', err);
+          console.log('Native share canceled or failed', err);
+          // Fallback to custom menu even on mobile if native fails unexpectedly
+          showCustomShareMenu(url, title); 
         }
       } else {
-        // Десктопный фоллбек: показываем кастомное меню соцсетей
         showCustomShareMenu(url, title);
       }
     });
   }
 
-  // Функция рендера кастомного меню шаринга
+  // Функция рендера кастомного меню шаринга (для десктопа)
   function showCustomShareMenu(url, title) {
-    // Удаляем старое меню, если оно открыто
     const oldMenu = document.getElementById('custom-share-menu');
     if (oldMenu) oldMenu.remove();
 
@@ -49,7 +49,6 @@
       { name: 'Facebook', icon: '<path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` }
     ];
 
-    // Используем те же токены для стиля меню, чтобы оно тоже менялось с темой
     let html = `<div id="custom-share-menu" style="position: fixed; bottom: calc(var(--space-4, 1.5rem) + 60px); right: var(--space-4, 1.5rem); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 12px; z-index: 1001; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 8px;">`;
     
     networks.forEach(net => {
@@ -64,7 +63,6 @@
 
     document.body.insertAdjacentHTML('beforeend', html);
 
-    // Закрываем меню при клике вне его
     setTimeout(() => {
       document.addEventListener('click', function closeMenu(e) {
         const menu = document.getElementById('custom-share-menu');
@@ -76,7 +74,7 @@
     }, 0);
   }
 
-  // 3. Кнопка "Меню": открытие/закрытие drawer-панели
+  // 3. Кнопка "Меню": РАБОТАЕТ ВЕЗДЕ (No width restrictions!)
   var menu = document.getElementById('mobile-menu');
   var menuBtn = document.getElementById('sticky-menu-btn');
 

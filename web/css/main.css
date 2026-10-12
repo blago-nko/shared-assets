@@ -1451,3 +1451,88 @@ nav ul li .theme-toggle-btn {
     background-color: var(--color-bg-secondary) !important;
   }
 }
+
+/* =========================================================
+   INFRA-082 HOTFIX v3: Fix light mode visibility & positioning
+   Uses actual design-tokens.css variables for full theme sync
+   ========================================================= */
+
+/* 1. ФОН И ТЕМАТИЗАЦИЯ (Critical Fix for White-on-White) */
+.sticky-bottom-bar {
+  /* Фон строго следует за токеном фона страницы (--color-bg) */
+  background-color: var(--color-bg) !important;
+  
+  /* Граница также адаптируется под текущую тему */
+  border-top: 1px solid var(--color-border) !important;
+  
+  /* Тень мягкая, чтобы не давить на контент */
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ВАЖНО: Цвет иконок и текста ДОЛЖЕН меняться вместе с темой */
+.sticky-bottom-bar button svg {
+  stroke: var(--color-text) !important; /* Было hardcoded white, стало dynamic */
+  fill: none !important;
+}
+
+.sticky-bottom-bar button span {
+  color: var(--color-text) !important; /* Текст подписи тоже динамический */
+}
+
+/* Hover эффект должен быть контрастным к фону */
+@media (hover: hover) {
+  .sticky-bottom-bar button:hover {
+    background-color: var(--color-bg-secondary) !important;
+  }
+}
+
+
+/* 2. ПОЗИЦИОНИРОВАНИЕ (Desktop / Landscape Mobile) */
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  .sticky-bottom-bar {
+    position: fixed !important;
+    right: 0 !important;
+    
+    /* КОМПРОМИСС: Чуть ниже центра, чтобы избежать наложения на кнопку темы 
+       (которая обычно top: ~20px) и уйти от футера (который bottom: 0) */
+    top: calc(50% + 1.5rem) !important; 
+    
+    /* Центрируем сам блок относительно этой точки */
+    transform: translateY(-50%) !important;
+    
+    bottom: auto !important; /* Отменяем previous bottom rule */
+    
+    /* Максимальная высота, чтобы не вылезти за экран на маленьких ноутбуках */
+    max-height: calc(100vh - 10rem) !important;
+    overflow-y: auto !important;
+    
+    /* Стилизация скроллбара внутри дока (если кнопок много) */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  
+  /* Скругляем левые углы для эффекта "выплывания" из края */
+  .sticky-bottom-bar {
+    border-radius: 8px 0 0 8px !important;
+    border-right: none !important;
+  }
+}
+
+/* 3. МОБИЛЬНЫЙ ПОРТРЕТ (Standard Bottom Bar) */
+@media (max-width: 767px) and (orientation: portrait) {
+  .sticky-bottom-bar {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    border-radius: 0 !important;
+    border-top: 1px solid var(--color-border) !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    
+    /* Safe area для iPhone с "челкой" снизу */
+    padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
