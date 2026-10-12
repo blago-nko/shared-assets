@@ -1405,3 +1405,49 @@ nav ul li .theme-toggle-btn {
     display: none !important;
   }
 }
+
+/* =========================================================
+   INFRA-082 HOTFIX v2: Fix overlaps, sync bg with theme tokens
+   Uses actual design-tokens.css variables: --color-bg, --color-text, --color-border
+   ========================================================= */
+
+/* 1. Фон дока: синхронизируем строго с основным фоном страницы (--color-bg) */
+.sticky-bottom-bar {
+  background-color: var(--color-bg) !important;
+  
+  /* Границы и тени адаптируются под текущую тему через бордер-токен */
+  border-top: 1px solid var(--color-border) !important;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* В ландшафте/десктопе тень уходит влево-низ */
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  .sticky-bottom-bar {
+    box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.05) !important;
+  }
+}
+
+/* 2. Ландшафт / Десктоп: опускаем док вниз, чтобы не перекрывать кнопку темы */
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  .sticky-bottom-bar {
+    top: auto !important;
+    bottom: var(--space-4, 1.5rem) !important; /* Отступ снизу вместо центра */
+    transform: none !important; /* Убираем трансформацию центрирования */
+  }
+}
+
+/* 3. Иконки и текст внутри дока наследуют цвет текста активной темы */
+.sticky-bottom-bar button svg {
+  stroke: var(--color-text) !important;
+}
+
+.sticky-bottom-bar button span {
+  color: var(--color-text) !important;
+}
+
+/* 4. Hover-эффекты под текущую тему (используем secondary bg для подсветки) */
+@media (hover: hover) {
+  .sticky-bottom-bar button:hover {
+    background-color: var(--color-bg-secondary) !important;
+  }
+}
