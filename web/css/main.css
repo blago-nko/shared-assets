@@ -1536,3 +1536,141 @@ nav ul li .theme-toggle-btn {
     padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
+
+/* =========================================================
+   INFRA-082 FINAL SPEC: Clean Architecture Refactor
+   Replaces all previous hotfixes with deterministic styles.
+   ========================================================= */
+
+/* 1. БАЗОВЫЕ СТИЛИ ДОКА (Mobile Portrait Default) */
+.sticky-bottom-bar {
+  position: fixed !important;
+  z-index: 999 !important; /* Ниже cookie-banner (1000), выше контента */
+  
+  /* Mobile Portrait: Bottom Full Width */
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: auto !important;
+  transform: none !important;
+  
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  
+  /* Colors: Hardcoded for guaranteed contrast, then overridden by theme if needed */
+  background-color: #ffffff !important; /* Light mode default */
+  color: #333333 !important;
+  border-top: 1px solid #e0e0e0 !important;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
+  
+  padding: var(--space-2) !important;
+  padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px)) !important;
+  
+  contain: layout style paint !important;
+}
+
+/* Dark Mode Override for Base */
+[data-theme="dark"] .sticky-bottom-bar {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  border-top-color: #333333 !important;
+}
+
+/* Hide Theme Button in Mobile Portrait (it's in header there) */
+.sticky-bottom-bar .btn-theme-toggle {
+  display: none !important;
+}
+
+/* 2. АДАПТИВНЫЙ РЕЖИМ (Desktop / Tablet / Mobile Landscape) */
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  .sticky-bottom-bar {
+    /* Right Side Vertical Dock, Top-Aligned */
+    top: var(--space-3) !important; 
+    right: var(--space-3) !important;
+    bottom: auto !important;
+    left: auto !important;
+    
+    width: auto !important;
+    max-height: calc(100vh - 4rem) !important;
+    
+    flex-direction: column !important;
+    gap: var(--space-2) !important;
+    padding: var(--space-2) !important;
+    
+    /* Visual Separation */
+    border-radius: 8px !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  [data-theme="dark"] .sticky-bottom-bar {
+    border-color: #333333 !important;
+  }
+  
+  /* Show Theme Button ONLY in this mode */
+  .sticky-bottom-bar .btn-theme-toggle {
+    display: flex !important;
+  }
+  
+  /* HIDE Menu Button on Desktop/Landscape (Not needed per spec) */
+  #sticky-menu-btn {
+    display: none !important;
+  }
+}
+
+/* 3. СТИЛИЗАЦИЯ КНОПОК ВНУТРИ ДОКА */
+.sticky-bottom-bar button {
+  appearance: none !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 6px !important;
+  border-radius: 6px !important;
+  
+  color: inherit !important; /* Inherits from parent (.sticky-bottom-bar) */
+  transition: background-color 0.2s ease !important;
+}
+
+.sticky-bottom-bar button:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="dark"] .sticky-bottom-bar button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.sticky-bottom-bar button svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+
+.sticky-bottom-bar button span {
+  font-size: 10px !important;
+  line-height: 1 !important;
+  opacity: 0.8 !important;
+}
+
+/* Accessibility Focus */
+.sticky-bottom-bar button:focus-visible {
+  outline: 2px solid var(--color-accent, #4285f4) !important;
+  outline-offset: 2px !important;
+}
+
+/* Print Hidden */
+@media print {
+  .sticky-bottom-bar { display: none !important; }
+}
