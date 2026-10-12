@@ -1674,3 +1674,46 @@ nav ul li .theme-toggle-btn {
 @media print {
   .sticky-bottom-bar { display: none !important; }
 }
+
+/* =========================================================
+   INFRA-082 POLISH: Hide Header Theme Conflict & Adjust Position
+   ========================================================= */
+
+/* 1. Скрываем СТАРУЮ кнопку темы в шапке, если она существует 
+   (обычно имеет класс .theme-switcher, #theme-toggle или similar) 
+   на экранах >= 768px, где наш док берет управление на себя */
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  
+  /* Попытка скрыть типовые селекторы кнопок темы в header/nav */
+  header .theme-toggle,
+  nav .theme-toggle,
+  .site-header [id*="theme"],
+  .site-header [class*="theme-btn"],
+  .header-actions button[aria-label*="тема" i],
+  .header-actions button[title*="тема" i] {
+    display: none !important;
+  }
+
+  /* 2. Корректировка позиции дока: опускаем чуть ниже, чтобы избежать коллизий с логотипом/меню */
+  .sticky-bottom-bar {
+    top: calc(var(--space-3) + 4rem) !important; /* Отступ сверху увеличен на высоту примерной строки меню */
+    right: var(--space-3) !important;
+    
+    /* Увеличиваем z-index, чтобы точно быть над всем контентом, но под модалками */
+    z-index: 998 !important; 
+  }
+}
+
+/* Для мобильных портретов оставляем старую кнопку видимой (если она там нужна), 
+   а нашу dock-версию прячем (мы это уже делали раньше, но продублируем для надежности) */
+@media (max-width: 767px) and (orientation: portrait) {
+  .sticky-bottom-bar .btn-theme-toggle {
+    display: none !important;
+  }
+  
+  /* Восстанавливаем видимость старой кнопки в шапке на мобиле */
+  header .theme-toggle,
+  nav .theme-toggle {
+    display: block !important;
+  }
+}
