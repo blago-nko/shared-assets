@@ -1754,3 +1754,66 @@ nav ul li .theme-toggle-btn {
     border-color: #333333 !important;
   }
 }
+
+/* =========================================================
+   INFRA-082 OPTIMIZATION: Compact Dock & Content Safe Zone
+   Solves text overlap in landscape/mobile-horizontal mode.
+   ========================================================= */
+
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  
+  /* 1. КОМПАКТНЫЙ ДОК (Уменьшаем занимаемую площадь) */
+  .sticky-bottom-bar {
+    /* Уменьшаем внутренний padding */
+    padding: var(--space-2, 0.5rem) !important;
+    
+    /* Уменьшаем gap между кнопками */
+    gap: 4px !important;
+    
+    /* Фиксируем минимальную ширину, чтобы док был узким столбцом */
+    min-width: 48px !important; 
+    max-width: 56px !important;
+  }
+
+  /* Кнопки становятся меньше (тап-таргет все еще >= 44px благодаря padding/min-height) */
+  .sticky-bottom-bar button {
+    min-width: 36px !important; /* Чуть уже стандартных 44px для экономии места */
+    min-height: 36px !important;
+    padding: 4px !important;     /* Минимальный внутренний отступ */
+  }
+  
+  /* Иконки чуть меньше */
+  .sticky-bottom-bar button svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  /* Подписи скрываем полностью на компактном доке, оставляем только иконки */
+  .sticky-bottom-bar button span {
+    display: none !important;
+  }
+
+  /* 2. ЗАЩИТНАЯ ЗОНА ДЛЯ КОНТЕНТА (Content Shift) */
+  /* Сдвигаем основной контент влево, освобождая место справа для дока */
+  body,
+  main,
+  article,
+  .post-content,
+  .container {
+    /* Отступ справа равен примерной ширине дока (56px) + безопасный зазор (16px) */
+    padding-right: calc(56px + var(--space-4, 1rem)) !important;
+  }
+  
+  /* Важно: Не применять этот сдвиг к самим шапкам/футерам, если они растянуты на всю ширину */
+  header, footer {
+    padding-right: inherit !important; /* Наследуем общий стиль или сбрасываем */
+  }
+}
+
+/* Для очень узких мобильных ландшафтов (< 600px) можно ослабить сдвиг, 
+   так как там контент и так плотный */
+@media (max-width: 600px) and (orientation: landscape) {
+  body, main, article, .post-content {
+    padding-right: calc(48px + var(--space-3, 0.75rem)) !important;
+  }
+}
