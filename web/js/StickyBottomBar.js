@@ -1,38 +1,38 @@
-// INFRA-082: Sticky Bottom Bar (всегда виден) + мобильное меню-drawer
+// INFRA-082: Логика кнопок адаптивного навигационного дока
 (function () {
-  // Кнопка "Наверх": плавный скролл к началу страницы
-  var topBtn = document.getElementById('sticky-top-btn');
+  // 1. Кнопка "Наверх"
+  const topBtn = document.getElementById('sticky-top-btn');
   if (topBtn) {
     topBtn.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  // Кнопка "Поделиться": Web Share API, fallback — копирование ссылки
-  var shareBtn = document.getElementById('sticky-share-btn');
+  // 2. Кнопка "Поделиться"
+  const shareBtn = document.getElementById('sticky-share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', function () {
       if (navigator.share) {
         navigator.share({ title: document.title, url: window.location.href }).catch(function () {});
       } else if (navigator.clipboard) {
         navigator.clipboard.writeText(window.location.href).then(function () {
-          alert('Ссылка скопирована в буфер обмена');
+          console.log('Ссылка скопирована в буфер обмена');
         });
       }
     });
   }
 
-  // Кнопка "Меню": открытие/закрытие drawer-панели
-  var menu = document.getElementById('mobile-menu');
-  var menuBtn = document.getElementById('sticky-menu-btn');
+  // 3. Кнопка "Меню" (Drawer)
+  const menu = document.getElementById('mobile-menu');
+  const menuBtn = document.getElementById('sticky-menu-btn');
   if (menu && menuBtn) {
-    var open = function () {
+    const open = function () {
       menu.hidden = false;
       requestAnimationFrame(function () { menu.classList.add('mobile-menu--open'); });
       document.body.classList.add('no-scroll');
       menuBtn.setAttribute('aria-expanded', 'true');
     };
-    var close = function () {
+    const close = function () {
       menu.classList.remove('mobile-menu--open');
       document.body.classList.remove('no-scroll');
       menuBtn.setAttribute('aria-expanded', 'false');
