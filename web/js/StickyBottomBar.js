@@ -1,39 +1,34 @@
-// INFRA-082 FINAL SPEC: Unified Dock Logic
+// INFRA-082 REFACTOR: Popover Menu & Unified Theme Control
 (function () {
-  // Helper: Get current theme state
+  
+  // --- Helpers ---
   function getTheme() {
     return document.documentElement.getAttribute('data-theme') || 
            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   }
 
-  // Helper: Set theme
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
     updateThemeIcon(theme);
   }
 
-  // Update Icon inside the dock button
   function updateThemeIcon(theme) {
     const btn = document.getElementById('dock-theme-btn');
     if (!btn) return;
-    
     const svg = btn.querySelector('svg');
     if (!svg) return;
 
     if (theme === 'dark') {
-      // Sun icon for Dark Mode (click to go Light)
       svg.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
     } else {
-      // Moon icon for Light Mode (click to go Dark)
       svg.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
     }
   }
 
-  // 1. Init Theme Button in Dock
+  // --- Init Theme Button in Dock ---
   const dockThemeBtn = document.getElementById('dock-theme-btn');
   if (dockThemeBtn) {
-    // Initial render based on saved/system preference
     const initialTheme = localStorage.getItem('theme') || 
                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     setTheme(initialTheme);
@@ -45,7 +40,7 @@
     });
   }
 
-  // 2. Share Button (Custom Menu Only)
+  // --- Share Button (Custom Menu Only) ---
   const shareBtn = document.getElementById('sticky-share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', function (e) {
@@ -55,9 +50,8 @@
   }
 
   function showCustomShareMenu(url, title) {
-    const oldMenu = document.getElementById('custom-share-menu');
-    if (oldMenu) oldMenu.remove();
-
+    closeAllPopovers(); // Закрываем другие меню, если открыты
+    
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
 
@@ -69,36 +63,89 @@
       { name: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` }
     ];
 
-    let html = `<div id="custom-share-menu" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--color-bg, #fff); border: 1px solid var(--color-border, #ddd); border-radius: 12px; padding: 16px; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 8px; min-width: 200px;">`;
-    
+    let html = `<div id="custom-share-menu" class="mobile-menu-popover is-open">`;
     networks.forEach(net => {
-      html += `<a href="${net.href}" target="_blank" rel="noopener noreferrer" style="display: block; text-decoration: none; color: var(--color-text, #333); font-size: 14px; padding: 8px; border-radius: 6px;" onmouseover="this.style.backgroundColor='var(--color-bg-secondary, #f5f5f5)'" onmouseout="this.style.backgroundColor='transparent'">${net.name}</a>`;
+      html += `<a href="${net.href}" target="_blank" rel="noopener noreferrer">${net.name}</a>`;
     });
-
-    html += `<button onclick="navigator.clipboard.writeText('${url}').then(()=>alert('Ссылка скопирована'));document.getElementById('custom-share-menu').remove();" style="margin-top: 4px; padding: 8px; border: 1px dashed var(--color-border, #ddd); background: transparent; cursor: pointer; border-radius: 6px; font-size: 13px; color: var(--color-text, #333);">📋 Скопировать ссылку</button>`;
-    html += `</div><div id="share-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999;"></div>`;
+    html += `<button onclick="navigator.clipboard.writeText('${url}').then(()=>alert('Ссылка скопирована'));closeAllPopovers();" style="border:none;background:none;text-align:left;padding:8px 16px;font-size:14px;color:var(--color-text,#333);cursor:pointer;">📋 Скопировать ссылку</button>`;
+    html += `</div><div id="share-overlay" class="menu-overlay is-active"></div>`;
 
     document.body.insertAdjacentHTML('beforeend', html);
 
-    // Close handlers
     const overlay = document.getElementById('share-overlay');
-    const menu = document.getElementById('custom-share-menu');
-    
-    function closeMenu() {
-      if (menu) menu.remove();
-      if (overlay) overlay.remove();
-    }
+    if (overlay) overlay.addEventListener('click', closeAllPopovers);
+  }
 
-    if (overlay) overlay.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', function escHandler(e) {
-      if (e.key === 'Escape') {
-        closeMenu();
-        document.removeEventListener('keydown', escHandler);
+  // --- Menu Button (Popover Logic for Desktop/Landscape) ---
+  const menuBtn = document.getElementById('sticky-menu-btn');
+  
+  if (menuBtn) {
+    menuBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      
+      // Проверяем разрешение: если мобильный портрет -> используем старый Drawer
+      const isMobilePortrait = window.innerWidth < 768 && window.innerHeight > window.innerWidth;
+      
+      if (isMobilePortrait) {
+        toggleMobileDrawer(); // Старая логика для телефона
+      } else {
+        showNavPopover();     // Новая логика для десктопа/ландшафта
       }
     });
   }
 
-  // 3. Top Button
+  function showNavPopover() {
+    closeAllPopovers();
+
+    // Получаем ссылки из основного навигационного меню (предположим, они есть в header nav)
+    // Или хардкодим основные разделы сайта
+    const links = [
+      { name: 'Главная', href: '/' },
+      { name: 'Статьи', href: '/posts/' },
+      { name: 'О нас', href: '/about/' }
+    ];
+
+    let html = `<div id="nav-popover" class="mobile-menu-popover is-open">`;
+    links.forEach(link => {
+      html += `<a href="${link.href}">${link.name}</a>`;
+    });
+    html += `</div><div id="nav-overlay" class="menu-overlay is-active"></div>`;
+
+    document.body.insertAdjacentHTML('beforeend', html);
+
+    const overlay = document.getElementById('nav-overlay');
+    if (overlay) overlay.addEventListener('click', closeAllPopovers);
+  }
+
+  function closeAllPopovers() {
+    const menus = ['custom-share-menu', 'nav-popover'];
+    const overlays = ['share-overlay', 'nav-overlay'];
+    
+    menus.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    });
+    overlays.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    });
+  }
+
+  // Close on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeAllPopovers();
+      // Also close mobile drawer if open
+      const drawer = document.getElementById('mobile-menu');
+      if (drawer && !drawer.hidden) {
+         drawer.classList.remove('mobile-menu--open');
+         setTimeout(() => { drawer.hidden = true; }, 250);
+         document.body.classList.remove('no-scroll');
+      }
+    }
+  });
+
+  // --- Top Button ---
   const topBtn = document.getElementById('sticky-top-btn');
   if (topBtn) {
     topBtn.addEventListener('click', function () {
@@ -106,21 +153,20 @@
     });
   }
 
-  // 4. Menu Button (Only active on Mobile Portrait due to CSS hiding it elsewhere)
-  const menuBtn = document.getElementById('sticky-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  
-  if (menuBtn && mobileMenu) {
-    menuBtn.addEventListener('click', function () {
-      if (mobileMenu.hidden) {
-        mobileMenu.hidden = false;
-        requestAnimationFrame(() => mobileMenu.classList.add('mobile-menu--open'));
-        document.body.classList.add('no-scroll');
-      } else {
-        mobileMenu.classList.remove('mobile-menu--open');
-        document.body.classList.remove('no-scroll');
-        setTimeout(() => { mobileMenu.hidden = true; }, 250);
-      }
-    });
+  // --- Legacy Mobile Drawer Support (Only for Portrait) ---
+  function toggleMobileDrawer() {
+    const menu = document.getElementById('mobile-menu');
+    if (!menu) return;
+
+    if (menu.hidden) {
+      menu.hidden = false;
+      requestAnimationFrame(() => menu.classList.add('mobile-menu--open'));
+      document.body.classList.add('no-scroll');
+    } else {
+      menu.classList.remove('mobile-menu--open');
+      document.body.classList.remove('no-scroll');
+      setTimeout(() => { menu.hidden = true; }, 250);
+    }
   }
+
 })();

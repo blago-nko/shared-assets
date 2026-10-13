@@ -1862,3 +1862,106 @@ nav ul li .theme-toggle-btn {
     z-index: 900 !important; /* Ниже дока (998), но выше контента */
   }
 }
+
+/* =========================================================
+   INFRA-082 REFACTOR: Layout Unification & Popover Menu
+   Fixes content squeeze, aligns dock/theme button, adds popover menu.
+   ========================================================= */
+
+/* 1. КОНТЕНТ: Уменьшаем отступ справа, чтобы текст не выглядел "съехавшим" */
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  
+  /* Основной контент получает умеренный отступ, равный ширине дока + маленький зазор */
+  .post-content, 
+  article, 
+  main.container {
+    /* Дока ~48px + зазор 12px = 60px. Этого достаточно, чтобы не перекрывать, но не слишком много */
+    padding-right: 60px !important; 
+    margin-right: auto !important; /* Центрируем блок относительно доступной ширины */
+  }
+
+  /* Шапка и футер остаются на всю ширину без боковых отступов дока */
+  header, footer {
+    padding-right: var(--space-4, 1.5rem) !important; /* Обычный отступ страницы */
+  }
+}
+
+/* 2. ДОК И КНОПКА ТЕМЫ: Полная симметрия */
+@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+  
+  /* Фиксируем точную ширину дока */
+  .sticky-bottom-bar {
+    width: 48px !important; 
+    right: var(--space-4, 1.5rem) !important;
+    
+    /* Внутренние отступы нулевые по бокам, чтобы иконки были центрированы */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Все кнопки внутри дока имеют одинаковый размер и центрирование */
+  .sticky-bottom-bar button {
+    width: 48px !important;
+    height: 48px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Скрываем СТАРУЮ кнопку темы в шапке навсегда на этих разрешениях */
+  /* Теперь тема управляется ТОЛЬКО из дока */
+  header [id*="theme"],
+  header [class*="theme-toggle"],
+  .site-header .theme-switcher {
+    display: none !important;
+  }
+}
+
+/* 3. ПОПОВЕР-МЕНЮ (Вместо Drawer для десктопа/ландшафта) */
+.mobile-menu-popover {
+  position: fixed;
+  bottom: calc(var(--space-4, 1.5rem) + 56px); /* Выше дока */
+  right: var(--space-4, 1.5rem);
+  background: var(--color-bg, #fff);
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 8px 0;
+  z-index: 1001;
+  min-width: 160px;
+  display: none; /* По умолчанию скрыто */
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-menu-popover.is-open {
+  display: flex;
+}
+
+.mobile-menu-popover a {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: var(--color-text, #333);
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.mobile-menu-popover a:hover {
+  background-color: var(--color-bg-secondary, #f5f5f5);
+}
+
+/* Затемнение фона при открытии попавера (опционально, для фокуса внимания) */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+}
+.menu-overlay.is-active {
+  display: block;
+}
+
