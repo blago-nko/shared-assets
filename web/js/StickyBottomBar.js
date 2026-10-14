@@ -1,4 +1,4 @@
-// INFRA-082 REFACTOR: Popover Menu & Unified Theme Control
+// INFRA-082 V4 FINAL: Unified Dock, Theme & Popover Logic
 (function () {
   
   // --- Helpers ---
@@ -8,7 +8,11 @@
   }
 
   function setTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
     localStorage.setItem('theme', theme);
     updateThemeIcon(theme);
   }
@@ -20,9 +24,69 @@
     if (!svg) return;
 
     if (theme === 'dark') {
+      // Sun icon (Click to go Light)
       svg.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
     } else {
+      // Moon icon (Click to go Dark)
       svg.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+  }
+
+  // Close any existing popovers
+  function closeAllPopovers() {
+    document.querySelectorAll('.dock-popover').forEach(el => el.remove());
+    document.querySelectorAll('.dock-overlay').forEach(el => el.remove());
+  }
+
+  // Create a generic popover structure
+  function createPopover(items, anchorElement = null) {
+    closeAllPopovers();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'dock-overlay is-active';
+    overlay.addEventListener('click', closeAllPopovers);
+    document.body.appendChild(overlay);
+
+    const popover = document.createElement('div');
+    popover.className = 'dock-popover is-open';
+    
+    items.forEach(item => {
+      if (item.type === 'link') {
+        const a = document.createElement('a');
+        a.href = item.href;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = item.label;
+        popover.appendChild(a);
+      } else if (item.type === 'action') {
+        const btn = document.createElement('button');
+        btn.className = 'popover-action';
+        btn.textContent = item.label;
+        btn.onclick = () => {
+          item.action();
+          closeAllPopovers();
+        };
+        popover.appendChild(btn);
+      }
+    });
+
+    document.body.appendChild(popover);
+
+    // Positioning Logic
+    if (anchorElement && window.innerWidth >= 768) {
+      // Anchor Mode (Desktop/Hybrid): Above the button
+      const rect = anchorElement.getBoundingClientRect();
+      popover.style.bottom = `${window.innerHeight - rect.top + 8}px`; 
+      popover.style.right = `${window.innerWidth - rect.right}px`;
+      popover.style.left = 'auto';
+      popover.style.top = 'auto';
+    } else {
+      // Center Mode (Mobile Portrait): Screen Center
+      popover.style.top = '50%';
+      popover.style.left = '50%';
+      popover.style.transform = 'translate(-50%, -50%)';
+      popover.style.bottom = 'auto';
+      popover.style.right = 'auto';
     }
   }
 
@@ -40,110 +104,44 @@
     });
   }
 
-  // --- Share Button (Custom Menu Only) ---
+  // --- Share Button ---
   const shareBtn = document.getElementById('sticky-share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', function (e) {
       e.preventDefault();
-      showCustomShareMenu(window.location.href, document.title);
+      const url = window.location.href;
+      const title = document.title;
+      
+      const items = [
+        { type: 'link', label: 'Telegram', href: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}` },
+        { type: 'link', label: 'VK', href: `https://vk.com/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}` },
+        { type: 'link', label: 'WhatsApp', href: `https://wa.me/?text=${encodeURIComponent(title)}%20${encodeURIComponent(url)}` },
+        { type: 'link', label: 'X (Twitter)', href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}` },
+        { type: 'link', label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
+        { type: 'action', label: '📋 Скопировать ссылку', action: () => navigator.clipboard.writeText(url).then(() => alert('Ссылка скопирована')) }
+      ];
+      
+      createPopover(items, shareBtn);
     });
   }
 
-  function showCustomShareMenu(url, title) {
-    closeAllPopovers(); // Закрываем другие меню, если открыты
-    
-    const encodedUrl = encodeURIComponent(url);
-    const encodedTitle = encodeURIComponent(title);
-
-    const networks = [
-      { name: 'Telegram', href: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}` },
-      { name: 'VK', href: `https://vk.com/share.php?url=${encodedUrl}&title=${encodedTitle}` },
-      { name: 'WhatsApp', href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}` },
-      { name: 'X (Twitter)', href: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}` },
-      { name: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` }
-    ];
-
-    let html = `<div id="custom-share-menu" class="mobile-menu-popover is-open">`;
-    networks.forEach(net => {
-      html += `<a href="${net.href}" target="_blank" rel="noopener noreferrer">${net.name}</a>`;
-    });
-    html += `<button onclick="navigator.clipboard.writeText('${url}').then(()=>alert('Ссылка скопирована'));closeAllPopovers();" style="border:none;background:none;text-align:left;padding:8px 16px;font-size:14px;color:var(--color-text,#333);cursor:pointer;">📋 Скопировать ссылку</button>`;
-    html += `</div><div id="share-overlay" class="menu-overlay is-active"></div>`;
-
-    document.body.insertAdjacentHTML('beforeend', html);
-
-    const overlay = document.getElementById('share-overlay');
-    if (overlay) overlay.addEventListener('click', closeAllPopovers);
-  }
-
-  // --- Menu Button (Popover Logic for Desktop/Landscape) ---
+  // --- Menu Button ---
   const menuBtn = document.getElementById('sticky-menu-btn');
-  
   if (menuBtn) {
     menuBtn.addEventListener('click', function (e) {
       e.preventDefault();
       
-      // Проверяем разрешение: если мобильный портрет -> используем старый Drawer
-      const isMobilePortrait = window.innerWidth < 768 && window.innerHeight > window.innerWidth;
+      // Define navigation links
+      const items = [
+        { type: 'link', label: 'Главная', href: '/' },
+        { type: 'link', label: 'Статьи', href: '/posts/' },
+        { type: 'link', label: 'О нас', href: '/about/' },
+        { type: 'link', label: 'Ярлыки', href: '/tags/' }
+      ];
       
-      if (isMobilePortrait) {
-        toggleMobileDrawer(); // Старая логика для телефона
-      } else {
-        showNavPopover();     // Новая логика для десктопа/ландшафта
-      }
+      createPopover(items, menuBtn);
     });
   }
-
-  function showNavPopover() {
-    closeAllPopovers();
-
-    // Получаем ссылки из основного навигационного меню (предположим, они есть в header nav)
-    // Или хардкодим основные разделы сайта
-    const links = [
-      { name: 'Главная', href: '/' },
-      { name: 'Статьи', href: '/posts/' },
-      { name: 'О нас', href: '/about/' }
-    ];
-
-    let html = `<div id="nav-popover" class="mobile-menu-popover is-open">`;
-    links.forEach(link => {
-      html += `<a href="${link.href}">${link.name}</a>`;
-    });
-    html += `</div><div id="nav-overlay" class="menu-overlay is-active"></div>`;
-
-    document.body.insertAdjacentHTML('beforeend', html);
-
-    const overlay = document.getElementById('nav-overlay');
-    if (overlay) overlay.addEventListener('click', closeAllPopovers);
-  }
-
-  function closeAllPopovers() {
-    const menus = ['custom-share-menu', 'nav-popover'];
-    const overlays = ['share-overlay', 'nav-overlay'];
-    
-    menus.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.remove();
-    });
-    overlays.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.remove();
-    });
-  }
-
-  // Close on Escape
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      closeAllPopovers();
-      // Also close mobile drawer if open
-      const drawer = document.getElementById('mobile-menu');
-      if (drawer && !drawer.hidden) {
-         drawer.classList.remove('mobile-menu--open');
-         setTimeout(() => { drawer.hidden = true; }, 250);
-         document.body.classList.remove('no-scroll');
-      }
-    }
-  });
 
   // --- Top Button ---
   const topBtn = document.getElementById('sticky-top-btn');
@@ -153,20 +151,11 @@
     });
   }
 
-  // --- Legacy Mobile Drawer Support (Only for Portrait) ---
-  function toggleMobileDrawer() {
-    const menu = document.getElementById('mobile-menu');
-    if (!menu) return;
-
-    if (menu.hidden) {
-      menu.hidden = false;
-      requestAnimationFrame(() => menu.classList.add('mobile-menu--open'));
-      document.body.classList.add('no-scroll');
-    } else {
-      menu.classList.remove('mobile-menu--open');
-      document.body.classList.remove('no-scroll');
-      setTimeout(() => { menu.hidden = true; }, 250);
+  // Global Escape Key Handler
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeAllPopovers();
     }
-  }
+  });
 
 })();
