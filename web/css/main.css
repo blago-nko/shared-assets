@@ -1,1553 +1,14 @@
-/* INFRA-095-FINAL: Strictly prevent logo jitter on click/hover */
-.brand {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-.site-logo-link {
-  display: block;
-  text-decoration: none;
-  outline: none;
-}
-.site-logo-link:active, .site-logo-link:focus {
-  transform: none !important;
-  opacity: 1 !important;
-  outline: none !important;
-}
-.site-logo {
-  display: block;
-  pointer-events: none;
-}
-
-/* INFRA-095-FIX: Prevent SVG logo from intercepting clicks and shifting */
-.site-title .site-logo {
-  pointer-events: none;
-  display: block;
-}
-
-/* INFRA-098: Remove default blue/grey tap highlight on mobile */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Mobile-First CSS (INFRA-057) */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.6;
-  color: #333;
-}
-
-header, main, footer {
-  padding: 1rem;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-@media (min-width: 768px) {
-  nav ul {
-    flex-direction: row;
-    gap: 1rem;
-  }
-  header, footer {
-    padding: 2rem;
-  }
-  main {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    font-size: 18px;
-  }
-}
-
-a, button {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-}
-
-/* INFRA-063: figure, метаданные поста, iframe */
-figure { margin: 1rem 0; }
-figure img { max-width: 100%; height: auto; }
-figcaption { font-size: 0.875rem; color: #555; margin-top: 0.5rem; }
-.post-author, .post-categories, .post-tags { font-size: 0.875rem; color: #555; }
-.post-content iframe { max-width: 100%; }
-
-/* INFRA-064: центрирование как в оригинале + описание сайта */
-.text-center { text-align: center; }
-.site-description { color: #555; margin: 0 0 1.5rem 0; }
-
-/* INFRA-066: мета-строки и подписи в размер основного текста */
-figcaption, .post-author, .post-categories, .post-tags { font-size: 1rem; }
-
-/* INFRA-069: отступ списков от края на мобильных */
-main ul, main ol { padding-left: 1.5rem; }
-
-/* INFRA-070: центрирование изображений и подписей в figure (как в Blogger) */
-figure { text-align: center; }
-
-/* INFRA-071: мета-строки и подписи того же кегля, что основной текст */
-figcaption, .post-author, .post-categories, .post-tags { font-size: inherit; }
-
-/* INFRA-071: однородные вертикальные отступы блоков контента */
-.post-content p, .post-content ul, .post-content ol, .post-content figure { margin: 0 0 1rem; }
-.post-content li { margin: 0; }
-
-/* INFRA-073: ссылки наследуют метрики строки, не растягивая line-box */
-a { line-height: inherit; font-size: inherit; vertical-align: baseline; }
-
-/* INFRA-074: 44px tap-target только для навигации/кнопок; ссылки в контенте — обычный inline */
-/* INFRA-074 (расш.): tap-target 44px нужен навигации/кнопкам, но НЕ инлайн-ссылкам
-   в потоке текста — иначе min-height:44px растягивает строку до 44px при lh:24px
-   и ломает ритм ("дыра" только где ссылка). Список контент-контейнеров расширяем
-   ПО ЗАМЕРУ (computed rectH ссылки > lh), а не на вырост, чтобы не ломать 13 сайтов. */
-.post-content a, .post-card-summary a, .post-card-title a { display: inline; min-height: 0; }
-
-/* INFRA-075: Дизайн-система "Образ слов" */
-
-body {
-  font-family: var(--font-body);
-  color: var(--color-neutral-900);
-  line-height: 1.5;
-  background-color: var(--color-neutral-50);
-  font-size: 18px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  color: var(--color-primary);
-  line-height: var(--line-height-tight);
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-3);
-}
-
-h1 { font-size: 2.25rem; }
-h2 { font-size: 1.625rem; }
-h3 { font-size: 1.375rem; }
-h4 { font-size: 1.1875rem; }
-h5, h6 { font-size: 1.0625rem; }
-
-@media (max-width: 767px) {
-  h1 { font-size: 1.875rem; }
-  h2 { font-size: 1.4375rem; }
-}
-
-p {
-  margin-bottom: var(--space-3);
-}
-
-a {
-  color: var(--color-secondary);
-  text-decoration: none;
-  border-bottom: 1px solid var(--color-neutral-500);
-  transition: all 0.2s ease;
-}
-
-a:hover {
-  color: var(--color-secondary-light);
-  border-bottom-color: var(--color-secondary-light);
-}
-
-blockquote {
-  border-left: 4px solid var(--color-accent);
-  padding-left: var(--space-4);
-  margin: var(--space-4) 0;
-  font-style: italic;
-  color: var(--color-neutral-700);
-}
-
-code {
-  font-family: var(--font-mono);
-  background-color: var(--color-neutral-100);
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  font-size: 0.9em;
-}
-
-pre {
-  background-color: var(--color-neutral-900);
-  color: var(--color-neutral-50);
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  overflow-x: auto;
-}
-
-pre code {
-  background: none;
-  padding: 0;
-}
-
-/* Карточки */
-.card {
-  background: var(--color-neutral-50);
-  border: 1px solid var(--color-neutral-300);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-md);
-}
-
-/* Кнопки */
-.btn {
-  display: inline-block;
-  padding: var(--space-2) var(--space-4);
-  background-color: var(--color-primary);
-  color: var(--color-neutral-50);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  transition: background-color 0.2s ease;
-}
-
-.btn:hover {
-  background-color: var(--color-primary-light);
-}
-
-.btn-secondary {
-  background-color: var(--color-secondary);
-}
-
-.btn-secondary:hover {
-  background-color: var(--color-secondary-light);
-}
-
-/* Метки/теги */
-.tag {
-  display: inline-block;
-  padding: var(--space-1) var(--space-2);
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-700);
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  margin-right: var(--space-2);
-  margin-bottom: var(--space-2);
-}
-
-/* Шапка */
-header {
-  background-color: var(--color-neutral-50);
-  border-bottom: 2px solid var(--color-primary);
-  padding: var(--space-4) 0;
-}
-
-/* Подвал */
-footer {
-  background-color: var(--color-neutral-900);
-  color: var(--color-neutral-300);
-  padding: var(--space-6) 0;
-  margin-top: var(--space-6);
-}
-
-footer a {
-  color: var(--color-neutral-300);
-  border-bottom-color: var(--color-neutral-700);
-}
-
-footer a:hover {
-  color: var(--color-neutral-50);
-}
-
-
-/* INFRA-077: карточки постов, горизонтальная шапка, cookie-баннер */
-
-/* Сетка карточек */
-.post-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-5);
-  margin-top: var(--space-5);
-}
-
-@media (min-width: 768px) {
-  .post-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .post-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* Карточка поста */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Горизонтальная шапка */
-header nav {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-@media (min-width: 768px) {
-  header nav {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-header nav > a {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  color: var(--color-primary);
-  font-weight: 700;
-  border-bottom: none;
-}
-
-header nav ul {
-  display: flex;
-  gap: var(--space-4);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-header nav ul li {
-  margin: 0;
-}
-
-header nav ul li a {
-  color: var(--color-neutral-900);
-  font-weight: 500;
-  border-bottom: 2px solid transparent;
-  transition: border-bottom-color 0.2s ease;
-}
-
-header nav ul li a:hover {
-  border-bottom-color: var(--color-secondary);
-}
-
-/* Cookie-баннер */
-#cookie-consent-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #000;
-  color: var(--color-neutral-50);
-  padding: var(--space-3);
-  text-align: center;
-  box-shadow: var(--shadow-lg);
-  z-index: 1200;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  align-items: center;
-}
-
-@media (min-width: 768px) {
-  #cookie-consent-banner {
-    flex-direction: row;
-    justify-content: center;
-    gap: var(--space-4);
-  }
-}
-
-#cookie-consent-banner button {
-  background: var(--color-primary);
-  color: var(--color-neutral-50);
-  border: none;
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  transition: background-color 0.2s ease;
-}
-
-#cookie-consent-banner button:hover {
-  background: var(--color-primary-light);
-}
-
-/* INFRA-079: внутренний контейнер полноширинных полос */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-left: var(--space-3);
-  padding-right: var(--space-3);
-}
-
-@media (min-width: 768px) {
-  .container {
-    padding-left: var(--space-5);
-    padding-right: var(--space-5);
-  }
-}
-
-/* INFRA-079: колонка чтения целиком (заголовок + мета + текст) */
-.post-article {
-  max-width: 75ch;
-  margin: 0 auto;
-}
-
-/* INFRA-080: бренд-блок шапки, рабочие теги, цвета полос в бренд */
-.brand {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.site-title {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  border-bottom: none;
-  margin: 0;
-}
-
-a.site-title:hover {
-  color: var(--color-primary-light);
-  opacity: 0.9;
-}
-.site-title:active {
-  opacity: 0.85;
-}
-
-
-.site-tagline {
-  color: var(--color-neutral-700);
-  font-size: 0.875rem;
-  margin: 0;
-}
-
-header nav ul li a {
-  color: var(--color-primary);
-}
-
-header nav ul li a:hover {
-  color: var(--color-secondary);
-  border-bottom-color: var(--color-secondary);
-}
-
-footer {
-  background-color: var(--color-primary);
-}
-
-#cookie-consent-banner {
-  background: var(--color-primary);
-}
-
-a.tag {
-  color: var(--color-neutral-700);
-  border-bottom: none;
-}
-
-a.tag:hover {
-  color: var(--color-secondary);
-  background: var(--color-neutral-300);
-}
-
-/* INFRA-081: иерархия типографики (бренд < H1 страницы; шаг 1.2-1.25) */
-.site-title {
-  font-size: 1.375rem;
-}
-
-
-
-.post-card-summary h1,
-.post-card-summary h2,
-.post-card-summary h3,
-.post-card-summary h4,
-.post-card-summary h5,
-
-
-
-
-
-
-/* INFRA-082: Sticky Bottom Bar (мобильная навигация) */
-.sticky-bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--color-primary);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  transform: translateY(0);
-  transition: transform 0.3s ease-in-out;
-
-  contain: layout style paint;
-  isolation: isolate;}
-
-.sticky-btn {
-  background: none;
-  border: none;
-  color: var(--color-neutral-50);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-2);
-  cursor: pointer;
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  transition: color 0.2s ease;
-}
-
-.sticky-btn:hover {
-  color: var(--color-accent);
-}
-
-.sticky-btn svg {
-  width: 24px;
-  height: 24px;
-}
-
-@media (min-width: 768px) {
-  .sticky-bottom-bar {
-    display: none;
-  
-  contain: layout style paint;
-  isolation: isolate;}
-}
-
-/* INFRA-082: Focus-states для accessibility (клавиатурная навигация) */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-/* Убираем outline для мыши */
-a:focus:not(:focus-visible),
-button:focus:not(:focus-visible),
-input:focus:not(:focus-visible),
-textarea:focus:not(:focus-visible),
-select:focus:not(:focus-visible) {
-  outline: none;
-}
-
-/* INFRA-082: CLS-оптимизация (предотвращение скачков layout) */
-.post-card img {
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-}
-
-
-
-.post-content img {
-  aspect-ratio: auto;
-  height: auto;
-  max-width: 100%;
-}
-
-.post-content figure {
-  contain: layout;
-}
-
-/* INFRA-082-fix: мобильное меню-drawer (открывается кнопкой Меню) */
-body.no-scroll {
-  overflow: hidden;
-}
-
-.mobile-menu[hidden] {
-  display: none;
-}
-
-.mobile-menu {
-  position: fixed;
-  inset: 0;
-  z-index: 1100;
-}
-
-.mobile-menu__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.mobile-menu--open .mobile-menu__backdrop {
-  opacity: 1;
-}
-
-.mobile-menu__panel {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  padding: var(--space-4) var(--space-3) calc(var(--space-4) + 56px);
-  transform: translateY(100%);
-  transition: transform 0.25s ease;
-  box-shadow: var(--shadow-lg);
-}
-
-.mobile-menu--open .mobile-menu__panel {
-  transform: translateY(0);
-}
-
-.mobile-menu__panel ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.mobile-menu__panel a {
-  display: block;
-  padding: var(--space-3);
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  color: var(--color-primary);
-  border-bottom: 1px solid var(--color-neutral-300);
-}
-
-.mobile-menu__close {
-  position: absolute;
-  top: var(--space-2);
-  right: var(--space-3);
-  background: none;
-  border: none;
-  font-size: 1.75rem;
-  line-height: 1;
-  color: var(--color-neutral-700);
-  cursor: pointer;
-}
-
-@media (min-width: 768px) {
-  .mobile-menu {
-    display: none;
-  }
-}
-
-/* INFRA-084: бар индиго; cookie над баром; YouTube-шрифт */
-@media (max-width: 767px) {
-  body {
-    padding-bottom: 72px; /* контент/подвал не прячутся под бар */
-  }
-  #cookie-consent-banner {
-    bottom: calc(76px + env(safe-area-inset-bottom, 0px)); /* над баром + safe-area */
-    left: var(--space-3);
-    right: var(--space-3);
-    border-radius: var(--radius-md);
-  }
-}
-
-/* INFRA-088: возврат жирности (доступные веса 400/700) + тело 18px, h1 28px */
-h1 { font-size: 28px; font-weight: 700; line-height: 1.2; margin: 0 0 var(--space-2); }
-h2 { font-size: 24px; font-weight: 700; line-height: 1.25; margin: var(--space-4) 0 var(--space-2); }
-h3 { font-size: 20px; font-weight: 700; line-height: 1.3; margin: var(--space-4) 0 var(--space-2); }
-h4, h5, h6 { font-size: 18px; font-weight: 700; line-height: 1.4; margin: var(--space-3) 0 var(--space-2); }
-
-.site-title { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
-
-
-
-.post-card-summary h1,
-.post-card-summary h2,
-.post-card-summary h3,
-.post-card-summary h4,
-.post-card-summary h5,
-
-
-.post-card-date,
-time,
-.post-author,
-.post-categories,
-.post-tags { font-size: 15px; font-weight: 400; color: var(--color-neutral-700); }
-
-.sticky-btn span { font-size: 14px; font-weight: 400; }
-
-#cookie-consent-banner { font-size: 16px; font-weight: 400; }
-#cookie-consent-banner button { font-size: 16px; font-weight: 700; }
-
-header nav ul li a { font-weight: 400; }
-
-/* INFRA-086: горизонтальное верхнее меню на всех экранах */
-header nav ul { flex-direction: row; }
-
-/* INFRA-086: drawer-меню поверх cookie-баннера (навигация важнее согласия) */
-.mobile-menu { z-index: 1300; }
-
-/* INFRA-089: медиа скруглено так же, как карточки-блоки (радиус = var(--radius-md)) */
-.post-card img,
-.post-content img {
-  border-radius: var(--radius-md);
-}
-
-.post-content iframe,
-.post-content .video-wrapper,
-.post-content figure {
-  border-radius: var(--radius-md);
-}
-
-.post-content .video-wrapper,
-.post-content figure {
-  overflow: hidden;          /* углы iframe/обёртки режутся чисто */
-}
-
-.post-content iframe {
-  display: block;            /* убирает лишний baseline-зазор под видео */
-}
-
-/* INFRA-090: логотип в шапке слева от названия */
-.brand {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.site-logo-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  text-decoration: none;
-}
-
-.site-logo {
-  width: 144px;
-  height: 144px;
-  display: block;
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  min-width: 0;
-}
-
-@media (max-width: 767px) {
-  .brand { gap: var(--space-2); }
-  .site-logo { width: 128px; height: 128px; }
-}
-
-/* INFRA-091: 4b — на мобильном блок меню опускается ниже бренда/описания (ссылки в ul остаются в ряд) */
-@media (max-width: 767px) {
-  header nav {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
-  }
-}
-
-/* INFRA-092: двухцветие названия + янтарная «фирменная» линия */
-.site-title-main { color: var(--color-primary); }
-.site-title-accent { color: var(--color-accent); }
-.site-title {
-  display: inline-block;            /* линия снизу по ширине текста, не на всю строку */
-  border-bottom: 2px solid var(--color-accent);
-  padding-bottom: 2px;
-}
-
-/* INFRA-095: меню column на всех устройствах (расширение 091 4b с <768 на все брейкпоинты) */
-header nav {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-2);
-}
-
-/* Пункты меню в ряд внутри опущенного блока, с переносом на узких экранах */
-header nav ul {
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-
-@media (max-width: 767px) {
-  header nav ul {
-    gap: var(--space-2);
-  }
-}
-
-/* INFRA-094a: .site-title — ширина по контенту, фикс align-items:stretch в .brand-text */
-.site-title { align-self: flex-start; width: max-content; max-width: 100%; }
-
-/* INFRA-094b: сохранение пропорций логотипа (2736x1520 -> вписывается в 36x36 без искажения) */
-.site-logo { object-fit: contain; }
-
-
-
-
-
-
-
-
-/* === FINAL UI FIXES FOR PILOT AUDIT (v3 - Clean Slate) === */
-
-/* 1. Sticky Bottom Bar: Simple & Stable */
-.sticky-bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  
-  /* Темная тема как у футера */
-  background-color: var(--color-footer-bg, #1a1a1a);
-  color: var(--color-text-inverse, #ffffff);
-  
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
-  
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
-  
-  /* Никаких will-change, transform, perspective. Только база. */
-
-  contain: layout style paint;
-  isolation: isolate;}
-
-/* Иконки внутри панели должны быть белыми */
-.sticky-bottom-bar svg,
-.sticky-bottom-bar button {
-  fill: currentColor;
-  stroke: currentColor;
-  color: inherit;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-/* Скрываем на десктопе */
-@media (min-width: 769px) {
-  .sticky-bottom-bar {
-    display: none !important;
-  
-  contain: layout style paint;
-  isolation: isolate;}
-}
-
-/* 2. Cookie Banner: Above the bar, Centered */
-#cookie-consent-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2000; /* Выше панели (1000) */
-  
-  background-color: var(--color-footer-bg, #1a1a1a);
-  color: var(--color-text-inverse, #ffffff);
-  
-  padding: var(--space-3) var(--space-4);
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-4);
-  
-  font-family: inherit;
-  font-size: 0.875rem;
-}
-
-#cookie-consent-banner span {
-  white-space: nowrap;
-}
-
-#cookie-consent-banner button {
-  background-color: var(--color-primary, #007bff);
-  color: #fff;
-  border: none;
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: 600;
-  min-width: 80px;
-}
-
-/* На очень узких экранах куки становятся колонкой */
-@media (max-width: 480px) {
-  #cookie-consent-banner {
-    flex-direction: column;
-    gap: var(--space-2);
-    text-align: center;
-  }
-}
-
-/* 3. Post Cards: Image Placeholder Styling */
-
-
-
-
-.post-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-}
-
-/* 4. Tags Alignment (Clean Version) */
-
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 0 var(--space-2);
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-700);
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  line-height: 1;
-  text-decoration: none;
-}
-
-a.tag:hover {
-  background-color: var(--color-neutral-200);
-  color: var(--color-secondary);
-}
-
-
-/* === CLEAN POST CARD LAYOUT (v5 - Final Fix) === */
-
-.post-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--space-4);
-}
-
-.post-card {
-  background: var(--color-neutral-50);
-  border: 1px solid var(--color-neutral-300);
-  border-radius: var(--radius-md);
-  overflow: hidden; /* Важно: скрываем выступы изображений */
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* Растягиваем карточку на всю высоту ячейки грида */
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.post-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-/* 1. Image Area */
-.post-card-image-wrapper {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background-color: var(--color-neutral-100);
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0; /* Не сжимать картинку при нехватке места */
-}
-
-.post-card-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.post-card-image-placeholder-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--color-neutral-400);
-  opacity: 0.5;
-}
-
-/* 2. Content Area */
-.post-card-content {
-  padding: var(--space-3) var(--space-4);
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1; /* Занимает всё оставшееся место */
-}
-
-.post-card-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.3;
-  margin: 0 0 var(--space-2);
-  color: var(--color-primary);
-}
-
-.post-card-title a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.post-card-title a:hover {
-  color: var(--color-secondary);
-}
-
-.post-card-date {
-  font-size: 0.875rem;
-  color: var(--color-neutral-700);
-  margin-bottom: var(--space-2);
-}
-
-.post-card-summary {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--color-neutral-900);
-  margin-bottom: var(--space-3);
-  flex-grow: 1; /* Толкает теги вниз */
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* Обрезаем текст после 3 строк */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* 3. Tags Footer */
-.post-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  align-items: center;
-  margin-top: auto; /* Прижимаем к низу карточки */
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--color-neutral-200);
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 0 var(--space-2);
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-700);
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-a.tag:hover {
-  background-color: var(--color-neutral-200);
-  color: var(--color-secondary);
-}
-
-/* === LINKS INSIDE POST CARD SUMMARIES (Fix for v8) === */
-
-
-
-/* === HIDE DUPLICATE IMAGES IN SUMMARIES (v10 Fix) === */
-.post-card-summary img {
-  display: none !important;
-}
-
-/* === FINAL TEXT CLAMPING & LINK STYLING FOR CARD SUMMARIES (v13 Hotfix) === */
-.post-card-summary {
-  display: -webkit-box;
-  -webkit-line-clamp: 4; /* Показываем максимум 4 строки */
-  -webkit-box-orient: vertical;  
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 0.5rem;
-  color: var(--color-text-secondary);
-  line-height: 1.5;
-}
-
-/* Стилизация ссылок внутри описания */
-
-
-/* === FINAL LINK POLISH FOR CARD SUMMARIES (v14) === */
-.post-card-summary a:hover,
-.post-card-summary a:focus {
-  /* При наведении меняем только оттенок/яркость, оставляя структуру */
-  color: var(--color-primary); /* Или другой акцентный цвет бренда */
-  text-decoration-color: currentColor; /* Подчеркивание становится того же цвета, что и текст */
-}
-
-
-/* === FINAL LINK STYLES FOR CARDS (v15 Clean Slate) === */
-.post-card-summary a {
-  /* 1. Цвет: наследуем основной текст, но делаем его чуть темнее/ярче для различимости */
-  color: var(--color-text-primary); 
-  
-  /* 2. Декорация: только одно подчеркивание */
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-  
-  /* 3. Убираем border-bottom, который мог создавать вторую линию */
-  border-bottom: none !important; 
-  
-  /* 4. Плавность перехода */
-  transition: color 0.2s ease, text-decoration-color 0.2s ease;
-}
-
-.post-card-summary a:hover,
-.post-card-summary a:focus {
-  /* При наведении меняем цвет на акцентный (синий/зеленый бренда) */
-  color: var(--color-primary); 
-  
-  /* Подчеркивание становится того же цвета, что и текст */
-  text-decoration-color: currentColor;
-  
-  /* Опционально: можно добавить легкий фон или жирность, если нужно сильнее выделить */
-  font-weight: 600; 
-}
-
-/* INFRA-095-FINAL: Absolute prevention of logo/title jitter on click */
-/* 1. Запрет любых обводок и теней при фокусе/клике для обоих элементов */
-.site-logo-link,
-.site-title {
-  outline: none !important;
-  box-shadow: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-.site-logo-link:active, .site-logo-link:focus, .site-logo-link:focus-visible,
-.site-title:active, .site-title:focus, .site-title:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-  margin: 0 !important;
-  transform: none !important;
-}
-
-/* 2. Промоутим элементы в отдельные слои композитинга, чтобы избежать reflow/repaint */
-.site-logo {
-  will-change: transform;
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.site-title {
-  will-change: opacity;
-}
-
-/* INFRA-095-ULTIMATE: Lock flex dimensions to prevent ANY baseline/size shift */
-.site-logo-link {
-  flex: 0 0 auto !important;
-  flex-shrink: 0 !important;
-  flex-grow: 0 !important;
-}
-
-.site-logo {
-  flex-shrink: 0 !important;
-  flex-grow: 0 !important;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
-
-/* INFRA-100: Theme toggle positioning in navigation */
-nav ul li:last-child {
-  margin-left: auto;
-}
-
-nav ul li .theme-toggle-btn {
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  nav ul {
-    flex-wrap: wrap;
-    gap: var(--space-2, 8px);
-  }
-  nav ul li:last-child {
-    margin-left: auto;
-    order: 100;
-  }
-}
-
 /* =========================================================
-   INFRA-082: Adaptive sticky navigation dock
-   Safe append-only override.
-   Legacy .sticky-bottom-bar rules are intentionally kept.
-   Do not mechanically delete duplicates until computed-style QA
-   and disjoint !important analysis are completed.
+   INFRA-082 V4 FINAL ARCHITECTURE
+   Zones: Mobile Portrait | Hybrid (Symmetric Squeeze) | Desktop (Overlay)
    ========================================================= */
 
-/* Mobile portrait: bottom bar, always visible */
-.sticky-bottom-bar,
-.sticky-bottom-bar.is-hidden,
-.sticky-bottom-bar--hidden {
-  position: fixed !important;
-  z-index: 1000 !important;
-
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-around !important;
-  align-items: center !important;
-
-  top: auto !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  transform: none !important;
-
-  width: auto !important;
-  max-width: none !important;
-
-  background-color: var(--color-footer-bg, #1a1a1a) !important;
-  color: var(--color-text-inverse, #ffffff) !important;
-
-  border: 0 !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 0 !important;
-
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2) !important;
-
-  padding-top: var(--space-2, 0.5rem) !important;
-  padding-right: var(--space-2, 0.5rem) !important;
-  padding-bottom: calc(var(--space-2, 0.5rem) + env(safe-area-inset-bottom, 0px)) !important;
-  padding-left: var(--space-2, 0.5rem) !important;
-
-  contain: layout style paint !important;
-  isolation: isolate !important;
-}
-
-/* Mobile landscape, tablets, desktop: right-side vertical dock */
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  .sticky-bottom-bar,
-  .sticky-bottom-bar.is-hidden,
-  .sticky-bottom-bar--hidden {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: var(--space-3, 0.75rem) !important;
-
-    position: fixed !important;
-    z-index: 1000 !important;
-
-    top: 50% !important;
-    right: 0 !important;
-    bottom: auto !important;
-    left: auto !important;
-
-    transform: translateY(-50%) !important;
-
-    width: auto !important;
-    max-width: none !important;
-    max-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
-
-    background-color: var(--color-footer-bg, #1a1a1a) !important;
-    color: var(--color-text-inverse, #ffffff) !important;
-
-    border: 0 !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-right: 0 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 8px 0 0 8px !important;
-
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2) !important;
-
-    padding-top: var(--space-3, 0.75rem) !important;
-    padding-right: calc(var(--space-3, 0.75rem) + env(safe-area-inset-right, 0px)) !important;
-    padding-bottom: var(--space-3, 0.75rem) !important;
-    padding-left: var(--space-3, 0.75rem) !important;
-
-    contain: layout style paint !important;
-    isolation: isolate !important;
-  }
-
-  @supports (height: 100dvh) {
-    .sticky-bottom-bar,
-    .sticky-bottom-bar.is-hidden,
-    .sticky-bottom-bar--hidden {
-      max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
-    }
-  }
-}
-
-/* Buttons inside the dock */
-.sticky-bottom-bar button {
-  appearance: none !important;
-  -webkit-appearance: none !important;
-
-  flex: 0 0 auto !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 4px !important;
-
-  min-width: 44px !important;
-  min-height: 44px !important;
-  padding: 8px !important;
-  border: 0 !important;
-  border-radius: 6px !important;
-
-  background: transparent !important;
-  color: inherit !important;
-  font: inherit !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  line-height: 1.2 !important;
-  text-align: center !important;
-  white-space: nowrap !important;
-  cursor: pointer !important;
-  user-select: none !important;
-  -webkit-user-select: none !important;
-  touch-action: manipulation !important;
-  -webkit-tap-highlight-color: transparent !important;
-
-  transition:
-    background-color 0.2s ease,
-    transform 0.1s ease !important;
-}
-
-@media (hover: hover) {
-  .sticky-bottom-bar button:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-  }
-}
-
-.sticky-bottom-bar button:active {
-  transform: scale(0.95) !important;
-}
-
-.sticky-bottom-bar button svg {
-  display: block !important;
-  width: 24px !important;
-  height: 24px !important;
-  flex: 0 0 auto !important;
-
-  fill: none !important;
-  stroke: currentColor !important;
-  stroke-width: 2 !important;
-  stroke-linecap: round !important;
-  stroke-linejoin: round !important;
-}
-
-.sticky-bottom-bar button span {
-  display: block !important;
-  flex: 0 0 auto !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  line-height: 1.2 !important;
-}
-
-/* Very narrow mobile portrait: icons only */
-@media (max-width: 360px) and (orientation: portrait) {
-  .sticky-bottom-bar button span {
-    display: none !important;
-  }
-}
-
-/* Short landscape screens: reduce label pressure */
-@media (orientation: landscape) and (max-height: 520px) {
-  .sticky-bottom-bar button span {
-    display: none !important;
-  }
-}
-
-/* Accessibility: keyboard focus */
-.sticky-bottom-bar button:focus-visible {
-  outline: 3px solid var(--color-accent, #4285f4) !important;
-  outline-offset: 2px !important;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .sticky-bottom-bar button {
-    transition: none !important;
-  }
-
-  .sticky-bottom-bar button:active {
-    transform: none !important;
-  }
-}
-
-/* Print: do not show navigation dock */
-@media print {
-  .sticky-bottom-bar,
-  .sticky-bottom-bar.is-hidden,
-  .sticky-bottom-bar--hidden {
-    display: none !important;
-  }
-}
-
-/* =========================================================
-   INFRA-082 HOTFIX v2: Fix overlaps, sync bg with theme tokens
-   Uses actual design-tokens.css variables: --color-bg, --color-text, --color-border
-   ========================================================= */
-
-/* 1. Фон дока: синхронизируем строго с основным фоном страницы (--color-bg) */
-.sticky-bottom-bar {
-  background-color: var(--color-bg) !important;
-  
-  /* Границы и тени адаптируются под текущую тему через бордер-токен */
-  border-top: 1px solid var(--color-border) !important;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* В ландшафте/десктопе тень уходит влево-низ */
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  .sticky-bottom-bar {
-    box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.05) !important;
-  }
-}
-
-/* 2. Ландшафт / Десктоп: опускаем док вниз, чтобы не перекрывать кнопку темы */
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  .sticky-bottom-bar {
-    top: auto !important;
-    bottom: var(--space-4, 1.5rem) !important; /* Отступ снизу вместо центра */
-    transform: none !important; /* Убираем трансформацию центрирования */
-  }
-}
-
-/* 3. Иконки и текст внутри дока наследуют цвет текста активной темы */
-.sticky-bottom-bar button svg {
-  stroke: var(--color-text) !important;
-}
-
-.sticky-bottom-bar button span {
-  color: var(--color-text) !important;
-}
-
-/* 4. Hover-эффекты под текущую тему (используем secondary bg для подсветки) */
-@media (hover: hover) {
-  .sticky-bottom-bar button:hover {
-    background-color: var(--color-bg-secondary) !important;
-  }
-}
-
-/* =========================================================
-   INFRA-082 HOTFIX v3: Fix light mode visibility & positioning
-   Uses actual design-tokens.css variables for full theme sync
-   ========================================================= */
-
-/* 1. ФОН И ТЕМАТИЗАЦИЯ (Critical Fix for White-on-White) */
-.sticky-bottom-bar {
-  /* Фон строго следует за токеном фона страницы (--color-bg) */
-  background-color: var(--color-bg) !important;
-  
-  /* Граница также адаптируется под текущую тему */
-  border-top: 1px solid var(--color-border) !important;
-  
-  /* Тень мягкая, чтобы не давить на контент */
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* ВАЖНО: Цвет иконок и текста ДОЛЖЕН меняться вместе с темой */
-.sticky-bottom-bar button svg {
-  stroke: var(--color-text) !important; /* Было hardcoded white, стало dynamic */
-  fill: none !important;
-}
-
-.sticky-bottom-bar button span {
-  color: var(--color-text) !important; /* Текст подписи тоже динамический */
-}
-
-/* Hover эффект должен быть контрастным к фону */
-@media (hover: hover) {
-  .sticky-bottom-bar button:hover {
-    background-color: var(--color-bg-secondary) !important;
-  }
-}
-
-
-/* 2. ПОЗИЦИОНИРОВАНИЕ (Desktop / Landscape Mobile) */
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  .sticky-bottom-bar {
-    position: fixed !important;
-    right: 0 !important;
-    
-    /* КОМПРОМИСС: Чуть ниже центра, чтобы избежать наложения на кнопку темы 
-       (которая обычно top: ~20px) и уйти от футера (который bottom: 0) */
-    top: calc(50% + 1.5rem) !important; 
-    
-    /* Центрируем сам блок относительно этой точки */
-    transform: translateY(-50%) !important;
-    
-    bottom: auto !important; /* Отменяем previous bottom rule */
-    
-    /* Максимальная высота, чтобы не вылезти за экран на маленьких ноутбуках */
-    max-height: calc(100vh - 10rem) !important;
-    overflow-y: auto !important;
-    
-    /* Стилизация скроллбара внутри дока (если кнопок много) */
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-border) transparent;
-  }
-  
-  /* Скругляем левые углы для эффекта "выплывания" из края */
-  .sticky-bottom-bar {
-    border-radius: 8px 0 0 8px !important;
-    border-right: none !important;
-  }
-}
-
-/* 3. МОБИЛЬНЫЙ ПОРТРЕТ (Standard Bottom Bar) */
-@media (max-width: 767px) and (orientation: portrait) {
-  .sticky-bottom-bar {
-    top: auto !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    transform: none !important;
-    border-radius: 0 !important;
-    border-top: 1px solid var(--color-border) !important;
-    border-left: none !important;
-    border-right: none !important;
-    border-bottom: none !important;
-    
-    /* Safe area для iPhone с "челкой" снизу */
-    padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px)) !important;
-  }
-}
-
-/* =========================================================
-   INFRA-082 FINAL SPEC: Clean Architecture Refactor
-   Replaces all previous hotfixes with deterministic styles.
-   ========================================================= */
-
-/* 1. БАЗОВЫЕ СТИЛИ ДОКА (Mobile Portrait Default) */
+/* --- БАЗА: Мобильный Портрет (<768px) --- */
 .sticky-bottom-bar {
   position: fixed !important;
-  z-index: 999 !important; /* Ниже cookie-banner (1000), выше контента */
+  z-index: 999 !important;
   
-  /* Mobile Portrait: Bottom Full Width */
+  /* Full Width Bottom Bar */
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
@@ -1559,371 +20,163 @@ nav ul li .theme-toggle-btn {
   justify-content: space-around !important;
   align-items: center !important;
   
-  /* Colors: Hardcoded for guaranteed contrast, then overridden by theme if needed */
-  background-color: #ffffff !important; /* Light mode default */
-  color: #333333 !important;
-  border-top: 1px solid #e0e0e0 !important;
+  background-color: var(--color-bg, #fff) !important;
+  color: var(--color-text, #333) !important;
+  border-top: 1px solid var(--color-border, #ddd) !important;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
   
   padding: var(--space-2) !important;
   padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* Content Compensation for Fixed Bottom Bar */
+@media (max-width: 767px) {
+  body, main, article {
+    padding-bottom: 80px !important; 
+  }
+}
+
+
+/* --- ГИБРИДНАЯ ЗОНА: Планшет / Горизонтальный Мобильный (768px – 1199px) --- */
+@media (min-width: 768px) and (max-width: 1199px) {
   
-  contain: layout style paint !important;
-}
-
-/* Dark Mode Override for Base */
-[data-theme="dark"] .sticky-bottom-bar {
-  background-color: #1e1e1e !important;
-  color: #e0e0e0 !important;
-  border-top-color: #333333 !important;
-}
-
-/* Hide Theme Button in Mobile Portrait (it's in header there) */
-.sticky-bottom-bar .btn-theme-toggle {
-  display: none !important;
-}
-
-/* 2. АДАПТИВНЫЙ РЕЖИМ (Desktop / Tablet / Mobile Landscape) */
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
   .sticky-bottom-bar {
-    /* Right Side Vertical Dock, Top-Aligned */
-    top: var(--space-3) !important; 
-    right: var(--space-3) !important;
-    bottom: auto !important;
+    /* Compact Vertical Dock, Bottom-Right */
+    top: auto !important;
+    bottom: var(--space-4, 1.5rem) !important;
+    right: var(--space-4, 1.5rem) !important;
     left: auto !important;
     
-    width: auto !important;
+    width: 48px !important; 
     max-height: calc(100vh - 4rem) !important;
     
     flex-direction: column !important;
-    gap: var(--space-2) !important;
-    padding: var(--space-2) !important;
+    gap: var(--space-2, 0.5rem) !important;
+    padding: var(--space-2, 0.5rem) !important;
     
-    /* Visual Separation */
-    border-radius: 8px !important;
-    border: 1px solid #e0e0e0 !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--color-border, #ddd) !important;
+    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15) !important;
   }
-  
+
   [data-theme="dark"] .sticky-bottom-bar {
-    border-color: #333333 !important;
-  }
-  
-  /* Show Theme Button ONLY in this mode */
-  .sticky-bottom-bar .btn-theme-toggle {
-    display: flex !important;
-  }
-  
-  /* HIDE Menu Button on Desktop/Landscape (Not needed per spec) */
-  #sticky-menu-btn {
-    display: none !important;
-  }
-}
-
-/* 3. СТИЛИЗАЦИЯ КНОПОК ВНУТРИ ДОКА */
-.sticky-bottom-bar button {
-  appearance: none !important;
-  background: transparent !important;
-  border: none !important;
-  cursor: pointer !important;
-  
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 2px !important;
-  
-  min-width: 44px !important;
-  min-height: 44px !important;
-  padding: 6px !important;
-  border-radius: 6px !important;
-  
-  color: inherit !important; /* Inherits from parent (.sticky-bottom-bar) */
-  transition: background-color 0.2s ease !important;
-}
-
-.sticky-bottom-bar button:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-[data-theme="dark"] .sticky-bottom-bar button:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-.sticky-bottom-bar button svg {
-  width: 20px !important;
-  height: 20px !important;
-  stroke: currentColor !important;
-  fill: none !important;
-  stroke-width: 2 !important;
-}
-
-.sticky-bottom-bar button span {
-  font-size: 10px !important;
-  line-height: 1 !important;
-  opacity: 0.8 !important;
-}
-
-/* Accessibility Focus */
-.sticky-bottom-bar button:focus-visible {
-  outline: 2px solid var(--color-accent, #4285f4) !important;
-  outline-offset: 2px !important;
-}
-
-/* Print Hidden */
-@media print {
-  .sticky-bottom-bar { display: none !important; }
-}
-
-/* =========================================================
-   INFRA-082 POLISH: Hide Header Theme Conflict & Adjust Position
-   ========================================================= */
-
-/* 1. Скрываем СТАРУЮ кнопку темы в шапке, если она существует 
-   (обычно имеет класс .theme-switcher, #theme-toggle или similar) 
-   на экранах >= 768px, где наш док берет управление на себя */
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  
-  /* Попытка скрыть типовые селекторы кнопок темы в header/nav */
-  header .theme-toggle,
-  nav .theme-toggle,
-  .site-header [id*="theme"],
-  .site-header [class*="theme-btn"],
-  .header-actions button[aria-label*="тема" i],
-  .header-actions button[title*="тема" i] {
-    display: none !important;
+    background-color: var(--color-bg-secondary, #1e1e1e) !important;
+    border-color: #333 !important;
+    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.4) !important;
   }
 
-  /* 2. Корректировка позиции дока: опускаем чуть ниже, чтобы избежать коллизий с логотипом/меню */
-  .sticky-bottom-bar {
-    top: calc(var(--space-3) + 4rem) !important; /* Отступ сверху увеличен на высоту примерной строки меню */
-    right: var(--space-3) !important;
+  /* CRITICAL FIX: Symmetric Squeeze for Content */
+  .post-content, 
+  article.single-post,
+  main.container {
+    padding-left: var(--space-4, 1rem) !important;
+    padding-right: calc(48px + var(--space-4, 1rem)) !important; 
     
-    /* Увеличиваем z-index, чтобы точно быть над всем контентом, но под модалками */
-    z-index: 998 !important; 
-  }
-}
-
-/* Для мобильных портретов оставляем старую кнопку видимой (если она там нужна), 
-   а нашу dock-версию прячем (мы это уже делали раньше, но продублируем для надежности) */
-@media (max-width: 767px) and (orientation: portrait) {
-  .sticky-bottom-bar .btn-theme-toggle {
-    display: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
-  /* Восстанавливаем видимость старой кнопки в шапке на мобиле */
-  header .theme-toggle,
-  nav .theme-toggle {
-    display: block !important;
+  body {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
   }
 }
 
-/* =========================================================
-   INFRA-082 FINAL POSITION: Bottom-Right Dock for Desktop/Landscape
-   Overrides previous top-positioning to avoid header conflicts
-   and follow standard FAB placement conventions.
-   ========================================================= */
 
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
+/* --- ДЕСКТОП: Широкие экраны (>=1200px) --- */
+@media (min-width: 1200px) {
+  
   .sticky-bottom-bar {
-    /* Переход от верхнего угла к нижнему */
+    /* Same positioning as Hybrid */
     top: auto !important;
     bottom: var(--space-4, 1.5rem) !important;
-    
     right: var(--space-4, 1.5rem) !important;
     left: auto !important;
     
-    /* Компактная вертикальная колонка */
+    width: 48px !important;
+    max-height: calc(100vh - 4rem) !important;
+    
     flex-direction: column !important;
     gap: var(--space-2, 0.5rem) !important;
-    padding: var(--space-3, 0.75rem) !important;
-    
-    /* Скругляем все углы, так как док больше не прижат к краю экрана */
-    border-radius: 12px !important;
-    
-    /* Тень направлена вверх-влево, подчеркивая положение внизу-справа */
-    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15) !important;
-    
-    /* Гарантируем, что док всегда поверх контента, но под модалками */
-    z-index: 998 !important;
-  }
-  
-  /* Адаптация тени для темной темы */
-  [data-theme="dark"] .sticky-bottom-bar {
-    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.4) !important;
-    border-color: #333333 !important;
-  }
-}
-
-/* =========================================================
-   INFRA-082 OPTIMIZATION: Compact Dock & Content Safe Zone
-   Solves text overlap in landscape/mobile-horizontal mode.
-   ========================================================= */
-
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  
-  /* 1. КОМПАКТНЫЙ ДОК (Уменьшаем занимаемую площадь) */
-  .sticky-bottom-bar {
-    /* Уменьшаем внутренний padding */
     padding: var(--space-2, 0.5rem) !important;
     
-    /* Уменьшаем gap между кнопками */
-    gap: 4px !important;
-    
-    /* Фиксируем минимальную ширину, чтобы док был узким столбцом */
-    min-width: 48px !important; 
-    max-width: 56px !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--color-border, #ddd) !important;
+    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15) !important;
   }
 
-  /* Кнопки становятся меньше (тап-таргет все еще >= 44px благодаря padding/min-height) */
+  [data-theme="dark"] .sticky-bottom-bar {
+    background-color: var(--color-bg-secondary, #1e1e1e) !important;
+    border-color: #333 !important;
+    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  /* NO CONTENT SQUEEZE NEEDED HERE */
+  .post-content, 
+  article.single-post,
+  main.container {
+    padding-right: var(--standard-padding, 1rem) !important; 
+    padding-left: var(--standard-padding, 1rem) !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+  }
+  
+  body {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+}
+
+
+/* --- ОБЩИЕ СТИЛИ КНОПОК ДОКА (Для всех режимов >=768px) --- */
+@media (min-width: 768px) {
   .sticky-bottom-bar button {
-    min-width: 36px !important; /* Чуть уже стандартных 44px для экономии места */
-    min-height: 36px !important;
-    padding: 4px !important;     /* Минимальный внутренний отступ */
-  }
-  
-  /* Иконки чуть меньше */
-  .sticky-bottom-bar button svg {
-    width: 18px !important;
-    height: 18px !important;
-  }
-  
-  /* Подписи скрываем полностью на компактном доке, оставляем только иконки */
-  .sticky-bottom-bar button span {
-    display: none !important;
-  }
-
-  /* 2. ЗАЩИТНАЯ ЗОНА ДЛЯ КОНТЕНТА (Content Shift) */
-  /* Сдвигаем основной контент влево, освобождая место справа для дока */
-  body,
-  main,
-  article,
-  .post-content,
-  .container {
-    /* Отступ справа равен примерной ширине дока (56px) + безопасный зазор (16px) */
-    padding-right: calc(56px + var(--space-4, 1rem)) !important;
-  }
-  
-  /* Важно: Не применять этот сдвиг к самим шапкам/футерам, если они растянуты на всю ширину */
-  header, footer {
-    padding-right: inherit !important; /* Наследуем общий стиль или сбрасываем */
-  }
-}
-
-/* Для очень узких мобильных ландшафтов (< 600px) можно ослабить сдвиг, 
-   так как там контент и так плотный */
-@media (max-width: 600px) and (orientation: landscape) {
-  body, main, article, .post-content {
-    padding-right: calc(48px + var(--space-3, 0.75rem)) !important;
-  }
-}
-
-/* =========================================================
-   INFRA-082 SYMMETRY FIX: Align Theme Toggle & Dock Right Edge
-   Ensures visual alignment between header theme button and dock buttons.
-   ========================================================= */
-
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  
-  /* 1. Единый отступ от правого края для всего дока */
-  .sticky-bottom-bar {
-    right: var(--space-4, 1.5rem) !important; /* Фиксируем точное значение */
+    appearance: none !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
     
-    /* Убираем лишние внутренние отступы по бокам, чтобы кнопки были плотнее к краю */
-    padding-left: 4px !important; 
-    padding-right: 4px !important;
-  }
-
-  /* 2. Выравнивание самой кнопки темы внутри дока */
-  /* Если в HTML есть отдельная кнопка #dock-theme-btn, центрируем её относительно других */
-  .sticky-bottom-bar #dock-theme-btn,
-  .sticky-bottom-bar .btn-theme-toggle {
-    margin: 0 auto !important; /* Центрирование по горизонтали внутри колонки */
     display: flex !important;
-    justify-content: center !important;
+    flex-direction: column !important;
     align-items: center !important;
-    width: 100% !important; /* Занимает всю доступную ширину ячейки дока */
+    justify-content: center !important;
+    gap: 2px !important;
+    
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 4px !important;
+    border-radius: 6px !important;
+    
+    color: inherit !important;
+    transition: background-color 0.2s ease !important;
   }
 
-  /* 3. Синхронизация размеров иконок */
-  /* Делаем так, чтобы иконка темы была такого же размера, как Share/Top */
-  .sticky-bottom-bar svg {
+  .sticky-bottom-bar button:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  [data-theme="dark"] .sticky-bottom-bar button:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .sticky-bottom-bar button svg {
     width: 20px !important;
     height: 20px !important;
+    stroke: currentColor !important;
+    fill: none !important;
+    stroke-width: 2 !important;
   }
 
-  /* 4. Если нативная кнопка темы в шапке всё ещё где-то мелькает (fallback),
-     принудительно ставим её на тот же уровень right, что и док */
-  header [id*="theme"],
-  header [class*="theme-toggle"] {
-    position: absolute !important;
-    right: var(--space-4, 1.5rem) !important;
-    top: var(--space-3, 1rem) !important; /* Примерный вертикальный ориентир */
-    z-index: 900 !important; /* Ниже дока (998), но выше контента */
-  }
-}
-
-/* =========================================================
-   INFRA-082 REFACTOR: Layout Unification & Popover Menu
-   Fixes content squeeze, aligns dock/theme button, adds popover menu.
-   ========================================================= */
-
-/* 1. КОНТЕНТ: Уменьшаем отступ справа, чтобы текст не выглядел "съехавшим" */
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  
-  /* Основной контент получает умеренный отступ, равный ширине дока + маленький зазор */
-  .post-content, 
-  article, 
-  main.container {
-    /* Дока ~48px + зазор 12px = 60px. Этого достаточно, чтобы не перекрывать, но не слишком много */
-    padding-right: 60px !important; 
-    margin-right: auto !important; /* Центрируем блок относительно доступной ширины */
-  }
-
-  /* Шапка и футер остаются на всю ширину без боковых отступов дока */
-  header, footer {
-    padding-right: var(--space-4, 1.5rem) !important; /* Обычный отступ страницы */
+  .sticky-bottom-bar button span {
+    font-size: 10px !important;
+    line-height: 1 !important;
+    opacity: 0.8 !important;
   }
 }
 
-/* 2. ДОК И КНОПКА ТЕМЫ: Полная симметрия */
-@media (min-width: 768px), (max-width: 767px) and (orientation: landscape) {
-  
-  /* Фиксируем точную ширину дока */
-  .sticky-bottom-bar {
-    width: 48px !important; 
-    right: var(--space-4, 1.5rem) !important;
-    
-    /* Внутренние отступы нулевые по бокам, чтобы иконки были центрированы */
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  /* Все кнопки внутри дока имеют одинаковый размер и центрирование */
-  .sticky-bottom-bar button {
-    width: 48px !important;
-    height: 48px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* Скрываем СТАРУЮ кнопку темы в шапке навсегда на этих разрешениях */
-  /* Теперь тема управляется ТОЛЬКО из дока */
-  header [id*="theme"],
-  header [class*="theme-toggle"],
-  .site-header .theme-switcher {
-    display: none !important;
-  }
-}
-
-/* 3. ПОПОВЕР-МЕНЮ (Вместо Drawer для десктопа/ландшафта) */
-.mobile-menu-popover {
+/* --- ПОПОВЕРЫ (SHARE & MENU) --- */
+.dock-popover {
   position: fixed;
-  bottom: calc(var(--space-4, 1.5rem) + 56px); /* Выше дока */
-  right: var(--space-4, 1.5rem);
   background: var(--color-bg, #fff);
   border: 1px solid var(--color-border, #ddd);
   border-radius: 8px;
@@ -1931,37 +184,64 @@ nav ul li .theme-toggle-btn {
   padding: 8px 0;
   z-index: 1001;
   min-width: 160px;
-  display: none; /* По умолчанию скрыто */
+  display: none; 
   flex-direction: column;
   gap: 4px;
 }
 
-.mobile-menu-popover.is-open {
+[data-theme="dark"] .dock-popover {
+  background: var(--color-bg-secondary, #1e1e1e);
+  border-color: #333;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.dock-popover.is-open {
   display: flex;
 }
 
-.mobile-menu-popover a {
+.dock-popover a,
+.dock-popover button.popover-action {
   display: block;
+  width: 100%;
   padding: 8px 16px;
   text-decoration: none;
   color: var(--color-text, #333);
   font-size: 14px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
   transition: background-color 0.2s;
 }
 
-.mobile-menu-popover a:hover {
+[data-theme="dark"] .dock-popover a,
+[data-theme="dark"] .dock-popover button.popover-action {
+  color: #e0e0e0;
+}
+
+.dock-popover a:hover,
+.dock-popover button.popover-action:hover {
   background-color: var(--color-bg-secondary, #f5f5f5);
 }
 
-/* Затемнение фона при открытии попавера (опционально, для фокуса внимания) */
-.menu-overlay {
+[data-theme="dark"] .dock-popover a:hover,
+[data-theme="dark"] .dock-popover button.popover-action:hover {
+  background-color: #333;
+}
+
+/* Overlay Backdrop */
+.dock-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.2);
   z-index: 1000;
   display: none;
 }
-.menu-overlay.is-active {
+.dock-overlay.is-active {
   display: block;
 }
 
+/* Print Hidden */
+@media print {
+  .sticky-bottom-bar, .dock-popover, .dock-overlay { display: none !important; }
+}

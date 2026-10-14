@@ -6,7 +6,7 @@
   console.log('%c[THEME-INIT] Запуск...', 'color: #fbbc04; font-weight: bold;');
   const stored = localStorage.getItem('theme');
   console.log('[THEME-INIT] Тема в localStorage:', stored);
-  
+
   if (stored === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     console.log('%c[THEME-INIT] Применена ТЕМНАЯ тема из памяти', 'color: #8ab4f4;');
@@ -59,8 +59,19 @@
       </ul>
     </nav>
   </div>
-  <nav class="sticky-bottom-bar" data-pagefind-ignore aria-label="Мобильная навигация">
-    <button class="sticky-btn" id="sticky-menu-btn" aria-label="Меню" aria-controls="mobile-menu" aria-expanded="false">
+
+  <!-- INFRA-082 V4 UNIFIED DOCK -->
+  <nav class="sticky-bottom-bar" data-pagefind-ignore aria-label="Панель управления">
+    <!-- Кнопка Темы -->
+    <button id="dock-theme-btn" type="button" aria-label="Переключить тему" title="Переключить тему">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <span>Тема</span>
+    </button>
+
+    <!-- Кнопка Меню -->
+    <button id="sticky-menu-btn" type="button" aria-label="Меню" aria-controls="mobile-menu" aria-expanded="false">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -68,7 +79,9 @@
       </svg>
       <span>Меню</span>
     </button>
-    <button class="sticky-btn" id="sticky-share-btn" aria-label="Поделиться">
+
+    <!-- Кнопка Поделиться -->
+    <button id="sticky-share-btn" type="button" aria-label="Поделиться">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="18" cy="5" r="3"/>
         <circle cx="6" cy="12" r="3"/>
@@ -78,16 +91,18 @@
       </svg>
       <span>Поделиться</span>
     </button>
-    <button class="sticky-btn" id="sticky-top-btn" aria-label="Наверх">
+
+    <!-- Кнопка Наверх -->
+    <button id="sticky-top-btn" type="button" aria-label="Наверх">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="18 15 12 9 6 15"/>
       </svg>
       <span>Наверх</span>
     </button>
   </nav>
+
   <script src="{{ "js/StickyBottomBar.js" | relURL }}"></script>
   {{ partial "search-modal.html" . }}
   <script type="module" src="{{ "js/PagefindInit.js" | relURL }}"></script>
-<script src="{{ "js/ThemeToggle.js" | relURL }}"></script>
 </body>
 </html>
