@@ -1,247 +1,1197 @@
-/* =========================================================
-   INFRA-082 V4 FINAL ARCHITECTURE
-   Zones: Mobile Portrait | Hybrid (Symmetric Squeeze) | Desktop (Overlay)
-   ========================================================= */
-
-/* --- БАЗА: Мобильный Портрет (<768px) --- */
-.sticky-bottom-bar {
-  position: fixed !important;
-  z-index: 999 !important;
-  
-  /* Full Width Bottom Bar */
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: auto !important;
-  transform: none !important;
-  
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-around !important;
-  align-items: center !important;
-  
-  background-color: var(--color-bg, #fff) !important;
-  color: var(--color-text, #333) !important;
-  border-top: 1px solid var(--color-border, #ddd) !important;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
-  
-  padding: var(--space-2) !important;
-  padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px)) !important;
-}
-
-/* Content Compensation for Fixed Bottom Bar */
-@media (max-width: 767px) {
-  body, main, article {
-    padding-bottom: 80px !important; 
-  }
-}
-
-
-/* --- ГИБРИДНАЯ ЗОНА: Планшет / Горизонтальный Мобильный (768px – 1199px) --- */
-@media (min-width: 768px) and (max-width: 1199px) {
-  
-  .sticky-bottom-bar {
-    /* Compact Vertical Dock, Bottom-Right */
-    top: auto !important;
-    bottom: var(--space-4, 1.5rem) !important;
-    right: var(--space-4, 1.5rem) !important;
-    left: auto !important;
-    
-    width: 48px !important; 
-    max-height: calc(100vh - 4rem) !important;
-    
-    flex-direction: column !important;
-    gap: var(--space-2, 0.5rem) !important;
-    padding: var(--space-2, 0.5rem) !important;
-    
-    border-radius: 12px !important;
-    border: 1px solid var(--color-border, #ddd) !important;
-    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15) !important;
-  }
-
-  [data-theme="dark"] .sticky-bottom-bar {
-    background-color: var(--color-bg-secondary, #1e1e1e) !important;
-    border-color: #333 !important;
-    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.4) !important;
-  }
-
-  /* CRITICAL FIX: Symmetric Squeeze for Content */
-  .post-content, 
-  article.single-post,
-  main.container {
-    padding-left: var(--space-4, 1rem) !important;
-    padding-right: calc(48px + var(--space-4, 1rem)) !important; 
-    
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-  
-  body {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-  }
-}
-
-
-/* --- ДЕСКТОП: Широкие экраны (>=1200px) --- */
-@media (min-width: 1200px) {
-  
-  .sticky-bottom-bar {
-    /* Same positioning as Hybrid */
-    top: auto !important;
-    bottom: var(--space-4, 1.5rem) !important;
-    right: var(--space-4, 1.5rem) !important;
-    left: auto !important;
-    
-    width: 48px !important;
-    max-height: calc(100vh - 4rem) !important;
-    
-    flex-direction: column !important;
-    gap: var(--space-2, 0.5rem) !important;
-    padding: var(--space-2, 0.5rem) !important;
-    
-    border-radius: 12px !important;
-    border: 1px solid var(--color-border, #ddd) !important;
-    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15) !important;
-  }
-
-  [data-theme="dark"] .sticky-bottom-bar {
-    background-color: var(--color-bg-secondary, #1e1e1e) !important;
-    border-color: #333 !important;
-    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.4) !important;
-  }
-
-  /* NO CONTENT SQUEEZE NEEDED HERE */
-  .post-content, 
-  article.single-post,
-  main.container {
-    padding-right: var(--standard-padding, 1rem) !important; 
-    padding-left: var(--standard-padding, 1rem) !important;
-    margin-right: auto !important;
-    margin-left: auto !important;
-  }
-  
-  body {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-  }
-}
-
-
-/* --- ОБЩИЕ СТИЛИ КНОПОК ДОКА (Для всех режимов >=768px) --- */
-@media (min-width: 768px) {
-  .sticky-bottom-bar button {
-    appearance: none !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 2px !important;
-    
-    min-width: 44px !important;
-    min-height: 44px !important;
-    padding: 4px !important;
-    border-radius: 6px !important;
-    
-    color: inherit !important;
-    transition: background-color 0.2s ease !important;
-  }
-
-  .sticky-bottom-bar button:hover {
-    background-color: rgba(0, 0, 0, 0.05) !important;
-  }
-  
-  [data-theme="dark"] .sticky-bottom-bar button:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-  }
-
-  .sticky-bottom-bar button svg {
-    width: 20px !important;
-    height: 20px !important;
-    stroke: currentColor !important;
-    fill: none !important;
-    stroke-width: 2 !important;
-  }
-
-  .sticky-bottom-bar button span {
-    font-size: 10px !important;
-    line-height: 1 !important;
-    opacity: 0.8 !important;
-  }
-}
-
-/* --- ПОПОВЕРЫ (SHARE & MENU) --- */
-.dock-popover {
-  position: fixed;
-  background: var(--color-bg, #fff);
-  border: 1px solid var(--color-border, #ddd);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  padding: 8px 0;
-  z-index: 1001;
-  min-width: 160px;
-  display: none; 
-  flex-direction: column;
-  gap: 4px;
-}
-
-[data-theme="dark"] .dock-popover {
-  background: var(--color-bg-secondary, #1e1e1e);
-  border-color: #333;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-}
-
-.dock-popover.is-open {
+/* INFRA-095-FINAL: Strictly prevent logo jitter on click/hover */
+.brand {
   display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
-
-.dock-popover a,
-.dock-popover button.popover-action {
+.site-logo-link {
   display: block;
-  width: 100%;
-  padding: 8px 16px;
   text-decoration: none;
-  color: var(--color-text, #333);
-  font-size: 14px;
-  border: none;
+  outline: none;
+}
+.site-logo-link:active, .site-logo-link:focus {
+  transform: none !important;
+  opacity: 1 !important;
+  outline: none !important;
+}
+.site-logo {
+  display: block;
+  pointer-events: none;
+}
+
+/* INFRA-095-FIX: Prevent SVG logo from intercepting clicks and shifting */
+.site-title .site-logo {
+  pointer-events: none;
+  display: block;
+}
+
+/* INFRA-098: Remove default blue/grey tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile-First CSS (INFRA-057) */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+header, main, footer {
+  padding: 1rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  nav ul {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  header, footer {
+    padding: 2rem;
+  }
+  main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    font-size: 18px;
+  }
+}
+
+a, button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* INFRA-063: figure, метаданные поста, iframe */
+figure { margin: 1rem 0; }
+figure img { max-width: 100%; height: auto; }
+figcaption { font-size: 0.875rem; color: #555; margin-top: 0.5rem; }
+.post-author, .post-categories, .post-tags { font-size: 0.875rem; color: #555; }
+.post-content iframe { max-width: 100%; }
+
+/* INFRA-064: центрирование как в оригинале + описание сайта */
+.text-center { text-align: center; }
+.site-description { color: #555; margin: 0 0 1.5rem 0; }
+
+/* INFRA-066: мета-строки и подписи в размер основного текста */
+figcaption, .post-author, .post-categories, .post-tags { font-size: 1rem; }
+
+/* INFRA-069: отступ списков от края на мобильных */
+main ul, main ol { padding-left: 1.5rem; }
+
+/* INFRA-070: центрирование изображений и подписей в figure (как в Blogger) */
+figure { text-align: center; }
+
+/* INFRA-071: мета-строки и подписи того же кегля, что основной текст */
+figcaption, .post-author, .post-categories, .post-tags { font-size: inherit; }
+
+/* INFRA-071: однородные вертикальные отступы блоков контента */
+.post-content p, .post-content ul, .post-content ol, .post-content figure { margin: 0 0 1rem; }
+.post-content li { margin: 0; }
+
+/* INFRA-073: ссылки наследуют метрики строки, не растягивая line-box */
+a { line-height: inherit; font-size: inherit; vertical-align: baseline; }
+
+/* INFRA-074: 44px tap-target только для навигации/кнопок; ссылки в контенте — обычный inline */
+/* INFRA-074 (расш.): tap-target 44px нужен навигации/кнопкам, но НЕ инлайн-ссылкам
+   в потоке текста — иначе min-height:44px растягивает строку до 44px при lh:24px
+   и ломает ритм ("дыра" только где ссылка). Список контент-контейнеров расширяем
+   ПО ЗАМЕРУ (computed rectH ссылки > lh), а не на вырост, чтобы не ломать 13 сайтов. */
+.post-content a, .post-card-summary a, .post-card-title a { display: inline; min-height: 0; }
+
+/* INFRA-075: Дизайн-система "Образ слов" */
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-neutral-900);
+  line-height: 1.5;
+  background-color: var(--color-neutral-50);
+  font-size: 18px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  line-height: var(--line-height-tight);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-3);
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.625rem; }
+h3 { font-size: 1.375rem; }
+h4 { font-size: 1.1875rem; }
+h5, h6 { font-size: 1.0625rem; }
+
+@media (max-width: 767px) {
+  h1 { font-size: 1.875rem; }
+  h2 { font-size: 1.4375rem; }
+}
+
+p {
+  margin-bottom: var(--space-3);
+}
+
+a {
+  color: var(--color-secondary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-neutral-500);
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-secondary-light);
+  border-bottom-color: var(--color-secondary-light);
+}
+
+blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding-left: var(--space-4);
+  margin: var(--space-4) 0;
+  font-style: italic;
+  color: var(--color-neutral-700);
+}
+
+code {
+  font-family: var(--font-mono);
+  background-color: var(--color-neutral-100);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+
+pre {
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-50);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+pre code {
   background: none;
-  text-align: left;
+  padding: 0;
+}
+
+/* Карточки */
+.card {
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Кнопки */
+.btn {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-primary);
+  color: var(--color-neutral-50);
+  border: none;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
 }
 
-[data-theme="dark"] .dock-popover a,
-[data-theme="dark"] .dock-popover button.popover-action {
-  color: #e0e0e0;
+.btn:hover {
+  background-color: var(--color-primary-light);
 }
 
-.dock-popover a:hover,
-.dock-popover button.popover-action:hover {
-  background-color: var(--color-bg-secondary, #f5f5f5);
+.btn-secondary {
+  background-color: var(--color-secondary);
 }
 
-[data-theme="dark"] .dock-popover a:hover,
-[data-theme="dark"] .dock-popover button.popover-action:hover {
-  background-color: #333;
+.btn-secondary:hover {
+  background-color: var(--color-secondary-light);
 }
 
-/* Overlay Backdrop */
-.dock-overlay {
+/* Метки/теги */
+.tag {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  margin-right: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+/* Шапка */
+header {
+  background-color: var(--color-neutral-50);
+  border-bottom: 2px solid var(--color-primary);
+  padding: var(--space-4) 0;
+}
+
+/* Подвал */
+footer {
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-300);
+  padding: var(--space-6) 0;
+  margin-top: var(--space-6);
+}
+
+footer a {
+  color: var(--color-neutral-300);
+  border-bottom-color: var(--color-neutral-700);
+}
+
+footer a:hover {
+  color: var(--color-neutral-50);
+}
+
+
+/* INFRA-077: карточки постов, горизонтальная шапка, cookie-баннер */
+
+/* Сетка карточек */
+.post-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .post-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .post-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Карточка поста */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Горизонтальная шапка */
+header nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  header nav {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+header nav > a {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  border-bottom: none;
+}
+
+header nav ul {
+  display: flex;
+  gap: var(--space-4);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+header nav ul li {
+  margin: 0;
+}
+
+header nav ul li a {
+  color: var(--color-neutral-900);
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom-color 0.2s ease;
+}
+
+header nav ul li a:hover {
+  border-bottom-color: var(--color-secondary);
+}
+
+/* Cookie-баннер */
+#cookie-consent-banner {
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.2);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #000;
+  color: var(--color-neutral-50);
+  padding: var(--space-3);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  #cookie-consent-banner {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+}
+
+#cookie-consent-banner button {
+  background: var(--color-primary);
+  color: var(--color-neutral-50);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+#cookie-consent-banner button:hover {
+  background: var(--color-primary-light);
+}
+
+/* INFRA-079: внутренний контейнер полноширинных полос */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--space-5);
+    padding-right: var(--space-5);
+  }
+}
+
+/* INFRA-079: колонка чтения целиком (заголовок + мета + текст) */
+.post-article {
+  max-width: 75ch;
+  margin: 0 auto;
+}
+
+/* INFRA-080: бренд-блок шапки, рабочие теги, цвета полос в бренд */
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.site-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  border-bottom: none;
+  margin: 0;
+}
+
+a.site-title:hover {
+  color: var(--color-primary-light);
+  opacity: 0.9;
+}
+.site-title:active {
+  opacity: 0.85;
+}
+
+
+.site-tagline {
+  color: var(--color-neutral-700);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+header nav ul li a {
+  color: var(--color-primary);
+}
+
+header nav ul li a:hover {
+  color: var(--color-secondary);
+  border-bottom-color: var(--color-secondary);
+}
+
+footer {
+  background-color: var(--color-primary);
+}
+
+#cookie-consent-banner {
+  background: var(--color-primary);
+}
+
+a.tag {
+  color: var(--color-neutral-700);
+  border-bottom: none;
+}
+
+a.tag:hover {
+  color: var(--color-secondary);
+  background: var(--color-neutral-300);
+}
+
+/* INFRA-081: иерархия типографики (бренд < H1 страницы; шаг 1.2-1.25) */
+.site-title {
+  font-size: 1.375rem;
+}
+
+
+
+.post-card-summary h1,
+.post-card-summary h2,
+.post-card-summary h3,
+.post-card-summary h4,
+.post-card-summary h5,
+
+
+
+
+
+
+/* INFRA-082: Sticky Bottom Bar (мобильная навигация) */
+.sticky-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-primary);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  transform: translateY(0);
+  transition: transform 0.3s ease-in-out;
+
+  contain: layout style paint;
+  isolation: isolate;}
+
+.sticky-btn {
+  background: none;
+  border: none;
+  color: var(--color-neutral-50);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.sticky-btn:hover {
+  color: var(--color-accent);
+}
+
+.sticky-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+@media (min-width: 768px) {
+  .sticky-bottom-bar {
+    display: none;
+  
+  contain: layout style paint;
+  isolation: isolate;}
+}
+
+/* INFRA-082: Focus-states для accessibility (клавиатурная навигация) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Убираем outline для мыши */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* INFRA-082: CLS-оптимизация (предотвращение скачков layout) */
+.post-card img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+
+
+.post-content img {
+  aspect-ratio: auto;
+  height: auto;
+  max-width: 100%;
+}
+
+.post-content figure {
+  contain: layout;
+}
+
+/* INFRA-082-fix: мобильное меню-drawer (открывается кнопкой Меню) */
+body.no-scroll {
+  overflow: hidden;
+}
+
+.mobile-menu[hidden] {
   display: none;
 }
-.dock-overlay.is-active {
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+}
+
+.mobile-menu__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.mobile-menu--open .mobile-menu__backdrop {
+  opacity: 1;
+}
+
+.mobile-menu__panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--space-4) var(--space-3) calc(var(--space-4) + 56px);
+  transform: translateY(100%);
+  transition: transform 0.25s ease;
+  box-shadow: var(--shadow-lg);
+}
+
+.mobile-menu--open .mobile-menu__panel {
+  transform: translateY(0);
+}
+
+.mobile-menu__panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mobile-menu__panel a {
+  display: block;
+  padding: var(--space-3);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-neutral-300);
+}
+
+.mobile-menu__close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    display: none;
+  }
+}
+
+/* INFRA-084: бар индиго; cookie над баром; YouTube-шрифт */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 72px; /* контент/подвал не прячутся под бар */
+  }
+  #cookie-consent-banner {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)); /* над баром + safe-area */
+    left: var(--space-3);
+    right: var(--space-3);
+    border-radius: var(--radius-md);
+  }
+}
+
+/* INFRA-088: возврат жирности (доступные веса 400/700) + тело 18px, h1 28px */
+h1 { font-size: 28px; font-weight: 700; line-height: 1.2; margin: 0 0 var(--space-2); }
+h2 { font-size: 24px; font-weight: 700; line-height: 1.25; margin: var(--space-4) 0 var(--space-2); }
+h3 { font-size: 20px; font-weight: 700; line-height: 1.3; margin: var(--space-4) 0 var(--space-2); }
+h4, h5, h6 { font-size: 18px; font-weight: 700; line-height: 1.4; margin: var(--space-3) 0 var(--space-2); }
+
+.site-title { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+
+
+
+.post-card-summary h1,
+.post-card-summary h2,
+.post-card-summary h3,
+.post-card-summary h4,
+.post-card-summary h5,
+
+
+.post-card-date,
+time,
+.post-author,
+.post-categories,
+.post-tags { font-size: 15px; font-weight: 400; color: var(--color-neutral-700); }
+
+.sticky-btn span { font-size: 14px; font-weight: 400; }
+
+#cookie-consent-banner { font-size: 16px; font-weight: 400; }
+#cookie-consent-banner button { font-size: 16px; font-weight: 700; }
+
+header nav ul li a { font-weight: 400; }
+
+/* INFRA-086: горизонтальное верхнее меню на всех экранах */
+header nav ul { flex-direction: row; }
+
+/* INFRA-086: drawer-меню поверх cookie-баннера (навигация важнее согласия) */
+.mobile-menu { z-index: 1300; }
+
+/* INFRA-089: медиа скруглено так же, как карточки-блоки (радиус = var(--radius-md)) */
+.post-card img,
+.post-content img {
+  border-radius: var(--radius-md);
+}
+
+.post-content iframe,
+.post-content .video-wrapper,
+.post-content figure {
+  border-radius: var(--radius-md);
+}
+
+.post-content .video-wrapper,
+.post-content figure {
+  overflow: hidden;          /* углы iframe/обёртки режутся чисто */
+}
+
+.post-content iframe {
+  display: block;            /* убирает лишний baseline-зазор под видео */
+}
+
+/* INFRA-090: логотип в шапке слева от названия */
+.brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.site-logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+
+.site-logo {
+  width: 144px;
+  height: 144px;
   display: block;
 }
 
-/* Print Hidden */
-@media print {
-  .sticky-bottom-bar, .dock-popover, .dock-overlay { display: none !important; }
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .brand { gap: var(--space-2); }
+  .site-logo { width: 128px; height: 128px; }
+}
+
+/* INFRA-091: 4b — на мобильном блок меню опускается ниже бренда/описания (ссылки в ul остаются в ряд) */
+@media (max-width: 767px) {
+  header nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}
+
+/* INFRA-092: двухцветие названия + янтарная «фирменная» линия */
+.site-title-main { color: var(--color-primary); }
+.site-title-accent { color: var(--color-accent); }
+.site-title {
+  display: inline-block;            /* линия снизу по ширине текста, не на всю строку */
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 2px;
+}
+
+/* INFRA-095: меню column на всех устройствах (расширение 091 4b с <768 на все брейкпоинты) */
+header nav {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+/* Пункты меню в ряд внутри опущенного блока, с переносом на узких экранах */
+header nav ul {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (max-width: 767px) {
+  header nav ul {
+    gap: var(--space-2);
+  }
+}
+
+/* INFRA-094a: .site-title — ширина по контенту, фикс align-items:stretch в .brand-text */
+.site-title { align-self: flex-start; width: max-content; max-width: 100%; }
+
+/* INFRA-094b: сохранение пропорций логотипа (2736x1520 -> вписывается в 36x36 без искажения) */
+.site-logo { object-fit: contain; }
+
+
+
+
+
+
+
+
+/* === FINAL UI FIXES FOR PILOT AUDIT (v3 - Clean Slate) === */
+
+/* 1. Sticky Bottom Bar: Simple & Stable */
+.sticky-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  
+  /* Темная тема как у футера */
+  background-color: var(--color-footer-bg, #1a1a1a);
+  color: var(--color-text-inverse, #ffffff);
+  
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+  
+  /* Никаких will-change, transform, perspective. Только база. */
+
+  contain: layout style paint;
+  isolation: isolate;}
+
+/* Иконки внутри панели должны быть белыми */
+.sticky-bottom-bar svg,
+.sticky-bottom-bar button {
+  fill: currentColor;
+  stroke: currentColor;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Скрываем на десктопе */
+@media (min-width: 769px) {
+  .sticky-bottom-bar {
+    display: none !important;
+  
+  contain: layout style paint;
+  isolation: isolate;}
+}
+
+/* 2. Cookie Banner: Above the bar, Centered */
+#cookie-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000; /* Выше панели (1000) */
+  
+  background-color: var(--color-footer-bg, #1a1a1a);
+  color: var(--color-text-inverse, #ffffff);
+  
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-4);
+  
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+#cookie-consent-banner span {
+  white-space: nowrap;
+}
+
+#cookie-consent-banner button {
+  background-color: var(--color-primary, #007bff);
+  color: #fff;
+  border: none;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  min-width: 80px;
+}
+
+/* На очень узких экранах куки становятся колонкой */
+@media (max-width: 480px) {
+  #cookie-consent-banner {
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: center;
+  }
+}
+
+/* 3. Post Cards: Image Placeholder Styling */
+
+
+
+
+.post-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* 4. Tags Alignment (Clean Version) */
+
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 var(--space-2);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+a.tag:hover {
+  background-color: var(--color-neutral-200);
+  color: var(--color-secondary);
+}
+
+
+/* === CLEAN POST CARD LAYOUT (v5 - Final Fix) === */
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+}
+
+.post-card {
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  overflow: hidden; /* Важно: скрываем выступы изображений */
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Растягиваем карточку на всю высоту ячейки грида */
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.post-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* 1. Image Area */
+.post-card-image-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-neutral-100);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0; /* Не сжимать картинку при нехватке места */
+}
+
+.post-card-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.post-card-image-placeholder-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-neutral-400);
+  opacity: 0.5;
+}
+
+/* 2. Content Area */
+.post-card-content {
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Занимает всё оставшееся место */
+}
+
+.post-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 var(--space-2);
+  color: var(--color-primary);
+}
+
+.post-card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.post-card-title a:hover {
+  color: var(--color-secondary);
+}
+
+.post-card-date {
+  font-size: 0.875rem;
+  color: var(--color-neutral-700);
+  margin-bottom: var(--space-2);
+}
+
+.post-card-summary {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-neutral-900);
+  margin-bottom: var(--space-3);
+  flex-grow: 1; /* Толкает теги вниз */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Обрезаем текст после 3 строк */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 3. Tags Footer */
+.post-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  margin-top: auto; /* Прижимаем к низу карточки */
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 var(--space-2);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+a.tag:hover {
+  background-color: var(--color-neutral-200);
+  color: var(--color-secondary);
+}
+
+/* === LINKS INSIDE POST CARD SUMMARIES (Fix for v8) === */
+
+
+
+/* === HIDE DUPLICATE IMAGES IN SUMMARIES (v10 Fix) === */
+.post-card-summary img {
+  display: none !important;
+}
+
+/* === FINAL TEXT CLAMPING & LINK STYLING FOR CARD SUMMARIES (v13 Hotfix) === */
+.post-card-summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Показываем максимум 4 строки */
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.5rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Стилизация ссылок внутри описания */
+
+
+/* === FINAL LINK POLISH FOR CARD SUMMARIES (v14) === */
+.post-card-summary a:hover,
+.post-card-summary a:focus {
+  /* При наведении меняем только оттенок/яркость, оставляя структуру */
+  color: var(--color-primary); /* Или другой акцентный цвет бренда */
+  text-decoration-color: currentColor; /* Подчеркивание становится того же цвета, что и текст */
+}
+
+
+/* === FINAL LINK STYLES FOR CARDS (v15 Clean Slate) === */
+.post-card-summary a {
+  /* 1. Цвет: наследуем основной текст, но делаем его чуть темнее/ярче для различимости */
+  color: var(--color-text-primary); 
+  
+  /* 2. Декорация: только одно подчеркивание */
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  
+  /* 3. Убираем border-bottom, который мог создавать вторую линию */
+  border-bottom: none !important; 
+  
+  /* 4. Плавность перехода */
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.post-card-summary a:hover,
+.post-card-summary a:focus {
+  /* При наведении меняем цвет на акцентный (синий/зеленый бренда) */
+  color: var(--color-primary); 
+  
+  /* Подчеркивание становится того же цвета, что и текст */
+  text-decoration-color: currentColor;
+  
+  /* Опционально: можно добавить легкий фон или жирность, если нужно сильнее выделить */
+  font-weight: 600; 
+}
+
+/* INFRA-095-FINAL: Absolute prevention of logo/title jitter on click */
+/* 1. Запрет любых обводок и теней при фокусе/клике для обоих элементов */
+.site-logo-link,
+.site-title {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.site-logo-link:active, .site-logo-link:focus, .site-logo-link:focus-visible,
+.site-title:active, .site-title:focus, .site-title:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+/* 2. Промоутим элементы в отдельные слои композитинга, чтобы избежать reflow/repaint */
+.site-logo {
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.site-title {
+  will-change: opacity;
+}
+
+/* INFRA-095-ULTIMATE: Lock flex dimensions to prevent ANY baseline/size shift */
+.site-logo-link {
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+}
+
+.site-logo {
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* INFRA-100: Theme toggle positioning in navigation */
+nav ul li:last-child {
+  margin-left: auto;
+}
+
+nav ul li .theme-toggle-btn {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    flex-wrap: wrap;
+    gap: var(--space-2, 8px);
+  }
+  nav ul li:last-child {
+    margin-left: auto;
+    order: 100;
+  }
 }
