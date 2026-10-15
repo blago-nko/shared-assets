@@ -1304,3 +1304,50 @@ article.post-single,
    }
 }
 
+
+/* =========================================================
+   INFRA-082 V5.2 FINAL FIX: Precise Spacing Control
+   Addresses Footer Margin Gap and Article Inner Padding
+   ========================================================= */
+
+/* 1. ФИКС ДЫРЫ СНИЗУ: Убираем margin-top у футера */
+/* Теперь расстояние до подвала будет контролироваться только padding-main */
+footer {
+  margin-top: 0 !important; 
+}
+
+/* 2. ВЫРАВНИВАЕМ ВЕРТИКАЛЬНЫЙ РИТМ: Симметричные отступы Main */
+/* Так как <main> имеет класс .container, целимся именно туда */
+main.container {
+  /* Жесткие симметричные отступы сверху и снизу */
+  padding-top: var(--space-6, 2rem) !important;
+  padding-bottom: var(--space-6, 2rem) !important;
+  
+  /* Боковые отступы оставляем из исходного правила .container, 
+     но гарантируем их наличие */
+}
+
+@media (max-width: 767px) {
+  main.container {
+    padding-top: var(--space-4, 1rem) !important;
+    padding-bottom: var(--space-4, 1rem) !important;
+  }
+}
+
+/* 3. ФИКС ТЕКСТА В РАМКЕ: Добавляем внутренний воздух в статью */
+/* Целимся конкретно в .post-article (серый блок на стр. About/Posts) */
+.post-article {
+  /* Внутренний отступ, чтобы текст не касался границ блока */
+  padding: var(--space-5, 1.5rem) !important; 
+  
+  /* Опционально: если нужно увеличить радиус скругления углов */
+  border-radius: 8px;
+}
+
+/* Для мобильных устройств уменьшаем внутренний паддинг статьи */
+@media (max-width: 767px) {
+  .post-article {
+    padding: var(--space-4, 1rem) !important;
+  }
+}
+
