@@ -1195,3 +1195,61 @@ nav ul li .theme-toggle-btn {
     order: 100;
   }
 }
+
+/* =========================================================
+   INFRA-082 V5 POLISH: Layout Symmetry & Mobile Dock Fix
+   ========================================================= */
+
+/* 1. SYMMETRIC PADDING FOR ARTICLES */
+/* Fixes "text touching left edge" and uneven bottom gaps */
+@media (min-width: 768px) {
+  .post-single, 
+  article.single-post,
+  main.container {
+    /* Uniform padding inside the content wrapper */
+    padding-left: var(--space-6, 2rem);
+    padding-right: var(--space-6, 2rem);
+    
+    /* Ensure consistent vertical rhythm between sections */
+    margin-top: var(--space-4, 1.5rem);
+    margin-bottom: var(--space-4, 1.5rem);
+  }
+}
+
+/* On Mobile Portrait, ensure standard side padding is respected */
+@media (max-width: 767px) {
+  .post-single, 
+  article.single-post {
+    padding-left: var(--space-4, 1rem);
+    padding-right: var(--space-4, 1rem);
+  }
+  
+  /* Reduce gap between last paragraph and footer if it was too large */
+  body.has-sticky-dock .site-footer {
+     margin-top: 0; 
+  }
+}
+
+
+/* 2. MOBILE DOCK ICONS & ALIGNMENT */
+/* Ensures Theme button has an icon like others on mobile portrait */
+@media (max-width: 767px) {
+  .sticky-bottom-bar button svg {
+    display: block !important; /* Force visibility even if hidden by previous rules */
+    width: 24px !important;
+    height: 24px !important;
+    margin-bottom: 4px !important; /* Space between icon and text */
+  }
+  
+  /* Equalize spacing between buttons in mobile bar */
+  .sticky-bottom-bar {
+    justify-content: space-evenly !important;
+    gap: 0 !important; /* Let space-evenly handle distribution */
+  }
+  
+  .sticky-bottom-bar button {
+    flex: 1 1 auto !important; /* Distribute available width equally */
+    max-width: 80px !important; /* Prevent stretching too much on wide phones */
+  }
+}
+

@@ -1,4 +1,4 @@
-// INFRA-082 V4 FINAL: Unified Dock, Theme & Popover Logic
+// INFRA-082 V5 FINAL: Dynamic Menu, Unified Popovers & Image A11y
 (function () {
   
   // --- Helpers ---
@@ -24,22 +24,21 @@
     if (!svg) return;
 
     if (theme === 'dark') {
-      // Sun icon (Click to go Light)
+      // Sun icon
       svg.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
     } else {
-      // Moon icon (Click to go Dark)
+      // Moon icon
       svg.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
     }
   }
 
-  // Close any existing popovers
   function closeAllPopovers() {
     document.querySelectorAll('.dock-popover').forEach(el => el.remove());
     document.querySelectorAll('.dock-overlay').forEach(el => el.remove());
   }
 
-  // Create a generic popover structure
-  function createPopover(items, anchorElement = null) {
+  // Generic Popover Creator (Always Centered)
+  function createPopover(items) {
     closeAllPopovers();
 
     const overlay = document.createElement('div');
@@ -54,9 +53,13 @@
       if (item.type === 'link') {
         const a = document.createElement('a');
         a.href = item.href;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
         a.textContent = item.label;
+        // Internal links don't need target blank usually, but safe to keep or remove based on preference
+        // For menu items, they are internal. For share, external.
+        if (item.external) {
+             a.target = '_blank';
+             a.rel = 'noopener noreferrer';
+        }
         popover.appendChild(a);
       } else if (item.type === 'action') {
         const btn = document.createElement('button');
@@ -71,23 +74,6 @@
     });
 
     document.body.appendChild(popover);
-
-    // Positioning Logic
-    if (anchorElement && window.innerWidth >= 768) {
-      // Anchor Mode (Desktop/Hybrid): Above the button
-      const rect = anchorElement.getBoundingClientRect();
-      popover.style.bottom = `${window.innerHeight - rect.top + 8}px`; 
-      popover.style.right = `${window.innerWidth - rect.right}px`;
-      popover.style.left = 'auto';
-      popover.style.top = 'auto';
-    } else {
-      // Center Mode (Mobile Portrait): Screen Center
-      popover.style.top = '50%';
-      popover.style.left = '50%';
-      popover.style.transform = 'translate(-50%, -50%)';
-      popover.style.bottom = 'auto';
-      popover.style.right = 'auto';
-    }
   }
 
   // --- Init Theme Button in Dock ---
@@ -113,33 +99,55 @@
       const title = document.title;
       
       const items = [
-        { type: 'link', label: 'Telegram', href: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}` },
-        { type: 'link', label: 'VK', href: `https://vk.com/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}` },
-        { type: 'link', label: 'WhatsApp', href: `https://wa.me/?text=${encodeURIComponent(title)}%20${encodeURIComponent(url)}` },
-        { type: 'link', label: 'X (Twitter)', href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}` },
-        { type: 'link', label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
+        { type: 'link', label: 'Telegram', href: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, external: true },
+        { type: 'link', label: 'VK', href: `https://vk.com/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`, external: true },
+        { type: 'link', label: 'WhatsApp', href: `https://wa.me/?text=${encodeURIComponent(title)}%20${encodeURIComponent(url)}`, external: true },
+        { type: 'link', label: 'X (Twitter)', href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, external: true },
+        { type: 'link', label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, external: true },
         { type: 'action', label: '📋 Скопировать ссылку', action: () => navigator.clipboard.writeText(url).then(() => alert('Ссылка скопирована')) }
       ];
       
-      createPopover(items, shareBtn);
+      createPopover(items);
     });
   }
 
-  // --- Menu Button ---
+  // --- Menu Button (Dynamic Links Extraction) ---
   const menuBtn = document.getElementById('sticky-menu-btn');
   if (menuBtn) {
     menuBtn.addEventListener('click', function (e) {
       e.preventDefault();
       
-      // Define navigation links
-      const items = [
-        { type: 'link', label: 'Главная', href: '/' },
-        { type: 'link', label: 'Статьи', href: '/posts/' },
-        { type: 'link', label: 'О нас', href: '/about/' },
-        { type: 'link', label: 'Ярлыки', href: '/tags/' }
-      ];
+      // Try to find real navigation links from header/nav
+      // Selector might vary depending on theme structure, trying common patterns
+      let navLinks = [];
+      const mainNav = document.querySelector('header nav ul') || document.querySelector('.main-navigation ul');
       
-      createPopover(items, menuBtn);
+      if (mainNav) {
+        const lis = mainNav.querySelectorAll('li:not(.nav-search-item)'); // Exclude search trigger
+        lis.forEach(li => {
+          const anchor = li.querySelector('a');
+          if (anchor && anchor.href && anchor.textContent.trim()) {
+            navLinks.push({
+              type: 'link',
+              label: anchor.textContent.trim(),
+              href: anchor.getAttribute('href'), // Use relative path for internal consistency
+              external: false
+            });
+          }
+        });
+      }
+
+      // Fallback if extraction fails (hardcoded defaults)
+      if (navLinks.length === 0) {
+         navLinks = [
+          { type: 'link', label: 'Главная', href: '/', external: false },
+          { type: 'link', label: 'Статьи', href: '/posts/', external: false },
+          { type: 'link', label: 'О нас', href: '/about/', external: false },
+          { type: 'link', label: 'Ярлыки', href: '/tags/', external: false }
+        ];
+      }
+
+      createPopover(navLinks);
     });
   }
 
@@ -150,6 +158,30 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  // --- Image Accessibility Enhancement ---
+  // Adds native tooltip (title attribute) if missing, using alt text or caption
+  document.addEventListener('DOMContentLoaded', () => {
+    const images = document.querySelectorAll('.post-content img, article img');
+    images.forEach(img => {
+      // If no title exists, try to generate one from alt or nearby figcaption
+      if (!img.getAttribute('title')) {
+        const alt = img.getAttribute('alt');
+        const parentFigure = img.closest('figure');
+        let captionText = '';
+        
+        if (parentFigure) {
+          const cap = parentFigure.querySelector('figcaption');
+          if (cap) captionText = cap.textContent.trim();
+        }
+
+        const finalTitle = captionText || alt;
+        if (finalTitle) {
+          img.setAttribute('title', finalTitle);
+        }
+      }
+    });
+  });
 
   // Global Escape Key Handler
   document.addEventListener('keydown', function(e) {
