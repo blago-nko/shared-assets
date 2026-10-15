@@ -252,3 +252,26 @@
 @media print {
   .sticky-bottom-bar, .dock-popover, .dock-overlay { display: none !important; }
 }
+
+/* --- FIX MOBILE SHARE ICON SHRINKAGE --- */
+@media (max-width: 767px) {
+  .sticky-bottom-bar button svg {
+    /* Жестко фиксируем размер и запрещаем сжатие */
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    flex-shrink: 0 !important; 
+    
+    /* Центрирование внутри кнопки */
+    display: block !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Дополнительно страхуем кнопку целиком */
+  .sticky-bottom-bar button {
+    min-width: unset !important; /* Отменяем предыдущее ограничение, если оно мешает */
+    width: auto !important;
+    flex-grow: 1; /* Позволяет расти, но контент внутри фиксирован */
+  }
+}
+
