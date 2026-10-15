@@ -1253,3 +1253,54 @@ nav ul li .theme-toggle-btn {
   }
 }
 
+
+/* =========================================================
+   INFRA-082 V5.1 POLISH: Vertical Rhythm & Container Padding
+   ========================================================= */
+
+/* 1. ГЛОБАЛЬНЫЙ КОНТЕЙНЕР MAIN */
+/* Задаем единый внутренний отступ для всей области контента между header и footer */
+main {
+  /* Симметричные отступы сверху и снизу */
+  padding-top: var(--space-6, 2rem); 
+  padding-bottom: var(--space-6, 2rem); 
+  
+  /* Боковые отступы тоже симметричны */
+  padding-left: var(--space-4, 1rem);
+  padding-right: var(--space-4, 1rem);
+}
+
+/* На десктопе увеличиваем боковые поля для комфорта чтения */
+@media (min-width: 768px) {
+  main {
+    padding-left: var(--space-6, 2rem);
+    padding-right: var(--space-6, 2rem);
+  }
+}
+
+/* 2. БЛОК СТАТЬИ (Article/Card) */
+/* Убираем лишние внешние отступы, так как теперь они есть у родителя <main> */
+article.post-single,
+.post-card,
+.page-content {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  
+  /* ВАЖНО: Внутренний отступ САМОЙ карточки, чтобы текст не лип к рамке */
+  /* Если у вас есть фон или бордер у article, этот padding создаст "воздух" внутри */
+  padding: var(--space-4, 1rem); 
+}
+
+/* Для статей без явного фона/рамки можно уменьшить внутренний паддинг, 
+   так как внешний уже есть у main */
+@media (min-width: 768px) {
+   article.post-single {
+     padding: 0; /* Текст уже защищен паддингом main */
+   }
+   
+   /* Но если нужно, чтобы заголовок H1 имел свой отступ сверху относительно текста */
+   article.post-single h1:first-child {
+      margin-top: 0;
+   }
+}
+
