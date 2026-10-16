@@ -1614,3 +1614,33 @@ main.container {
   }
 }
 
+
+/* =========================================================
+   INFRA-082 V5.7 OVERRIDE: Neutralize dock-v4 Hardcoded Paddings
+   Ensures clean slate spacing wins over legacy dock styles
+   ========================================================= */
+
+/* Убираем жесткий padding-bottom: 80px из dock-v4.css для мобильных */
+@media (max-width: 767px) {
+  body,
+  .site-footer,
+  main.container {
+    /* Принудительно сбрасываем вредное значение 80px из dock-v4 */
+    padding-bottom: var(--space-5, 2rem) !important; 
+  }
+  
+  /* Компенсируем высоту дока точно: контент + безопасная зона */
+  body.has-sticky-dock {
+     padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Гарантируем симметрию карточек на десктопе (перекрытие любых старых правил) */
+.post-card-body {
+  padding: var(--space-4) !important; /* 24px uniform air */
+}
+
+.post-card:not(:has(.post-card-image-link)) .post-card-title {
+  margin-top: 0 !important;
+}
+
