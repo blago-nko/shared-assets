@@ -1,0 +1,24 @@
+<article class="post-card">
+  {{ with .Params.image }}
+  <a href="{{ $.Permalink }}" class="post-card-image-link">
+    <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy" decoding="sync" width="400" height="250">
+  </a>
+  {{ end }}
+  
+  <div class="post-card-body">
+    <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+    <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
+    
+    {{ if .Summary }}
+    <p class="post-card-summary">{{ .Summary | plainify | truncate 120 }}</p>
+    {{ end }}
+    
+    {{ with .GetTerms "tags" }}
+    <div class="post-card-tags">
+      {{ range first 3 . }}
+        <a href="{{ .Permalink }}" class="tag-pill">{{ .LinkTitle }}</a>
+      {{ end }}
+    </div>
+    {{ end }}
+  </div>
+</article>
