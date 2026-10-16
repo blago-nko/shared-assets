@@ -1429,3 +1429,46 @@ main.container {
   }
 }
 
+
+/* =========================================================
+   INFRA-082 V5.4 UNIFICATION: Consistent Vertical Rhythm
+   Aligns Header, Footer, and Main paddings across devices
+   ========================================================= */
+
+/* 1. УНИФИКАЦИЯ ШАПКИ И ПОДВАЛА */
+/* Приводим padding footer к тому же значению, что и header (--space-4) */
+footer {
+  padding-top: var(--space-4) !important; 
+  padding-bottom: var(--space-4) !important;
+}
+
+/* 2. КОМПАКТНЫЙ MAIN НА МОБИЛЬНЫХ (<768px) */
+/* Уменьшаем глобальные отступы контейнера, чтобы контент дышал равномернее */
+@media (max-width: 767px) {
+  main.container {
+    /* Снижаем с 48px (space-6) до 24px (space-4) или даже меньше */
+    padding-top: var(--space-4, 1.5rem) !important;
+    padding-bottom: calc(var(--space-4, 1.5rem) + 60px) !important; /* + высота дока */
+  }
+  
+  /* Дополнительная защита: убираем лишние марджины у первых/последних детей внутри main */
+  main.container > *:first-child {
+    margin-top: 0 !important;
+  }
+  main.container > *:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+/* 3. ФИНАЛЬНАЯ ЧИСТКА ВНУТРИ СТАТЕЙ (Desktop & Mobile) */
+/* Гарантируем, что текст не упирается в границы блока за счет внутренних марджинов */
+.post-article .post-content p:last-child,
+.post-article .entry-content p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Если есть специфичные блоки мета-информации (даты, теги), они тоже должны быть компактными */
+.post-meta, .post-tags, .post-categories {
+  margin-bottom: var(--space-2, 0.5rem) !important;
+}
+
