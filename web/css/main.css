@@ -1472,3 +1472,85 @@ footer {
   margin-bottom: var(--space-2, 0.5rem) !important;
 }
 
+
+/* =========================================================
+   INFRA-082 V5.5 FIX: Posts Grid Layout & Global Vertical Rhythm
+   Targets Home Page structure specifically
+   ========================================================= */
+
+/* 1. СЕТКА ПОСТОВ (HOME PAGE) */
+/* Создаем управляемую сетку для класса .posts-grid из index.html */
+.posts-grid {
+  display: grid;
+  /* Десктоп: 3 колонки */
+  grid-template-columns: repeat(3, 1fr);
+  /* Расстояние МЕЖДУ карточками */
+  gap: var(--space-5); /* 32px - комфортное расстояние */
+  
+  /* Отступ сверху от шапки и снизу до футера контролируется через main */
+}
+
+@media (max-width: 1024px) {
+  .posts-grid {
+    grid-template-columns: repeat(2, 1fr); /* Планшет: 2 колонки */
+    gap: var(--space-4); /* 24px */
+  }
+}
+
+@media (max-width: 767px) {
+  .posts-grid {
+    grid-template-columns: 1fr; /* Мобильный: 1 колонка */
+    gap: var(--space-4); /* 24px */
+  }
+}
+
+/* 2. ГЛОБАЛЬНЫЙ ВЕРТИКАЛЬНЫЙ РИТМ MAIN */
+/* Унифицируем отступы контейнера контента */
+main.container {
+  /* Жесткие симметричные отступы сверху и снизу */
+  padding-top: var(--space-6, 3rem) !important; 
+  padding-bottom: var(--space-6, 3rem) !important; 
+  
+  /* Боковые отступы оставляем из исходного правила .container, 
+     но гарантируем их наличие */
+}
+
+@media (max-width: 767px) {
+  main.container {
+    /* Компактные отступы на мобильных */
+    padding-top: var(--space-4, 1.5rem) !important;
+    padding-bottom: calc(var(--space-4, 1.5rem) + 60px) !important; /* + высота дока */
+  }
+}
+
+/* 3. ВНУТРЕННИЕ ОТСТУПЫ КАРТОЧКИ (AIR INSIDE CARD) */
+/* Гарантируем, что контент внутри карточки имеет воздух */
+.post-card-body {
+  padding: var(--space-4); /* 24px внутренний отступ со всех сторон */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Занимает оставшееся место в карточке */
+}
+
+/* Теги прижимаем к низу карточки */
+.post-card-tags {
+  margin-top: auto; 
+  padding-top: var(--space-3); /* 16px воздуха над тегами */
+}
+
+/* Заголовок и дата имеют компактные отступы */
+.post-card-title {
+  margin-bottom: var(--space-2); /* 8px */
+}
+
+.post-card-date {
+  margin-bottom: var(--space-3); /* 16px */
+  font-size: 0.875rem;
+  color: var(--color-neutral-500);
+}
+
+.post-card-summary {
+  margin-bottom: var(--space-3); /* 16px */
+  line-height: 1.5;
+}
+
