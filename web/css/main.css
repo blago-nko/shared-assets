@@ -1554,3 +1554,63 @@ main.container {
   line-height: 1.5;
 }
 
+
+/* =========================================================
+   INFRA-082 V5.6 FINAL CLEAN SLATE: Unified Mobile & Cards
+   Single source of truth for spacing logic
+   ========================================================= */
+
+/* 1. ГЛОБАЛЬНАЯ СИММЕТРИЯ КАРТОЧЕК (Desktop & Mobile) */
+/* Гарантируем, что тело карточки всегда имеет одинаковые отступы,
+   независимо от того, есть ли изображение сверху или нет */
+.post-card-body {
+  padding: var(--space-4); /* 24px uniform air */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Если изображения нет, первый элемент (h2) не должен иметь лишнего top-margin,
+   так как padding уже обеспечивает пространство */
+.post-card:not(:has(.post-card-image-link)) .post-card-title {
+  margin-top: 0 !important;
+}
+
+/* 2. ЕДИНЫЙ МОБИЛЬНЫЙ РИТМ (<768px) */
+@media (max-width: 767px) {
+  
+  /* А. Компенсируем высоту дока через основной контейнер */
+  /* Убираем любые следы старых правил body { padding-bottom: 72px } */
+  body {
+    padding-bottom: 0 !important;
+  }
+
+  main.container {
+    /* Симметричные отступы: сверху столько же, сколько снизу минус высота дока */
+    padding-top: var(--space-5, 2rem) !important; /* 32px */
+    padding-bottom: calc(var(--space-5, 2rem) + 60px) !important; /* 32px + dock height */
+    
+    /* Боковые отступы для дыхания текста */
+    padding-left: var(--space-4, 1.5rem) !important;
+    padding-right: var(--space-4, 1.5rem) !important;
+  }
+
+  /* Б. Сетки постов становятся одноколоночными */
+  .posts-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-4, 1.5rem) !important;
+  }
+
+  /* В. Статьи получают гарантированный внутренний воздух */
+  .post-article {
+    padding: var(--space-4, 1.5rem) !important;
+    border-radius: 8px !important;
+  }
+  
+  /* Г. Шапка и подвал синхронизируются по компактности */
+  header, footer {
+    padding-top: var(--space-4, 1.5rem) !important;
+    padding-bottom: var(--space-4, 1.5rem) !important;
+  }
+}
+
