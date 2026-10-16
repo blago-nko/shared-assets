@@ -1351,3 +1351,81 @@ main.container {
   }
 }
 
+
+/* =========================================================
+   INFRA-082 V5.3 MOBILE FIX: Override Body Padding & Article Air
+   Targets ONLY screens < 768px to prevent desktop regressions
+   ========================================================= */
+
+@media (max-width: 767px) {
+  
+  /* 1. УБИРАЕМ СТАРУЮ ДЫРУ: Обнуляем padding-bottom у body */
+  /* Теперь расстояние до футера контролируется только через main/container */
+  body {
+    padding-bottom: 0 !important; 
+  }
+
+  /* 2. КОМПЕНСИРУЕМ ВЫСОТУ ДОКА: Добавляем минимальный necessary gap */
+  /* Чтобы последний элемент не прятался под панелью управления */
+  main.container {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* 3. ВОЗДУХ ВНУТРИ СТАТЬИ: Жестко задаем увеличенный паддинг для карточки */
+  /* Это решает проблему "текст липнет к краям рамки" на телефоне */
+  .post-article {
+    padding-left: var(--space-4, 1rem) !important;
+    padding-right: var(--space-4, 1rem) !important;
+    padding-top: var(--space-4, 1rem) !important;
+    padding-bottom: var(--space-4, 1rem) !important;
+    
+    /* Гарантируем скругление углов, если оно было потеряно */
+    border-radius: 8px !important;
+  }
+  
+  /* Дополнительная защита для контента внутри статьи */
+  .post-content {
+     padding-left: 0 !important;
+     padding-right: 0 !important;
+  }
+}
+
+
+/* =========================================================
+   INFRA-082 V5.3 MOBILE FIX: Override Body Padding & Article Air
+   Targets ONLY screens < 768px to prevent desktop regressions
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  /* 1. УБИРАЕМ СТАРУЮ ДЫРУ: Обнуляем padding-bottom у body */
+  /* Теперь расстояние до футера контролируется только через main/container */
+  body {
+    padding-bottom: 0 !important;
+  }
+
+  /* 2. КОМПЕНСИРУЕМ ВЫСОТУ ДОКА: Добавляем минимальный necessary gap */
+  /* Чтобы последний элемент не прятался под панелью управления */
+  main.container {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* 3. ВОЗДУХ ВНУТРИ СТАТЬИ: Жестко задаем увеличенный паддинг для карточки */
+  /* Это решает проблему "текст липнет к краям рамки" на телефоне */
+  .post-article {
+    padding-left: var(--space-4, 1rem) !important;
+    padding-right: var(--space-4, 1rem) !important;
+    padding-top: var(--space-4, 1rem) !important;
+    padding-bottom: var(--space-4, 1rem) !important;
+
+    /* Гарантируем скругление углов, если оно было потеряно */
+    border-radius: 8px !important;
+  }
+
+  /* Дополнительная защита для контента внутри статьи */
+  .post-content {
+     padding-left: 0 !important;
+     padding-right: 0 !important;
+  }
+}
+
