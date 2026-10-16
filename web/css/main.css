@@ -1657,3 +1657,16 @@ main.container {
   }
 }
 
+
+/* =========================================================
+   INFRA-082 V5.8 FOOTER OVERRIDE: Neutralize dock-v4 Footer Padding
+   Specifically targets .site-footer to remove hardcoded 80px bottom padding
+   ========================================================= */
+
+@media (max-width: 767px) {
+  /* Переопределяем padding-bottom для .site-footer напрямую */
+  .site-footer {
+    padding-bottom: var(--space-4, 1.5rem) !important; /* 24px вместо 80px */
+  }
+}
+
