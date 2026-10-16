@@ -1670,3 +1670,27 @@ main.container {
   }
 }
 
+
+/* =========================================================
+   INFRA-082 V6.0 FINAL FIX: Explicit Main Padding Override
+   Target: Kill the 80px bottom padding from dock-v4.css for <main>
+   ========================================================= */
+
+@media (max-width: 767px) {
+  /* Переопределяем padding-bottom непосредственно для тега main */
+  /* Используем !important, так как в dock-v4.css тоже стоит !important */
+  /* Порядок загрузки (main.css после dock-v4.css) гарантирует победу */
+  main {
+    padding-bottom: var(--space-5, 2rem) !important; /* 32px вместо 80px */
+    /* Можно также явно задать top, чтобы гарантировать симметрию, 
+       хотя он уже вроде бы корректен (48px), но лучше перестраховаться */
+    padding-top: var(--space-5, 2rem) !important; /* 32px для баланса */
+  }
+  
+  /* Дополнительно страхуем статью внутри main */
+  .post-article {
+     margin-bottom: 0 !important;
+     padding-bottom: 0 !important;
+  }
+}
+
