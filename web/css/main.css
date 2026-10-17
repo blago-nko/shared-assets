@@ -1743,3 +1743,17 @@ main.container {
   }
 }
 
+
+/* =========================================================
+   INFRA-082 V6.2 CARD TAGS SPACING FIX: Remove Double Gap
+   Target: Eliminate the extra 16px padding-top inside .post-card-tags
+   ========================================================= */
+
+.post-card-tags {
+  /* Убираем внутренний отступ сверху, который дублировал margin-top */
+  padding-top: 0 !important; 
+  
+  /* Дополнительно страхуемся от любых других внутренних отступов */
+  padding-bottom: 0 !important;
+}
+
