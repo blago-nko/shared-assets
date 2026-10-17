@@ -1778,3 +1778,57 @@ main.container {
   padding-bottom: 0 !important;          /* Нет внутреннего паддинга снизу */
 }
 
+
+/* =========================================================
+   INFRA-082 V6.4 CARD CLAMP FIX: Stabilize Header Height
+   Target: Limit title to 3 lines, allow summary to grow
+   ========================================================= */
+
+/* 1. Ограничиваем заголовок максимум 3 строками. 
+      Лишнее обрезается многоточием (...). 
+      Это гарантирует, что высота блока h2 не будет прыгать от 1 до 5 строк. */
+.post-card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  /* Дополнительно страхуемся от лишних марджинов внутри clamp-блока */
+  margin-top: 0 !important;
+  margin-bottom: var(--space-2) !important; /* 8px воздуха после заголовка перед датой */
+}
+
+/* 2. Блок даты тоже фиксируем сверху, чтобы он шел сразу после заголовка */
+.post-card-date {
+  display: block;
+  margin-bottom: var(--space-3) !important; /* 16px воздуха перед текстом описания */
+}
+
+/* 3. Основной механизм: Текст описания занимает ВСЁ свободное место.
+      Так как родитель (.post-card-content или article) является flex-column,
+      этот элемент растянется на всю доступную высоту между датой и тегами.
+      Теги всегда будут прижаты к самому низу паддинга карточки. */
+.post-card-summary {
+  flex-grow: 1;
+  min-height: 0; /* Важно для Firefox/Safari в некоторых случаях */
+  
+  /* Опционально: можно ограничить и описание, если оно слишком длинное,
+     но обычно flex-grow достаточно. Если нужно жесткое ограничение: */
+  /*
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  */
+}
+
+/* 4. Гарантируем, что блок тегов остается последним и не имеет внутренних отступов,
+     которые могли бы сдвинуть его вверх относительно нижней рамки. */
+.post-card-tags {
+  margin-top: auto !important; /* Дублируем защиту от смещения, хотя flex-grow выше уже работает */
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-top: none !important; /* Убираем линию, если она мешает визуальному балансу */
+}
+
