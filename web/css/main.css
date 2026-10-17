@@ -1757,3 +1757,24 @@ main.container {
   padding-bottom: 0 !important;
 }
 
+
+/* =========================================================
+   INFRA-082 V6.3 CARD ALIGNMENT FIX: Push Tags to Bottom
+   Target: Eliminate empty space below tags in stretched cards
+   ========================================================= */
+
+/* Делаем блок описания растягивающимся элементом. 
+   Он займет всё свободное место между датой и тегами, 
+   эффективно прижимая блок тегов к нижней границе padding'a карточки. */
+.post-card-summary {
+  flex-grow: 1; 
+}
+
+/* Гарантируем, что у самого блока тегов нет лишних внутренних отступов, 
+   которые могут мешать плотному прилеганию к рамке (если padding-bottom карточки мал). */
+.post-card-tags {
+  margin-top: var(--space-3) !important; /* Минимум 16px воздуха над тегами */
+  padding-top: 0 !important;             /* Нет внутреннего паддинга сверху */
+  padding-bottom: 0 !important;          /* Нет внутреннего паддинга снизу */
+}
+
