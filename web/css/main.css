@@ -855,13 +855,6 @@ header nav ul {
 }
 
 /* Скрываем на десктопе */
-@media (min-width: 769px) {
-  .sticky-bottom-bar {
-    display: none !important;
-  
-  contain: layout style paint;
-  isolation: isolate;}
-}
 
 /* 2. Cookie Banner: Above the bar, Centered */
 #cookie-consent-banner {
@@ -1830,5 +1823,89 @@ main.container {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   border-top: none !important; /* Убираем линию, если она мешает визуальному балансу */
+}
+
+
+/* =========================================================
+   INFRA-082 V7.0 UNIFIED LAYOUT FIX: Card Geometry & Dock Restore
+   Target: Sync selectors with HTML, restore desktop dock logic
+   ========================================================= */
+
+/* 1. Восстановление Sticky Bottom Bar на десктопе
+      Убираем любые остатки правил, которые могут мешать dock-v4.css.
+      Гарантируем, что бар виден и позиционируется правильно. */
+@media (min-width: 768px) {
+  .sticky-bottom-bar {
+    /* Переопределяем любые потенциальные display:none из других мест */
+    display: flex !important; 
+    /* Позиционирование делегируем dock-v4.css (fixed right/top/bottom) */
+  }
+}
+
+/* 2. Синхронизация селекторов Карточки (Body vs Content)
+      HTML использует .post-card-body. Наши старые правки целились в .post-card-content.
+      Теперь мы стилизуем РЕАЛЬНЫЙ контейнер. */
+.post-card-body {
+  padding: var(--space-4); /* 24px внутренний воздух */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Занимает всё оставшееся место в статье */
+  min-height: 0; /* Важно для корректной работы overflow/flex-grow в Safari/Firefox */
+}
+
+/* 3. Стабилизация заголовка (Clamp 3 lines)
+      Применяем к реальному элементу внутри body */
+.post-card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  margin-top: 0 !important;
+  margin-bottom: var(--space-2) !important; /* 8px до даты */
+}
+
+/* 4. Дата */
+.post-card-date {
+  display: block;
+  margin-bottom: var(--space-3) !important; /* 16px до текста */
+  font-size: 0.875rem;
+  color: var(--color-neutral-700);
+}
+
+/* 5. Описание (Резиновый буфер)
+      Этот элемент должен тянуться, толкая теги вниз */
+.post-card-summary {
+  flex-grow: 1;
+  min-height: 0;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3); /* Воздух снизу перед тегами, если они есть */
+}
+
+/* 6. Теги (Прижатие к низу)
+      Если summary растянулся, теги упадут в конец. 
+      Если summary короткий, margin-top:auto поднимет их вниз. */
+.post-card-tags {
+  margin-top: auto !important; /* Ключевое свойство для прижатия к нижнему краю padding'а */
+  padding-top: var(--space-3) !important; /* Фиксированный зазор сверху над кнопками */
+  padding-bottom: 0 !important;
+  border-top: none !important; /* Убираем линию, если она мешает балансу */
+  
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* 7. Защита от двойных отступов (First/Last Child Reset)
+      Внутри .post-card-body сбрасываем маржины краевых элементов,
+      так как padding родителя уже обеспечивает границы. */
+.post-card-body > *:first-child {
+  margin-top: 0 !important;
+}
+
+.post-card-body > *:last-child {
+  margin-bottom: 0 !important;
 }
 
