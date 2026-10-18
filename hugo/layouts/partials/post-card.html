@@ -1,7 +1,10 @@
 <article class="post-card">
   {{ with .Params.image }}
   <a href="{{ $.Permalink }}" class="post-card-image-link">
-    <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy" decoding="sync" width="400" height="250">
+    <!-- ОБЯЗАТЕЛЬНАЯ ОБЕРТКА для активации CSS стилей растягивания -->
+    <div class="post-card-image-wrapper">
+      <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy" decoding="sync" width="400" height="250">
+    </div>
   </a>
   {{ end }}
 
@@ -9,14 +12,17 @@
     <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
     <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
 
-    <!-- Логика вывода описания: 
-         1. Берем Description из фронтматтера, если есть.
-         2. Иначе берем Summary, но вырезаем из него все теги <img>, чтобы убрать alt-тексты картинок.
-         3. Обрезаем до 120 символов. -->
+    <!-- ЛОГИКА ВЫВОДА ОПИСАНИЯ (Приоритет: excerpt_clean -> Description -> Cleaned Content) -->
     {{ $raw_summary := "" }}
-    {{ if .Description }}
+    
+    {{ if .Params.excerpt_clean }}
+      <!-- 1. Берем кастомное поле из миграции Blogger -->
+      {{ $raw_summary = .Params.excerpt_clean }}
+    {{ else if .Description }}
+      <!-- 2. Если нет excerpt_clean, берем стандартный SEO description -->
       {{ $raw_summary = .Description }}
     {{ else }}
+      <!-- 3. Fallback: берем сырой контент, вырезаем картинки и обрезываем -->
       {{ $cleaned_html := replaceRE "<img[^>]*>" "" .RawContent }}
       {{ $raw_summary = $cleaned_html | plainify | truncate 120 }}
     {{ end }}
