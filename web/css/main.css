@@ -1909,3 +1909,38 @@ main.container {
   margin-bottom: 0 !important;
 }
 
+
+/* =========================================================
+   INFRA-082 V7.1 SPACING FIX: Tighten Tag Gaps
+   Target: Remove internal padding from tags container, rely on margins
+   ========================================================= */
+
+/* Переопределяем правила V7.0 для более плотного прилегания */
+.post-card-tags {
+  /* Убираем внутренний воздух сверху внутри блока тегов */
+  padding-top: 0 !important; 
+  
+  /* Оставляем авто-позиционирование к низу */
+  margin-top: auto !important;
+  
+  /* Добавляем минимальный зазор сверху только если нужно визуально разделить с текстом,
+     но лучше управлять этим через margin-bottom у summary */
+}
+
+/* Гарантируем, что описание имеет достаточный зазор снизу до тегов */
+.post-card-summary {
+  margin-bottom: var(--space-3) !important; /* 16px воздуха перед тегами */
+}
+
+/* Для мобильных устройств делаем ритм чуть компактнее */
+@media (max-width: 767px) {
+  .post-card-summary {
+    margin-bottom: var(--space-2) !important; /* 8px на мобилках */
+  }
+  
+  .post-card-tags {
+    /* На мобилках теги должны быть ближе к краю, так как экран узкий */
+    padding-top: 0 !important;
+  }
+}
+

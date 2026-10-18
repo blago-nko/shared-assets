@@ -4,15 +4,27 @@
     <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy" decoding="sync" width="400" height="250">
   </a>
   {{ end }}
-  
+
   <div class="post-card-body">
     <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
     <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
-    
-    {{ if .Summary }}
-    <p class="post-card-summary">{{ .Summary | plainify | truncate 120 }}</p>
+
+    <!-- Логика вывода описания: 
+         1. Берем Description из фронтматтера, если есть.
+         2. Иначе берем Summary, но вырезаем из него все теги <img>, чтобы убрать alt-тексты картинок.
+         3. Обрезаем до 120 символов. -->
+    {{ $raw_summary := "" }}
+    {{ if .Description }}
+      {{ $raw_summary = .Description }}
+    {{ else }}
+      {{ $cleaned_html := replaceRE "<img[^>]*>" "" .RawContent }}
+      {{ $raw_summary = $cleaned_html | plainify | truncate 120 }}
     {{ end }}
-    
+
+    {{ if $raw_summary }}
+    <p class="post-card-summary">{{ $raw_summary }}</p>
+    {{ end }}
+
     {{ with .GetTerms "tags" }}
     <div class="post-card-tags">
       {{ range first 3 . }}
