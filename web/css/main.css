@@ -1944,3 +1944,90 @@ main.container {
   }
 }
 
+
+/* =========================================================
+   INFRA-082 V7.2 FINAL GEOMETRY & CONTENT FIX
+   Target: Single Source of Truth for Card Layout
+   Action: Override all previous conflicting spacing rules
+   ========================================================= */
+
+/* 1. КОНТЕЙНЕР ТЕЛА КАРТОЧКИ (.post-card-body)
+      Используем gap вместо марджинов детей для идеального контроля расстояний.
+      Убираем padding-bottom, чтобы теги прилипали к краю рамки (если нужно). */
+.post-card-body {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-grow: 1 !important;
+  
+  /* Единый источник истины для вертикальных отступов между элементами */
+  gap: var(--space-3) !important; /* 16px между Заголовком, Датой, Текстом, Тегами */
+  
+  /* Внутренние поля самой карточки */
+  padding: var(--space-4) !important; /* 24px со всех сторон */
+}
+
+/* 2. ЗАГОЛОВОК И ДАТА
+      Сбрасываем все индивидуальные марджины, так как теперь они управляются через gap родителя */
+.post-card-title,
+.post-card-date {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 3. ОПИСАНИЕ (SUMMARY)
+      Растягивается на всё свободное место, толкая теги вниз.
+      Индивидуальные марджины убраны в пользу gap. */
+.post-card-summary {
+  flex-grow: 1 !important;
+  min-height: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  
+  /* Ограничение строк остается */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 4. БЛОК ТЕГОВ (TAGS)
+      Прижат к низу за счет flex-grow у summary выше.
+      Все внутренние и внешние отступы обнулены, расстояние дает gap родителя. */
+.post-card-tags {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-top: none !important; /* Убираем линию, если она мешает визуальному балансу */
+  
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2); /* Расстояние МЕЖДУ кнопками тегов */
+  align-items: center;
+}
+
+/* 5. ИЗОБРАЖЕНИЕ (IMAGE WRAPPER)
+      Гарантируем, что картинка занимает всю ширину доступного пространства внутри ссылки */
+.post-card-image-wrapper {
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+}
+
+.post-card-image-wrapper img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* 6. МОБИЛЬНАЯ КОМПЕНСАЦИЯ (<768px)
+      На узких экранах уменьшаем внутренний паддинг тела карточки для экономии места */
+@media (max-width: 767px) {
+  .post-card-body {
+    padding: var(--space-3) !important; /* 16px вместо 24px на мобилках */
+    gap: var(--space-2) !important;     /* 8px между элементами на мобилках */
+  }
+}
+
