@@ -816,234 +816,159 @@ header nav ul {
 
 
 
-/* === FINAL UI FIXES FOR PILOT AUDIT (v3 - Clean Slate) === */
 
-/* 1. Sticky Bottom Bar: Simple & Stable */
-.sticky-bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  
-  /* Темная тема как у футера */
-  background-color: var(--color-footer-bg, #1a1a1a);
-  color: var(--color-text-inverse, #ffffff);
-  
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
-  
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
-  
-  /* Никаких will-change, transform, perspective. Только база. */
+/* =========================================================
+   INFRA-082 FINAL REFACTOR (Clean Slate v8)
+   Single Source of Truth for Post Card Layout.
+   Replaces ALL previous V3–V7.3 hacks.
+   ========================================================= */
 
-  contain: layout style paint;
-  isolation: isolate;}
-
-/* Иконки внутри панели должны быть белыми */
-.sticky-bottom-bar svg,
-.sticky-bottom-bar button {
-  fill: currentColor;
-  stroke: currentColor;
-  color: inherit;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-/* Скрываем на десктопе */
-
-/* 2. Cookie Banner: Above the bar, Centered */
-#cookie-consent-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2000; /* Выше панели (1000) */
-  
-  background-color: var(--color-footer-bg, #1a1a1a);
-  color: var(--color-text-inverse, #ffffff);
-  
-  padding: var(--space-3) var(--space-4);
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-4);
-  
-  font-family: inherit;
-  font-size: 0.875rem;
-}
-
-#cookie-consent-banner span {
-  white-space: nowrap;
-}
-
-#cookie-consent-banner button {
-  background-color: var(--color-primary, #007bff);
-  color: #fff;
-  border: none;
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: 600;
-  min-width: 80px;
-}
-
-/* На очень узких экранах куки становятся колонкой */
-@media (max-width: 480px) {
-  #cookie-consent-banner {
-    flex-direction: column;
-    gap: var(--space-2);
-    text-align: center;
-  }
-}
-
-/* 3. Post Cards: Image Placeholder Styling */
-
-
-
-
-.post-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-}
-
-/* 4. Tags Alignment (Clean Version) */
-
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 0 var(--space-2);
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-700);
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  line-height: 1;
-  text-decoration: none;
-}
-
-a.tag:hover {
-  background-color: var(--color-neutral-200);
-  color: var(--color-secondary);
-}
-
-
-/* === CLEAN POST CARD LAYOUT (v5 - Final Fix) === */
-
+/* --- GRID CONTAINER --- */
+.posts-grid,
 .post-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-4);
+  align-items: stretch; /* Карточки одной высоты в ряду */
 }
 
+@media (max-width: 767px) {
+  .posts-grid,
+  .post-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+/* --- CARD SHELL --- */
 .post-card {
+  display: flex;
+  flex-direction: column;
   background: var(--color-neutral-50);
   border: 1px solid var(--color-neutral-300);
   border-radius: var(--radius-md);
-  overflow: hidden; /* Важно: скрываем выступы изображений */
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* Растягиваем карточку на всю высоту ячейки грида */
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  overflow: hidden;         /* Скругление углов картинок через родителя */
+  height: 100%;             /* Растягивается на высоту ячейки грида */
+  transition: box-shadow 0.2s ease;
 }
-
 .post-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
 }
 
-/* 1. Image Area */
-.post-card-image-wrapper {
+/* --- IMAGE BLOCK (flat structure, no wrapper div) --- */
+.post-card-media {
+  display: block;
+  width: 100%;
+  line-height: 0;           /* Убивает baseline-gap под <img> */
+  flex-shrink: 0;           /* Не сжимается при нехватке места */
+}
+.post-card-media img {
+  display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background-color: var(--color-neutral-100);
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0; /* Не сжимать картинку при нехватке места */
-}
-
-.post-card-image-wrapper img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
-  display: block;
+  border-radius: 0;         /* Скругление делает .post-card через overflow:hidden */
 }
 
-.post-card-image-placeholder-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--color-neutral-400);
-  opacity: 0.5;
+/* Hide images accidentally embedded inside excerpt_clean text */
+.post-card-excerpt img {
+  display: none !important;
 }
 
-/* 2. Content Area */
-.post-card-content {
-  padding: var(--space-3) var(--space-4);
+/* --- CONTENT BODY --- */
+.post-card-body {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Занимает всё оставшееся место */
+  flex-grow: 1;
+  gap: var(--space-3);      /* 16px между всеми дочерними блоками */
+  padding: var(--space-4);  /* 24px внутренний воздух */
+  min-height: 0;            /* Корректная работа flex-grow в Safari/Firefox */
 }
 
+/* Reset margins on first/last children (gap handles spacing) */
+.post-card-body > *:first-child { margin-top: 0; }
+.post-card-body > *:last-child  { margin-bottom: 0; }
+
+/* --- HEADER GROUP (Title + Date) --- */
+.post-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);      /* 4px between title and date */
+}
+
+/* --- TITLE (clamped to 3 lines max) --- */
 .post-card-title {
+  font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
-  margin: 0 0 var(--space-2);
-  color: var(--color-primary);
+  margin: 0;                /* Gap parent controls distance */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .post-card-title a {
-  color: inherit;
+  color: var(--color-primary);
   text-decoration: none;
 }
-
 .post-card-title a:hover {
   color: var(--color-secondary);
 }
 
+/* --- DATE --- */
 .post-card-date {
+  display: block;
   font-size: 0.875rem;
   color: var(--color-neutral-700);
-  margin-bottom: var(--space-2);
+  margin: 0;
 }
 
-.post-card-summary {
+/* --- EXCERPT (floating height, max 5 lines, NO ellipsis dots) --- */
+.post-card-excerpt {
+  flex-grow: 1;             /* Растягивается, толкая теги вниз */
+  min-height: 0;
+  margin: 0;
   font-size: 1rem;
   line-height: 1.5;
   color: var(--color-neutral-900);
-  margin-bottom: var(--space-3);
-  flex-grow: 1; /* Толкает теги вниз */
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* Обрезаем текст после 3 строк */
-  -webkit-box-orient: vertical;
+  /* Ограничение высоты: 5 строк × 1.5 lh × 16px font ≈ 120px */
+  max-height: calc(1.5em * 5);
   overflow: hidden;
+  /* НЕТ display:-webkit-box / -webkit-line-clamp → никаких трёх точек */
+}
+.post-card-excerpt p {
+  margin: 0 0 0.5em 0;      /* Компактный межстрочный внутри HTML excerpt_clean */
+}
+.post-card-excerpt p:last-child {
+  margin-bottom: 0;
+}
+.post-card-excerpt a {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  font-weight: 600;
+  border-bottom: none;
+}
+.post-card-excerpt a:hover {
+  color: var(--color-secondary-light);
 }
 
-/* 3. Tags Footer */
-.post-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  align-items: center;
-  margin-top: auto; /* Прижимаем к низу карточки */
+/* --- TAGS FOOTER (pushed to bottom via flex) --- */
+.post-card-footer {
+  margin-top: auto;         /* Прижимает к нижнему краю padding'а body */
   padding-top: var(--space-2);
   border-top: 1px solid var(--color-neutral-200);
 }
-
-.tag {
+.post-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);      /* 8px между кнопками тегов */
+  align-items: center;
+}
+.tag-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1056,1088 +981,43 @@ a.tag:hover {
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
+  border-bottom: none;
 }
-
-a.tag:hover {
-  background-color: var(--color-neutral-200);
+a.tag-pill:hover {
+  background-color: var(--color-neutral-300);
   color: var(--color-secondary);
 }
 
-/* === LINKS INSIDE POST CARD SUMMARIES (Fix for v8) === */
-
-
-
-/* === HIDE DUPLICATE IMAGES IN SUMMARIES (v10 Fix) === */
-.post-card-summary img {
-  display: none !important;
-}
-
-/* === FINAL TEXT CLAMPING & LINK STYLING FOR CARD SUMMARIES (v13 Hotfix) === */
-.post-card-summary {
-  display: -webkit-box;
-  -webkit-line-clamp: 4; /* Показываем максимум 4 строки */
-  -webkit-box-orient: vertical;  
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 0.5rem;
-  color: var(--color-text-secondary);
-  line-height: 1.5;
-}
-
-/* Стилизация ссылок внутри описания */
-
-
-/* === FINAL LINK POLISH FOR CARD SUMMARIES (v14) === */
-.post-card-summary a:hover,
-.post-card-summary a:focus {
-  /* При наведении меняем только оттенок/яркость, оставляя структуру */
-  color: var(--color-primary); /* Или другой акцентный цвет бренда */
-  text-decoration-color: currentColor; /* Подчеркивание становится того же цвета, что и текст */
-}
-
-
-/* === FINAL LINK STYLES FOR CARDS (v15 Clean Slate) === */
-.post-card-summary a {
-  /* 1. Цвет: наследуем основной текст, но делаем его чуть темнее/ярче для различимости */
-  color: var(--color-text-primary); 
-  
-  /* 2. Декорация: только одно подчеркивание */
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-  
-  /* 3. Убираем border-bottom, который мог создавать вторую линию */
-  border-bottom: none !important; 
-  
-  /* 4. Плавность перехода */
-  transition: color 0.2s ease, text-decoration-color 0.2s ease;
-}
-
-.post-card-summary a:hover,
-.post-card-summary a:focus {
-  /* При наведении меняем цвет на акцентный (синий/зеленый бренда) */
-  color: var(--color-primary); 
-  
-  /* Подчеркивание становится того же цвета, что и текст */
-  text-decoration-color: currentColor;
-  
-  /* Опционально: можно добавить легкий фон или жирность, если нужно сильнее выделить */
-  font-weight: 600; 
-}
-
-/* INFRA-095-FINAL: Absolute prevention of logo/title jitter on click */
-/* 1. Запрет любых обводок и теней при фокусе/клике для обоих элементов */
-.site-logo-link,
-.site-title {
-  outline: none !important;
-  box-shadow: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-.site-logo-link:active, .site-logo-link:focus, .site-logo-link:focus-visible,
-.site-title:active, .site-title:focus, .site-title:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-  margin: 0 !important;
-  transform: none !important;
-}
-
-/* 2. Промоутим элементы в отдельные слои композитинга, чтобы избежать reflow/repaint */
-.site-logo {
-  will-change: transform;
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.site-title {
-  will-change: opacity;
-}
-
-/* INFRA-095-ULTIMATE: Lock flex dimensions to prevent ANY baseline/size shift */
-.site-logo-link {
-  flex: 0 0 auto !important;
-  flex-shrink: 0 !important;
-  flex-grow: 0 !important;
-}
-
-.site-logo {
-  flex-shrink: 0 !important;
-  flex-grow: 0 !important;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-}
-
-/* INFRA-100: Theme toggle positioning in navigation */
-nav ul li:last-child {
-  margin-left: auto;
-}
-
-nav ul li .theme-toggle-btn {
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  nav ul {
-    flex-wrap: wrap;
-    gap: var(--space-2, 8px);
-  }
-  nav ul li:last-child {
-    margin-left: auto;
-    order: 100;
-  }
-}
-
-/* =========================================================
-   INFRA-082 V5 POLISH: Layout Symmetry & Mobile Dock Fix
-   ========================================================= */
-
-/* 1. SYMMETRIC PADDING FOR ARTICLES */
-/* Fixes "text touching left edge" and uneven bottom gaps */
-@media (min-width: 768px) {
-  .post-single, 
-  article.single-post,
-  main.container {
-    /* Uniform padding inside the content wrapper */
-    padding-left: var(--space-6, 2rem);
-    padding-right: var(--space-6, 2rem);
-    
-    /* Ensure consistent vertical rhythm between sections */
-    margin-top: var(--space-4, 1.5rem);
-    margin-bottom: var(--space-4, 1.5rem);
-  }
-}
-
-/* On Mobile Portrait, ensure standard side padding is respected */
-@media (max-width: 767px) {
-  .post-single, 
-  article.single-post {
-    padding-left: var(--space-4, 1rem);
-    padding-right: var(--space-4, 1rem);
-  }
-  
-  /* Reduce gap between last paragraph and footer if it was too large */
-  body.has-sticky-dock .site-footer {
-     margin-top: 0; 
-  }
-}
-
-
-/* 2. MOBILE DOCK ICONS & ALIGNMENT */
-/* Ensures Theme button has an icon like others on mobile portrait */
-@media (max-width: 767px) {
-  .sticky-bottom-bar button svg {
-    display: block !important; /* Force visibility even if hidden by previous rules */
-    width: 24px !important;
-    height: 24px !important;
-    margin-bottom: 4px !important; /* Space between icon and text */
-  }
-  
-  /* Equalize spacing between buttons in mobile bar */
-  .sticky-bottom-bar {
-    justify-content: space-evenly !important;
-    gap: 0 !important; /* Let space-evenly handle distribution */
-  }
-  
-  .sticky-bottom-bar button {
-    flex: 1 1 auto !important; /* Distribute available width equally */
-    max-width: 80px !important; /* Prevent stretching too much on wide phones */
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V5.1 POLISH: Vertical Rhythm & Container Padding
-   ========================================================= */
-
-/* 1. ГЛОБАЛЬНЫЙ КОНТЕЙНЕР MAIN */
-/* Задаем единый внутренний отступ для всей области контента между header и footer */
-main {
-  /* Симметричные отступы сверху и снизу */
-  padding-top: var(--space-6, 2rem); 
-  padding-bottom: var(--space-6, 2rem); 
-  
-  /* Боковые отступы тоже симметричны */
-  padding-left: var(--space-4, 1rem);
-  padding-right: var(--space-4, 1rem);
-}
-
-/* На десктопе увеличиваем боковые поля для комфорта чтения */
-@media (min-width: 768px) {
-  main {
-    padding-left: var(--space-6, 2rem);
-    padding-right: var(--space-6, 2rem);
-  }
-}
-
-/* 2. БЛОК СТАТЬИ (Article/Card) */
-/* Убираем лишние внешние отступы, так как теперь они есть у родителя <main> */
-article.post-single,
-.post-card,
-.page-content {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  
-  /* ВАЖНО: Внутренний отступ САМОЙ карточки, чтобы текст не лип к рамке */
-  /* Если у вас есть фон или бордер у article, этот padding создаст "воздух" внутри */
-  padding: var(--space-4, 1rem); 
-}
-
-/* Для статей без явного фона/рамки можно уменьшить внутренний паддинг, 
-   так как внешний уже есть у main */
-@media (min-width: 768px) {
-   article.post-single {
-     padding: 0; /* Текст уже защищен паддингом main */
-   }
-   
-   /* Но если нужно, чтобы заголовок H1 имел свой отступ сверху относительно текста */
-   article.post-single h1:first-child {
-      margin-top: 0;
-   }
-}
-
-
-/* =========================================================
-   INFRA-082 V5.2 FINAL FIX: Precise Spacing Control
-   Addresses Footer Margin Gap and Article Inner Padding
-   ========================================================= */
-
-/* 1. ФИКС ДЫРЫ СНИЗУ: Убираем margin-top у футера */
-/* Теперь расстояние до подвала будет контролироваться только padding-main */
-footer {
-  margin-top: 0 !important; 
-}
-
-/* 2. ВЫРАВНИВАЕМ ВЕРТИКАЛЬНЫЙ РИТМ: Симметричные отступы Main */
-/* Так как <main> имеет класс .container, целимся именно туда */
-main.container {
-  /* Жесткие симметричные отступы сверху и снизу */
-  padding-top: var(--space-6, 2rem) !important;
-  padding-bottom: var(--space-6, 2rem) !important;
-  
-  /* Боковые отступы оставляем из исходного правила .container, 
-     но гарантируем их наличие */
-}
-
-@media (max-width: 767px) {
-  main.container {
-    padding-top: var(--space-4, 1rem) !important;
-    padding-bottom: var(--space-4, 1rem) !important;
-  }
-}
-
-/* 3. ФИКС ТЕКСТА В РАМКЕ: Добавляем внутренний воздух в статью */
-/* Целимся конкретно в .post-article (серый блок на стр. About/Posts) */
-.post-article {
-  /* Внутренний отступ, чтобы текст не касался границ блока */
-  padding: var(--space-5, 1.5rem) !important; 
-  
-  /* Опционально: если нужно увеличить радиус скругления углов */
-  border-radius: 8px;
-}
-
-/* Для мобильных устройств уменьшаем внутренний паддинг статьи */
-@media (max-width: 767px) {
-  .post-article {
-    padding: var(--space-4, 1rem) !important;
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V5.3 MOBILE FIX: Override Body Padding & Article Air
-   Targets ONLY screens < 768px to prevent desktop regressions
-   ========================================================= */
-
-@media (max-width: 767px) {
-  
-  /* 1. УБИРАЕМ СТАРУЮ ДЫРУ: Обнуляем padding-bottom у body */
-  /* Теперь расстояние до футера контролируется только через main/container */
-  body {
-    padding-bottom: 0 !important; 
-  }
-
-  /* 2. КОМПЕНСИРУЕМ ВЫСОТУ ДОКА: Добавляем минимальный necessary gap */
-  /* Чтобы последний элемент не прятался под панелью управления */
-  main.container {
-    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
-  }
-
-  /* 3. ВОЗДУХ ВНУТРИ СТАТЬИ: Жестко задаем увеличенный паддинг для карточки */
-  /* Это решает проблему "текст липнет к краям рамки" на телефоне */
-  .post-article {
-    padding-left: var(--space-4, 1rem) !important;
-    padding-right: var(--space-4, 1rem) !important;
-    padding-top: var(--space-4, 1rem) !important;
-    padding-bottom: var(--space-4, 1rem) !important;
-    
-    /* Гарантируем скругление углов, если оно было потеряно */
-    border-radius: 8px !important;
-  }
-  
-  /* Дополнительная защита для контента внутри статьи */
-  .post-content {
-     padding-left: 0 !important;
-     padding-right: 0 !important;
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V5.3 MOBILE FIX: Override Body Padding & Article Air
-   Targets ONLY screens < 768px to prevent desktop regressions
-   ========================================================= */
-
-@media (max-width: 767px) {
-
-  /* 1. УБИРАЕМ СТАРУЮ ДЫРУ: Обнуляем padding-bottom у body */
-  /* Теперь расстояние до футера контролируется только через main/container */
-  body {
-    padding-bottom: 0 !important;
-  }
-
-  /* 2. КОМПЕНСИРУЕМ ВЫСОТУ ДОКА: Добавляем минимальный necessary gap */
-  /* Чтобы последний элемент не прятался под панелью управления */
-  main.container {
-    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
-  }
-
-  /* 3. ВОЗДУХ ВНУТРИ СТАТЬИ: Жестко задаем увеличенный паддинг для карточки */
-  /* Это решает проблему "текст липнет к краям рамки" на телефоне */
-  .post-article {
-    padding-left: var(--space-4, 1rem) !important;
-    padding-right: var(--space-4, 1rem) !important;
-    padding-top: var(--space-4, 1rem) !important;
-    padding-bottom: var(--space-4, 1rem) !important;
-
-    /* Гарантируем скругление углов, если оно было потеряно */
-    border-radius: 8px !important;
-  }
-
-  /* Дополнительная защита для контента внутри статьи */
-  .post-content {
-     padding-left: 0 !important;
-     padding-right: 0 !important;
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V5.4 UNIFICATION: Consistent Vertical Rhythm
-   Aligns Header, Footer, and Main paddings across devices
-   ========================================================= */
-
-/* 1. УНИФИКАЦИЯ ШАПКИ И ПОДВАЛА */
-/* Приводим padding footer к тому же значению, что и header (--space-4) */
-footer {
-  padding-top: var(--space-4) !important; 
-  padding-bottom: var(--space-4) !important;
-}
-
-/* 2. КОМПАКТНЫЙ MAIN НА МОБИЛЬНЫХ (<768px) */
-/* Уменьшаем глобальные отступы контейнера, чтобы контент дышал равномернее */
-@media (max-width: 767px) {
-  main.container {
-    /* Снижаем с 48px (space-6) до 24px (space-4) или даже меньше */
-    padding-top: var(--space-4, 1.5rem) !important;
-    padding-bottom: calc(var(--space-4, 1.5rem) + 60px) !important; /* + высота дока */
-  }
-  
-  /* Дополнительная защита: убираем лишние марджины у первых/последних детей внутри main */
-  main.container > *:first-child {
-    margin-top: 0 !important;
-  }
-  main.container > *:last-child {
-    margin-bottom: 0 !important;
-  }
-}
-
-/* 3. ФИНАЛЬНАЯ ЧИСТКА ВНУТРИ СТАТЕЙ (Desktop & Mobile) */
-/* Гарантируем, что текст не упирается в границы блока за счет внутренних марджинов */
-.post-article .post-content p:last-child,
-.post-article .entry-content p:last-child {
-  margin-bottom: 0 !important;
-}
-
-/* Если есть специфичные блоки мета-информации (даты, теги), они тоже должны быть компактными */
-.post-meta, .post-tags, .post-categories {
-  margin-bottom: var(--space-2, 0.5rem) !important;
-}
-
-
-/* =========================================================
-   INFRA-082 V5.5 FIX: Posts Grid Layout & Global Vertical Rhythm
-   Targets Home Page structure specifically
-   ========================================================= */
-
-/* 1. СЕТКА ПОСТОВ (HOME PAGE) */
-/* Создаем управляемую сетку для класса .posts-grid из index.html */
-.posts-grid {
-  display: grid;
-  /* Десктоп: 3 колонки */
-  grid-template-columns: repeat(3, 1fr);
-  /* Расстояние МЕЖДУ карточками */
-  gap: var(--space-5); /* 32px - комфортное расстояние */
-  
-  /* Отступ сверху от шапки и снизу до футера контролируется через main */
-}
-
-@media (max-width: 1024px) {
-  .posts-grid {
-    grid-template-columns: repeat(2, 1fr); /* Планшет: 2 колонки */
-    gap: var(--space-4); /* 24px */
-  }
-}
-
-@media (max-width: 767px) {
-  .posts-grid {
-    grid-template-columns: 1fr; /* Мобильный: 1 колонка */
-    gap: var(--space-4); /* 24px */
-  }
-}
-
-/* 2. ГЛОБАЛЬНЫЙ ВЕРТИКАЛЬНЫЙ РИТМ MAIN */
-/* Унифицируем отступы контейнера контента */
-main.container {
-  /* Жесткие симметричные отступы сверху и снизу */
-  padding-top: var(--space-6, 3rem) !important; 
-  padding-bottom: var(--space-6, 3rem) !important; 
-  
-  /* Боковые отступы оставляем из исходного правила .container, 
-     но гарантируем их наличие */
-}
-
-@media (max-width: 767px) {
-  main.container {
-    /* Компактные отступы на мобильных */
-    padding-top: var(--space-4, 1.5rem) !important;
-    padding-bottom: calc(var(--space-4, 1.5rem) + 60px) !important; /* + высота дока */
-  }
-}
-
-/* 3. ВНУТРЕННИЕ ОТСТУПЫ КАРТОЧКИ (AIR INSIDE CARD) */
-/* Гарантируем, что контент внутри карточки имеет воздух */
-.post-card-body {
-  padding: var(--space-4); /* 24px внутренний отступ со всех сторон */
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1; /* Занимает оставшееся место в карточке */
-}
-
-/* Теги прижимаем к низу карточки */
-.post-card-tags {
-  margin-top: auto; 
-  padding-top: var(--space-3); /* 16px воздуха над тегами */
-}
-
-/* Заголовок и дата имеют компактные отступы */
-.post-card-title {
-  margin-bottom: var(--space-2); /* 8px */
-}
-
-.post-card-date {
-  margin-bottom: var(--space-3); /* 16px */
-  font-size: 0.875rem;
-  color: var(--color-neutral-500);
-}
-
-.post-card-summary {
-  margin-bottom: var(--space-3); /* 16px */
-  line-height: 1.5;
-}
-
-
-/* =========================================================
-   INFRA-082 V5.6 FINAL CLEAN SLATE: Unified Mobile & Cards
-   Single source of truth for spacing logic
-   ========================================================= */
-
-/* 1. ГЛОБАЛЬНАЯ СИММЕТРИЯ КАРТОЧЕК (Desktop & Mobile) */
-/* Гарантируем, что тело карточки всегда имеет одинаковые отступы,
-   независимо от того, есть ли изображение сверху или нет */
-.post-card-body {
-  padding: var(--space-4); /* 24px uniform air */
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-/* Если изображения нет, первый элемент (h2) не должен иметь лишнего top-margin,
-   так как padding уже обеспечивает пространство */
-.post-card:not(:has(.post-card-image-link)) .post-card-title {
-  margin-top: 0 !important;
-}
-
-/* 2. ЕДИНЫЙ МОБИЛЬНЫЙ РИТМ (<768px) */
-@media (max-width: 767px) {
-  
-  /* А. Компенсируем высоту дока через основной контейнер */
-  /* Убираем любые следы старых правил body { padding-bottom: 72px } */
-  body {
-    padding-bottom: 0 !important;
-  }
-
-  main.container {
-    /* Симметричные отступы: сверху столько же, сколько снизу минус высота дока */
-    padding-top: var(--space-5, 2rem) !important; /* 32px */
-    padding-bottom: calc(var(--space-5, 2rem) + 60px) !important; /* 32px + dock height */
-    
-    /* Боковые отступы для дыхания текста */
-    padding-left: var(--space-4, 1.5rem) !important;
-    padding-right: var(--space-4, 1.5rem) !important;
-  }
-
-  /* Б. Сетки постов становятся одноколоночными */
-  .posts-grid {
-    grid-template-columns: 1fr !important;
-    gap: var(--space-4, 1.5rem) !important;
-  }
-
-  /* В. Статьи получают гарантированный внутренний воздух */
-  .post-article {
-    padding: var(--space-4, 1.5rem) !important;
-    border-radius: 8px !important;
-  }
-  
-  /* Г. Шапка и подвал синхронизируются по компактности */
-  header, footer {
-    padding-top: var(--space-4, 1.5rem) !important;
-    padding-bottom: var(--space-4, 1.5rem) !important;
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V5.7 OVERRIDE: Neutralize dock-v4 Hardcoded Paddings
-   Ensures clean slate spacing wins over legacy dock styles
-   ========================================================= */
-
-/* Убираем жесткий padding-bottom: 80px из dock-v4.css для мобильных */
-@media (max-width: 767px) {
-  body,
-  .site-footer,
-  main.container {
-    /* Принудительно сбрасываем вредное значение 80px из dock-v4 */
-    padding-bottom: var(--space-5, 2rem) !important; 
-  }
-  
-  /* Компенсируем высоту дока точно: контент + безопасная зона */
-  body.has-sticky-dock {
-     padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
-  }
-}
-
-/* Гарантируем симметрию карточек на десктопе (перекрытие любых старых правил) */
-.post-card-body {
-  padding: var(--space-4) !important; /* 24px uniform air */
-}
-
-.post-card:not(:has(.post-card-image-link)) .post-card-title {
-  margin-top: 0 !important;
-}
-
-
-/* =========================================================
-   INFRA-082 V5.8 FOOTER OVERRIDE: Neutralize dock-v4 Footer Padding
-   Specifically targets .site-footer to remove hardcoded 80px bottom padding
-   ========================================================= */
-
-@media (max-width: 767px) {
-  /* Переопределяем padding-bottom для .site-footer напрямую */
-  .site-footer {
-    padding-bottom: var(--space-4, 1.5rem) !important; /* 24px вместо 80px */
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V5.8 FOOTER OVERRIDE: Neutralize dock-v4 Footer Padding
-   Specifically targets .site-footer to remove hardcoded 80px bottom padding
-   ========================================================= */
-
-@media (max-width: 767px) {
-  /* Переопределяем padding-bottom для .site-footer напрямую */
-  .site-footer {
-    padding-bottom: var(--space-4, 1.5rem) !important; /* 24px вместо 80px */
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V6.0 FINAL FIX: Explicit Main Padding Override
-   Target: Kill the 80px bottom padding from dock-v4.css for <main>
-   ========================================================= */
-
-@media (max-width: 767px) {
-  /* Переопределяем padding-bottom непосредственно для тега main */
-  /* Используем !important, так как в dock-v4.css тоже стоит !important */
-  /* Порядок загрузки (main.css после dock-v4.css) гарантирует победу */
-  main {
-    padding-bottom: var(--space-5, 2rem) !important; /* 32px вместо 80px */
-    /* Можно также явно задать top, чтобы гарантировать симметрию, 
-       хотя он уже вроде бы корректен (48px), но лучше перестраховаться */
-    padding-top: var(--space-5, 2rem) !important; /* 32px для баланса */
-  }
-  
-  /* Дополнительно страхуем статью внутри main */
-  .post-article {
-     margin-bottom: 0 !important;
-     padding-bottom: 0 !important;
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V6.1 CARD RHYTHM FIX: Internal Spacing Normalization
-   Target: Remove asymmetry inside .post-card-content
-   ========================================================= */
-
-/* 1. Сбрасываем маржины первого и последнего ребенка внутри контента карточки 
-      чтобы они не конфликтовали с padding родителя */
-.post-card-content > *:first-child {
-  margin-top: 0 !important;
-}
-
-.post-card-content > *:last-child {
-  margin-bottom: 0 !important;
-}
-
-/* 2. Фиксируем расстояние между описанием и тегами.
-      Вместо margin-top: auto (которое создает дыру), используем фиксированный gap 
-      через свойство margin-top самого блока тегов */
-.post-card-tags {
-  /* Отключаем авто-растяжение, если оно было */
-  margin-top: var(--space-3) !important; /* 16px жесткий зазор перед тегами */
-  
-  /* Прижимаем к низу только если есть свободное место, но сохраняя минимум 16px сверху */
-  /* Для этого лучше использовать flex-grow на предыдущем элементе или spacer, 
-     но проще всего задать min-height блоку summary или просто оставить так */
-}
-
-/* 3. Опционально: если нужно, чтобы текст описания занимал все пространство, 
-      толкая теги вниз, раскомментируйте это: */
-/* 
-.post-card-summary {
-  flex-grow: 1;
-}
-*/
-
-
-/* =========================================================
-   INFRA-082 V5.8 FOOTER OVERRIDE: Neutralize dock-v4 Footer Padding
-   Specifically targets .site-footer to remove hardcoded 80px bottom padding
-   ========================================================= */
-
-@media (max-width: 767px) {
-  /* Переопределяем padding-bottom для .site-footer напрямую */
-  .site-footer {
-    padding-bottom: var(--space-4, 1.5rem) !important; /* 24px вместо 80px */
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V6.2 CARD TAGS SPACING FIX: Remove Double Gap
-   Target: Eliminate the extra 16px padding-top inside .post-card-tags
-   ========================================================= */
-
-.post-card-tags {
-  /* Убираем внутренний отступ сверху, который дублировал margin-top */
-  padding-top: 0 !important; 
-  
-  /* Дополнительно страхуемся от любых других внутренних отступов */
-  padding-bottom: 0 !important;
-}
-
-
-/* =========================================================
-   INFRA-082 V6.3 CARD ALIGNMENT FIX: Push Tags to Bottom
-   Target: Eliminate empty space below tags in stretched cards
-   ========================================================= */
-
-/* Делаем блок описания растягивающимся элементом. 
-   Он займет всё свободное место между датой и тегами, 
-   эффективно прижимая блок тегов к нижней границе padding'a карточки. */
-.post-card-summary {
-  flex-grow: 1; 
-}
-
-/* Гарантируем, что у самого блока тегов нет лишних внутренних отступов, 
-   которые могут мешать плотному прилеганию к рамке (если padding-bottom карточки мал). */
-.post-card-tags {
-  margin-top: var(--space-3) !important; /* Минимум 16px воздуха над тегами */
-  padding-top: 0 !important;             /* Нет внутреннего паддинга сверху */
-  padding-bottom: 0 !important;          /* Нет внутреннего паддинга снизу */
-}
-
-
-/* =========================================================
-   INFRA-082 V6.4 CARD CLAMP FIX: Stabilize Header Height
-   Target: Limit title to 3 lines, allow summary to grow
-   ========================================================= */
-
-/* 1. Ограничиваем заголовок максимум 3 строками. 
-      Лишнее обрезается многоточием (...). 
-      Это гарантирует, что высота блока h2 не будет прыгать от 1 до 5 строк. */
-.post-card-title {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  
-  /* Дополнительно страхуемся от лишних марджинов внутри clamp-блока */
-  margin-top: 0 !important;
-  margin-bottom: var(--space-2) !important; /* 8px воздуха после заголовка перед датой */
-}
-
-/* 2. Блок даты тоже фиксируем сверху, чтобы он шел сразу после заголовка */
-.post-card-date {
-  display: block;
-  margin-bottom: var(--space-3) !important; /* 16px воздуха перед текстом описания */
-}
-
-/* 3. Основной механизм: Текст описания занимает ВСЁ свободное место.
-      Так как родитель (.post-card-content или article) является flex-column,
-      этот элемент растянется на всю доступную высоту между датой и тегами.
-      Теги всегда будут прижаты к самому низу паддинга карточки. */
-.post-card-summary {
-  flex-grow: 1;
-  min-height: 0; /* Важно для Firefox/Safari в некоторых случаях */
-  
-  /* Опционально: можно ограничить и описание, если оно слишком длинное,
-     но обычно flex-grow достаточно. Если нужно жесткое ограничение: */
-  /*
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  */
-}
-
-/* 4. Гарантируем, что блок тегов остается последним и не имеет внутренних отступов,
-     которые могли бы сдвинуть его вверх относительно нижней рамки. */
-.post-card-tags {
-  margin-top: auto !important; /* Дублируем защиту от смещения, хотя flex-grow выше уже работает */
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  border-top: none !important; /* Убираем линию, если она мешает визуальному балансу */
-}
-
-
-/* =========================================================
-   INFRA-082 V7.0 UNIFIED LAYOUT FIX: Card Geometry & Dock Restore
-   Target: Sync selectors with HTML, restore desktop dock logic
-   ========================================================= */
-
-/* 1. Восстановление Sticky Bottom Bar на десктопе
-      Убираем любые остатки правил, которые могут мешать dock-v4.css.
-      Гарантируем, что бар виден и позиционируется правильно. */
-@media (min-width: 768px) {
-  .sticky-bottom-bar {
-    /* Переопределяем любые потенциальные display:none из других мест */
-    display: flex !important; 
-    /* Позиционирование делегируем dock-v4.css (fixed right/top/bottom) */
-  }
-}
-
-/* 2. Синхронизация селекторов Карточки (Body vs Content)
-      HTML использует .post-card-body. Наши старые правки целились в .post-card-content.
-      Теперь мы стилизуем РЕАЛЬНЫЙ контейнер. */
-.post-card-body {
-  padding: var(--space-4); /* 24px внутренний воздух */
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1; /* Занимает всё оставшееся место в статье */
-  min-height: 0; /* Важно для корректной работы overflow/flex-grow в Safari/Firefox */
-}
-
-/* 3. Стабилизация заголовка (Clamp 3 lines)
-      Применяем к реальному элементу внутри body */
-.post-card-title {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  
-  margin-top: 0 !important;
-  margin-bottom: var(--space-2) !important; /* 8px до даты */
-}
-
-/* 4. Дата */
-.post-card-date {
-  display: block;
-  margin-bottom: var(--space-3) !important; /* 16px до текста */
-  font-size: 0.875rem;
-  color: var(--color-neutral-700);
-}
-
-/* 5. Описание (Резиновый буфер)
-      Этот элемент должен тянуться, толкая теги вниз */
-.post-card-summary {
-  flex-grow: 1;
-  min-height: 0;
-  line-height: 1.5;
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-3); /* Воздух снизу перед тегами, если они есть */
-}
-
-/* 6. Теги (Прижатие к низу)
-      Если summary растянулся, теги упадут в конец. 
-      Если summary короткий, margin-top:auto поднимет их вниз. */
-.post-card-tags {
-  margin-top: auto !important; /* Ключевое свойство для прижатия к нижнему краю padding'а */
-  padding-top: var(--space-3) !important; /* Фиксированный зазор сверху над кнопками */
-  padding-bottom: 0 !important;
-  border-top: none !important; /* Убираем линию, если она мешает балансу */
-  
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-/* 7. Защита от двойных отступов (First/Last Child Reset)
-      Внутри .post-card-body сбрасываем маржины краевых элементов,
-      так как padding родителя уже обеспечивает границы. */
-.post-card-body > *:first-child {
-  margin-top: 0 !important;
-}
-
-.post-card-body > *:last-child {
-  margin-bottom: 0 !important;
-}
-
-
-/* =========================================================
-   INFRA-082 V7.1 SPACING FIX: Tighten Tag Gaps
-   Target: Remove internal padding from tags container, rely on margins
-   ========================================================= */
-
-/* Переопределяем правила V7.0 для более плотного прилегания */
-.post-card-tags {
-  /* Убираем внутренний воздух сверху внутри блока тегов */
-  padding-top: 0 !important; 
-  
-  /* Оставляем авто-позиционирование к низу */
-  margin-top: auto !important;
-  
-  /* Добавляем минимальный зазор сверху только если нужно визуально разделить с текстом,
-     но лучше управлять этим через margin-bottom у summary */
-}
-
-/* Гарантируем, что описание имеет достаточный зазор снизу до тегов */
-.post-card-summary {
-  margin-bottom: var(--space-3) !important; /* 16px воздуха перед тегами */
-}
-
-/* Для мобильных устройств делаем ритм чуть компактнее */
-@media (max-width: 767px) {
-  .post-card-summary {
-    margin-bottom: var(--space-2) !important; /* 8px на мобилках */
-  }
-  
-  .post-card-tags {
-    /* На мобилках теги должны быть ближе к краю, так как экран узкий */
-    padding-top: 0 !important;
-  }
-}
-
-
-/* =========================================================
-   INFRA-082 V7.2 FINAL GEOMETRY & CONTENT FIX
-   Target: Single Source of Truth for Card Layout
-   Action: Override all previous conflicting spacing rules
-   ========================================================= */
-
-/* 1. КОНТЕЙНЕР ТЕЛА КАРТОЧКИ (.post-card-body)
-      Используем gap вместо марджинов детей для идеального контроля расстояний.
-      Убираем padding-bottom, чтобы теги прилипали к краю рамки (если нужно). */
-.post-card-body {
-  display: flex !important;
-  flex-direction: column !important;
-  flex-grow: 1 !important;
-  
-  /* Единый источник истины для вертикальных отступов между элементами */
-  gap: var(--space-3) !important; /* 16px между Заголовком, Датой, Текстом, Тегами */
-  
-  /* Внутренние поля самой карточки */
-  padding: var(--space-4) !important; /* 24px со всех сторон */
-}
-
-/* 2. ЗАГОЛОВОК И ДАТА
-      Сбрасываем все индивидуальные марджины, так как теперь они управляются через gap родителя */
-.post-card-title,
-.post-card-date {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-/* 3. ОПИСАНИЕ (SUMMARY)
-      Растягивается на всё свободное место, толкая теги вниз.
-      Индивидуальные марджины убраны в пользу gap. */
-.post-card-summary {
-  flex-grow: 1 !important;
-  min-height: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  
-  /* Ограничение строк остается */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* 4. БЛОК ТЕГОВ (TAGS)
-      Прижат к низу за счет flex-grow у summary выше.
-      Все внутренние и внешние отступы обнулены, расстояние дает gap родителя. */
-.post-card-tags {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  border-top: none !important; /* Убираем линию, если она мешает визуальному балансу */
-  
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2); /* Расстояние МЕЖДУ кнопками тегов */
-  align-items: center;
-}
-
-/* 5. ИЗОБРАЖЕНИЕ (IMAGE WRAPPER)
-      Гарантируем, что картинка занимает всю ширину доступного пространства внутри ссылки */
-.post-card-image-wrapper {
-  width: 100% !important;
-  aspect-ratio: 16 / 9 !important;
-  overflow: hidden !important;
-  position: relative !important;
-  flex-shrink: 0 !important;
-}
-
-.post-card-image-wrapper img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  display: block !important;
-}
-
-/* 6. МОБИЛЬНАЯ КОМПЕНСАЦИЯ (<768px)
-      На узких экранах уменьшаем внутренний паддинг тела карточки для экономии места */
+/* --- MOBILE COMPACT (<768px) --- */
 @media (max-width: 767px) {
   .post-card-body {
-    padding: var(--space-3) !important; /* 16px вместо 24px на мобилках */
-    gap: var(--space-2) !important;     /* 8px между элементами на мобилках */
+    padding: var(--space-3);   /* 16px вместо 24px */
+    gap: var(--space-2);       /* 8px между элементами */
+  }
+  .post-card-excerpt {
+    max-height: calc(1.5em * 4); /* 4 строки на мобильном (экономия места) */
   }
 }
 
-
-/* =========================================================
-   INFRA-082 V7.3 FINAL GEOMETRY & CONTENT FIX
-   Target: Single Source of Truth for Card Layout & Links
-   Action: Override all previous conflicting spacing rules + Enable HTML links
-   ========================================================= */
-
-/* 1. КОНТЕЙНЕР ТЕЛА КАРТОЧКИ (.post-card-body)
-      Используем gap вместо марджинов детей для идеального контроля расстояний.
-      Убираем padding-bottom, чтобы теги прилипали к краю рамки (если нужно). */
-.post-card-body {
-  display: flex !important;
-  flex-direction: column !important;
-  flex-grow: 1 !important;
-
-  /* Единый источник истины для вертикальных отступов между элементами */
-  gap: var(--space-3) !important; /* 16px между Заголовком, Датой, Текстом, Тегами */
-
-  /* Внутренние поля самой карточки */
-  padding: var(--space-4) !important; /* 24px со всех сторон */
-  
-  /* Отделяем тело от картинки сверху */
-  margin-top: 0 !important; 
+/* --- DARK MODE OVERRIDES --- */
+[data-theme="dark"] .post-card {
+  background-color: var(--color-card-bg, #1e1e1e);
+  border-color: var(--color-card-border, #333);
 }
-
-/* 2. ЗАГОЛОВОК И ДАТА
-      Сбрасываем все индивидуальные марджины, так как теперь они управляются через gap родителя */
-.post-card-title,
-.post-card-date {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+[data-theme="dark"] .post-card-title a {
+  color: var(--color-primary, #8ab4f8);
 }
-
-/* 3. ОПИСАНИЕ (SUMMARY)
-      Растягивается на всё свободное место, толкая теги вниз.
-      Индивидуальные марджины убраны в пользу gap. */
-.post-card-summary {
-  flex-grow: 1 !important;
-  min-height: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-
-  /* Ограничение строк остается */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  
-  /* Стилизация ссылок внутри описания */
-  color: var(--color-text-primary);
+[data-theme="dark"] .post-card-excerpt {
+  color: var(--color-text, #e0e0e0);
 }
-
-.post-card-summary a {
-  color: var(--color-secondary);
-  text-decoration: underline;
-  font-weight: 600;
+[data-theme="dark"] .post-card-excerpt a {
+  color: var(--color-link, #8ab4f8);
 }
-
-.post-card-summary a:hover {
-  color: var(--color-secondary-light);
+[data-theme="dark"] .tag-pill {
+  background-color: var(--color-tag-bg, #2d2d2d);
+  color: var(--color-tag-text, #e0e0e0);
 }
-
-/* 4. БЛОК ТЕГОВ (TAGS)
-      Прижат к низу за счет flex-grow у summary выше.
-      Все внутренние и внешние отступы обнулены, расстояние дает gap родителя. */
-.post-card-tags {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  border-top: none !important; /* Убираем линию, если она мешает визуальному балансу */
-
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2); /* Расстояние МЕЖДУ кнопками тегов */
-  align-items: center;
+[data-theme="dark"] a.tag-pill:hover {
+  background-color: #444;
+  color: #fff;
 }
-
-/* 5. ИЗОБРАЖЕНИЕ (IMAGE WRAPPER)
-      Гарантируем, что картинка занимает всю ширину доступного пространства внутри ссылки */
-.post-card-image-link {
-  display: block !important;
-  width: 100% !important;
-  line-height: 0 !important; /* Убирает лишний baseline-gap под картинкой */
-}
-
-.post-card-image-wrapper {
-  width: 100% !important;
-  aspect-ratio: 16 / 9 !important;
-  overflow: hidden !important;
-  position: relative !important;
-  flex-shrink: 0 !important;
-}
-
-.post-card-image-wrapper img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  display: block !important;
-  border-radius: 0 !important; /* Скругление делает родитель через overflow:hidden */
-}
-
-/* 6. МОБИЛЬНАЯ КОМПЕНСАЦИЯ (<768px)
-      На узких экранах уменьшаем внутренний паддинг тела карточки для экономии места */
-@media (max-width: 767px) {
-  .post-card-body {
-    padding: var(--space-3) !important; /* 16px вместо 24px на мобилках */
-    gap: var(--space-2) !important;     /* 8px между элементами на мобилках */
-  }
-}
-
