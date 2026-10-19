@@ -1,43 +1,40 @@
 <article class="post-card">
-  {{ with .Params.image }}
-  <a href="{{ $.Permalink }}" class="post-card-image-link">
-    <!-- ОБЯЗАТЕЛЬНАЯ ОБЕРТКА для активации CSS стилей растягивания -->
-    <div class="post-card-image-wrapper">
-      <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy" decoding="sync" width="400" height="250">
-    </div>
+  <!-- БЛОК ИЗОБРАЖЕНИЯ: Плоская структура, без лишних div -->
+  {{ if .Params.image }}
+  <a href="{{ .Permalink }}" class="post-card-media" tabindex="-1">
+    <img src="{{ .Params.image }}" alt="{{ .Title }}" loading="lazy" decoding="sync">
   </a>
   {{ end }}
 
+  <!-- БЛОК КОНТЕНТА -->
   <div class="post-card-body">
-    <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-    <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
-
-    <!-- ЛОГИКА ВЫВОДА ОПИСАНИЯ (Приоритет: excerpt_clean -> Description -> Cleaned Content) -->
-    {{ $raw_summary := "" }}
     
-    {{ if .Params.excerpt_clean }}
-      <!-- 1. Берем кастомное поле из миграции Blogger -->
-      {{ $raw_summary = .Params.excerpt_clean }}
-    {{ else if .Description }}
-      <!-- 2. Если нет excerpt_clean, берем стандартный SEO description -->
-      {{ $raw_summary = .Description }}
-    {{ else }}
-      <!-- 3. Fallback: берем сырой контент, вырезаем картинки и обрезываем -->
-      {{ $cleaned_html := replaceRE "<img[^>]*>" "" .RawContent }}
-      {{ $raw_summary = $cleaned_html | plainify | truncate 120 }}
-    {{ end }}
+    <header class="post-card-header">
+      <h2 class="post-card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+      <time datetime="{{ .Date.Format "2006-01-02" }}" class="post-card-date">{{ .Date.Format "02.01.2006" }}</time>
+    </header>
 
-    {{ if $raw_summary }}
-    <!-- ВАЖНО: Используем safeHTML, чтобы теги <a> внутри excerpt_clean рендерились как ссылки -->
-    <p class="post-card-summary">{{ $raw_summary | safeHTML }}</p>
-    {{ end }}
-
-    {{ with .GetTerms "tags" }}
-    <div class="post-card-tags">
-      {{ range first 3 . }}
-        <a href="{{ .Permalink }}" class="tag-pill">{{ .LinkTitle }}</a>
+    <!-- ОПИСАНИЕ: Безопасный вывод excerpt_clean или fallback -->
+    <div class="post-card-excerpt">
+      {{ if .Params.excerpt_clean }}
+        {{ .Params.excerpt_clean | safeHTML }}
+      {{ else if .Description }}
+        {{ .Description }}
+      {{ else }}
+        {{ .Summary | plainify | truncate 150 }}
       {{ end }}
     </div>
+
+    <!-- ТЕГИ: Прижаты к низу через margin-top:auto в CSS -->
+    {{ if .GetTerms "tags" }}
+    <footer class="post-card-footer">
+      <div class="post-card-tags">
+        {{ range first 3 (.GetTerms "tags") }}
+          <a href="{{ .Permalink }}" class="tag-pill">{{ .LinkTitle }}</a>
+        {{ end }}
+      </div>
+    </footer>
     {{ end }}
+
   </div>
 </article>
