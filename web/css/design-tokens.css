@@ -1,49 +1,49 @@
 /* INFRA-075: Дизайн-система "Образ слов" */
 
 :root {
-  /* Primary: глубокий индиго — интеллект, надёжность, глубина */
+  /* Primary: глубокий индиго */
   --color-primary: #2c3e50;
   --color-primary-light: #34495e;
-  
-  /* Secondary: терракотовый — античность, земля, тепло */
+
+  /* Secondary: терракотовый */
   --color-secondary: #c0392b;
   --color-secondary-light: #e74c3c;
-  
-  /* Accent: янтарный — цитаты, выделения, акценты */
+
+  /* Accent: янтарный */
   --color-accent: #d4a017;
   --color-accent-light: #f4c430;
-  
-  /* Neutral: тёплая серая шкала — мягкость, не холодная */
-  --color-neutral-900: #2d3436;  /* основной текст */
-  --color-neutral-700: #636e72;  /* вторичный текст */
-  --color-neutral-500: #b2bec3;  /* границы */
-  --color-neutral-300: #dfe6e9;  /* фоны */
-  --color-neutral-100: #f5f6fa;  /* светлый фон */
-  --color-neutral-50: #ffffff;   /* белый */
-  
+
+  /* Neutral: тёплая серая шкала */
+  --color-neutral-900: #2d3436;
+  --color-neutral-700: #636e72;
+  --color-neutral-500: #b2bec3;
+  --color-neutral-300: #dfe6e9;
+  --color-neutral-100: #f5f6fa;
+  --color-neutral-50: #ffffff;
+
   /* Typography */
   --font-heading: 'PT Serif', Georgia, serif;
   --font-body: 'PT Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Fira Code', 'Courier New', monospace;
-  
+
   /* Spacing (4px base) */
-  --space-1: 0.25rem;  /* 4px */
-  --space-2: 0.5rem;   /* 8px */
-  --space-3: 1rem;     /* 16px */
-  --space-4: 1.5rem;   /* 24px */
-  --space-5: 2rem;     /* 32px */
-  --space-6: 3rem;     /* 48px */
-  
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+
   /* Line heights */
   --line-height-tight: 1.2;
   --line-height-normal: 1.6;
   --line-height-relaxed: 1.8;
-  
+
   /* Border radius */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 16px;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
   --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
@@ -51,28 +51,25 @@
 }
 
 /* ==========================================
-   INFRA-XXX: Dark Mode Support
+   INFRA-XXX: Dark Mode Support (Base Variables)
    ========================================== */
-
-/* Плавный переход для всех элементов при смене темы */
 html {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Переопределение переменных для темной темы */
 [data-theme="dark"] {
   --color-bg: #121212;
   --color-bg-secondary: #1e1e1e;
   --color-text: #e0e0e0;
   --color-text-muted: #a0a0a0;
-  --color-primary: #8ab4f8; /* Более светлый оттенок для темного фона */
+  --color-primary: #8ab4f8;
   --color-primary-light: #aecbfa;
   --color-accent: #fbbc04;
   --color-border: #333333;
   --color-card-bg: #1e1e1e;
 }
 
-/* Стили кнопки переключения темы */
+/* Theme Toggle Button Styles */
 .theme-toggle-btn {
   background: transparent;
   border: 1px solid var(--color-border);
@@ -97,38 +94,21 @@ html {
   height: 20px;
 }
 
-/* Показываем только одну иконку в зависимости от темы */
-[data-theme="dark"] .icon-sun { display: block; }
-[data-theme="dark"] .icon-moon { display: none; }
-[data-theme="light"] .icon-sun { display: none; }
-[data-theme="light"] .icon-moon { display: block; }
-
-/* Если атрибут data-theme не задан, по умолчанию показываем луну (для светлой темы) */
 .icon-sun { display: none; }
 .icon-moon { display: block; }
+[data-theme="dark"] .icon-sun { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }
 
 /* ==========================================
-   INFRA-100: Dark Mode Support (Comprehensive)
+   INFRA-100: Comprehensive Dark Mode Overrides
    ========================================== */
-
-/* Плавный переход для всех элементов */
 html, body, * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Темная тема - переопределение переменных */
 [data-theme="dark"] {
-  --color-bg: #121212;
-  --color-bg-secondary: #1e1e1e;
   --color-bg-tertiary: #2d2d2d;
-  --color-text: #e0e0e0;
-  --color-text-muted: #a0a0a0;
   --color-heading: #ffffff;
-  --color-primary: #8ab4f8;
-  --color-primary-light: #aecbfa;
-  --color-accent: #fbbc04;
-  --color-border: #333333;
-  --color-card-bg: #1e1e1e;
   --color-card-border: #333333;
   --color-link: #8ab4f8;
   --color-link-hover: #aecbfa;
@@ -136,13 +116,12 @@ html, body, * {
   --color-tag-text: #e0e0e0;
 }
 
-/* Применяем переменные к body и основным элементам */
 [data-theme="dark"] body {
   background-color: var(--color-bg);
   color: var(--color-text);
 }
 
-[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, 
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3,
 [data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6 {
   color: var(--color-heading);
 }
@@ -160,66 +139,7 @@ html, body, * {
   color: var(--color-tag-text);
 }
 
-/* Кнопка переключения темы */
-.theme-toggle-btn {
-  background: transparent;
-  border: 2px solid var(--color-border, #333);
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--color-text, #333);
-  transition: all 0.2s ease;
-  padding: 0;
-  margin: 0;
-}
-
-.theme-toggle-btn:hover {
-  background-color: var(--color-bg-secondary, #f5f5f5);
-  border-color: var(--color-primary, #4a90d9);
-  transform: scale(1.1);
-}
-
-.theme-toggle-btn svg {
-  width: 22px;
-  height: 22px;
-}
-
-/* Логика отображения иконок */
-.icon-sun { display: none; }
-.icon-moon { display: block; }
-
-[data-theme="dark"] .icon-sun { display: block; }
-[data-theme="dark"] .icon-moon { display: none; }
-
-
-
-/* INFRA-100: Dark mode styles for header, footer and cookie consent */
-[data-theme="dark"] header {
-  background-color: var(--color-bg-secondary, #1e1e1e);
-  border-bottom-color: var(--color-border, #333);
-}
-
-[data-theme="dark"] footer {
-  background-color: var(--color-bg-secondary, #1e1e1e);
-  border-top-color: var(--color-border, #333);
-  color: var(--color-text-muted, #a0a0a0);
-}
-
-[data-theme="dark"] footer a {
-  color: var(--color-link, #8ab4f8);
-}
-
-[data-theme="dark"] .cookie-consent {
-  background-color: var(--color-bg-secondary, #1e1e1e);
-  border-top-color: var(--color-border, #333);
-  color: var(--color-text, #e0e0e0);
-}
-
-/* INFRA-100: Theme toggle button - BULLETPROOF VISIBILITY */
+/* Theme Toggle Bulletproof Visibility */
 .theme-toggle-btn {
   position: fixed !important;
   top: 16px !important;
@@ -254,10 +174,6 @@ html, body, * {
   display: block !important;
 }
 
-/* Логика иконок */
-.icon-sun { display: none !important; }
-.icon-moon { display: block !important; }
-
 [data-theme="dark"] .theme-toggle-btn {
   background: var(--color-bg-secondary, #1e1e1e) !important;
   border-color: var(--color-border, #444444) !important;
@@ -265,150 +181,82 @@ html, body, * {
   box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
 }
 
-[data-theme="dark"] .icon-sun { display: block !important; }
-[data-theme="dark"] .icon-moon { display: none !important; }
+/* Header/Footer/Cookie Dark Mode */
+[data-theme="dark"] header {
+  background-color: var(--color-bg-secondary, #1e1e1e);
+  border-bottom-color: var(--color-border, #333);
+}
 
-/* INFRA-100: Logo styling - square background matching header */
+[data-theme="dark"] footer {
+  background-color: var(--color-bg-secondary, #1e1e1e);
+  border-top-color: var(--color-border, #333);
+  color: var(--color-text-muted, #a0a0a0);
+}
+
+[data-theme="dark"] footer a {
+  color: var(--color-link, #8ab4f8);
+}
+
+[data-theme="dark"] .cookie-consent {
+  background-color: var(--color-bg-secondary, #1e1e1e);
+  border-top-color: var(--color-border, #333);
+  color: var(--color-text, #e0e0e0);
+}
+
+/* ==========================================
+   INFRA-100: Logo Styling (CLEAN VERSION)
+   ЕДИНСТВЕННЫЙ БЛОК ДЛЯ ЛОГОТИПА
+   ========================================== */
+
 .site-logo-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 4px;
-  background: var(--color-bg, #ffffff);
-  transition: background-color 0.3s ease;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px !important;
+  background-color: #ffffff !important;
+  border-radius: 6px !important;
+  transition: background-color 0.3s ease !important;
 }
 
 [data-theme="dark"] .site-logo-link {
-  background: var(--color-bg-secondary, #1e1e1e);
+  background-color: #1e1e1e !important;
 }
 
 .site-logo {
-  width: 144px;
-  height: 144px;
-  display: block;
-  object-fit: contain;
+  width: 144px !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: contain !important;
 }
 
-/* Убираем любые фильтры для логотипа */
+@media (max-width: 767px) {
+  .site-logo {
+    width: 128px !important;
+  }
+}
+
 .site-logo,
 [data-theme="dark"] .site-logo {
   filter: none !important;
   opacity: 1 !important;
 }
 
-/* INFRA-100: Logo with square background */
-.site-logo-link {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 12px !important;
-  background-color: var(--color-bg, #ffffff) !important;
-  border-radius: 4px !important;
-  transition: background-color 0.3s ease !important;
-}
-
-[data-theme="dark"] .site-logo-link {
-  background-color: var(--color-bg-secondary, #1e1e1e) !important;
-}
-
-.site-logo {
-  width: 144px !important;
-  height: 144px !important;
-  display: block !important;
-  object-fit: contain !important;
-}
-
-/* INFRA-100: Dual Logo & Square Background (Hardcoded for reliability) */
-.site-logo-link {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 10px !important; /* Отступ между краем квадрата и логотипом */
-  background-color: #ffffff !important; /* Белый фон для светлой темы */
-  border-radius: 6px !important;
-  transition: background-color 0.3s ease !important;
-}
-
-[data-theme="dark"] .site-logo-link {
-  background-color: #1e1e1e !important; /* Темно-серый фон как у шапки */
-}
-
-.site-logo {
-  width: 120px !important;
-  height: auto !important;
-  display: block !important;
-  object-fit: contain !important;
-}
-
-
-
-/* INFRA-100: Dual Logo & Square Background (Hardcoded for reliability) */
-.site-logo-link {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 10px !important; /* Отступ между краем квадрата и логотипом */
-  background-color: #ffffff !important; /* Белый фон для светлой темы */
-  border-radius: 6px !important;
-  transition: background-color 0.3s ease !important;
-}
-
-[data-theme="dark"] .site-logo-link {
-  background-color: #1e1e1e !important; /* Темно-серый фон как у шапки */
-}
-
-.site-logo {
-  width: 120px !important;
-  height: auto !important;
-  display: block !important;
-  object-fit: contain !important;
-}
-
-/* INFRA-100: Logo with ALWAYS WHITE square background */
-.site-logo-link {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 10px !important;
-  background-color: #ffffff !important; /* ВСЕГДА белый, даже в темной теме */
-  border-radius: 6px !important;
-}
-
-.site-logo {
-  width: 120px !important;
-  height: auto !important;
-  display: block !important;
-  object-fit: contain !important;
-}
 .site-title-accent {
-  color: #E65100 !important; /* Яркий оранжевый - МАКСИМАЛЬНАЯ КОНТРАСТНОСТЬ */
+  color: var(--color-accent) !important;
   font-weight: 700 !important;
-  text-shadow: 0 0 4px rgba(230, 81, 0, 0.3) !important;
 }
 
 [data-theme="dark"] .site-title-accent {
-  color: #FF6F00 !important; /* Ещё ярче в темной теме */
+  color: var(--color-accent) !important;
   font-weight: 700 !important;
-  text-shadow: 0 0 8px rgba(255, 111, 0, 0.6) !important;
 }
 
-/* INFRA-100: site-tagline contrast (amber pair, согласовано с брендовым оранжевым акцентом) */
 .site-tagline {
-  color: #b45309 !important;   /* светлая: amber-700, контрастно к белому + "цветом" */
-  font-weight: 600 !important; /* усиление жирностью, как просили */
-}
-[data-theme="dark"] .site-tagline {
-  color: #ffcc80 !important;   /* тёмная: amber-200, ярко и цветно на тёмном фоне */
+  color: #b45309 !important;
   font-weight: 600 !important;
 }
 
-/* INFRA-100: responsive site-logo size (компактнее нынешних ~128px; квадрат webp сохранён через height:auto + object-fit:contain) */
-.site-logo {
-  width: clamp(44px, 8vw, 72px) !important;
-  height: auto !important;
-}
-[data-theme="dark"] .site-logo {
-  width: clamp(44px, 8vw, 72px) !important;
-  height: auto !important;
+[data-theme="dark"] .site-tagline {
+  color: #ffcc80 !important;
+  font-weight: 600 !important;
 }
