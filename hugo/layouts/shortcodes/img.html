@@ -10,7 +10,7 @@
 {{ $caption := .Get "caption" }}
 
 <figure class="{{ $class }}">
-    <img 
+    <img loading="lazy" decoding="async" fetchpriority="low" 
         src="{{ $src }}" 
         alt="{{ $alt }}"
         {{ with $width }}width="{{ . }}"{{ end }}
