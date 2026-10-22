@@ -1,7 +1,15 @@
 {{ define "main" }}
-<div class="posts-grid">
-  {{ range .Site.RegularPages }}
-    {{ partial "post-card.html" . }}
-  {{ end }}
+<div class="container">
+  <h1>{{ .Title }}</h1>
+  {{ if .Content }}<div class="page-description">{{ .Content }}</div>{{ end }}
+  
+  <div class="post-grid">
+    {{ range .Paginator.Pages.ByDate.Reverse }}
+      {{ partial "post-card.html" . }}
+    {{ end }}
+  </div>
+
+  <!-- Пагинация -->
+  {{ template "_internal/pagination.html" . }}
 </div>
 {{ end }}
