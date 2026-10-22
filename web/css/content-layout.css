@@ -1,0 +1,100 @@
+/* ==========================================
+   INFRA-VISUAL: Content Layout (New)
+   Р¦РµРЅС‚СЂРёСЂРѕРІР°РЅРёРµ Рё РѕС‚СЃС‚СѓРїС‹ РєРѕРЅС‚РµРЅС‚Р°
+   ========================================== */
+
+/* Р¦РµРЅС‚СЂРёСЂРѕРІР°РЅРёРµ РёРЅС‚РµСЂР°РєС‚РёРІРЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ (РєР°СЂС‚С‹, РІРёРґРµРѕ) */
+.post-content .text-center,
+.post-content figure,
+.post-content .video-wrapper {
+  text-align: center;
+  margin: var(--space-4) auto;
+}
+
+.post-content iframe {
+  display: block;
+  margin: var(--space-4) auto;
+  max-width: 100%;
+}
+
+/* РћС‚СЃС‚СѓРїС‹ РґР»СЏ РёР·РѕР±СЂР°Р¶РµРЅРёР№ РІ РєРѕРЅС‚РµРЅС‚Рµ */
+.post-content img {
+  display: block;
+  margin: var(--space-4) auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Figure Рё РїРѕРґРїРёСЃРё */
+.post-content figure {
+  margin: var(--space-4) auto;
+}
+
+.post-content figcaption {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+  text-align: center;
+}
+
+/* РЎРїРёСЃРєРё */
+.post-content ul,
+.post-content ol {
+  padding-left: var(--space-5);
+  margin-bottom: var(--space-3);
+}
+
+.post-content li {
+  margin-bottom: var(--space-2);
+}
+
+/* Р¦РёС‚Р°С‚С‹ */
+.post-content blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding-left: var(--space-4);
+  margin: var(--space-4) 0;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+/* РљРѕРґ */
+.post-content code {
+  font-family: var(--font-mono);
+  background-color: var(--color-neutral-100);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+
+.post-content pre {
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-50);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: var(--space-4) 0;
+}
+
+.post-content pre code {
+  background: none;
+  padding: 0;
+}
+
+/* РўР°Р±Р»РёС†С‹ */
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-4) 0;
+}
+
+.post-content th,
+.post-content td {
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.post-content th {
+  background-color: var(--color-bg-secondary);
+  font-weight: var(--font-weight-bold);
+}

@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="{{ "css/design-tokens.css" | relURL }}">
   <link rel="stylesheet" href="{{ "css/dock-v4.css" | relURL }}">
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/content-layout.css" | relURL }}">
   <title>{{ if eq .Title .Site.Title }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ .Description | default .Site.Params.description }}">
   {{ if eq hugo.Environment "staging" }}

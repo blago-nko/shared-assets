@@ -1,277 +1,162 @@
-/* =========================================================
-   INFRA-082 V5 DOCK STYLES (Overlay Layer + Centered Modals)
-   Loaded AFTER main.css.
-   ========================================================= */
+/* ==========================================
+   INFRA-VISUAL: Dock V4 (Clean)
+   Р•РґРёРЅС‹Рµ СЃС‚РёР»Рё РґР»СЏ РІСЃРµС… СЂР°Р·СЂРµС€РµРЅРёР№
+   ========================================== */
 
-/* --- БАЗА: Мобильный Портрет (<768px) --- */
 .sticky-bottom-bar {
-  position: fixed !important;
-  z-index: 999 !important;
-  
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: auto !important;
-  
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-around !important;
-  align-items: center !important;
-  
-  background-color: var(--color-bg, #fff) !important;
-  color: var(--color-text, #333) !important;
-  border-top: 1px solid var(--color-border, #ddd) !important;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1) !important;
-  
-  padding: var(--space-2) !important;
-  padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px)) !important;
+  position: fixed;
+  z-index: 999;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  padding: var(--space-2);
+  padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
 }
 
+.sticky-bottom-bar button {
+  appearance: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px;
+  border-radius: 6px;
+  color: inherit;
+  transition: background-color var(--transition-fast);
+}
+
+.sticky-bottom-bar button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .sticky-bottom-bar button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sticky-bottom-bar button svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.sticky-bottom-bar button span {
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+/* Mobile: РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅС‹Р№ Р±Р°СЂ РІРЅРёР·Сѓ */
 @media (max-width: 767px) {
   body, main, article {
-    padding-bottom: 80px !important; 
+    padding-bottom: 80px;
   }
 }
 
-
-/* --- ГИБРИДНАЯ ЗОНА (768px – 1199px) --- */
-@media (min-width: 768px) and (max-width: 1199px) {
-  
-  .sticky-bottom-bar {
-    top: auto !important;
-    bottom: var(--space-4, 1.5rem) !important;
-    right: var(--space-4, 1.5rem) !important;
-    left: auto !important;
-    
-    width: 48px !important; 
-    max-height: calc(100vh - 4rem) !important;
-    
-    flex-direction: column !important;
-    gap: var(--space-2, 0.5rem) !important;
-    padding: var(--space-2, 0.5rem) !important;
-    
-    border-radius: 12px !important;
-    border: 1px solid var(--color-border, #ddd) !important;
-    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15) !important;
-  }
-
-  [data-theme="dark"] .sticky-bottom-bar {
-    background-color: var(--color-bg-secondary, #1e1e1e) !important;
-    border-color: #333 !important;
-  }
-
-  /* Symmetric Squeeze for Content */
-  .post-content, 
-  article.single-post,
-  main.container {
-    padding-left: var(--space-4, 1rem) !important;
-    padding-right: calc(48px + var(--space-4, 1rem)) !important; 
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-}
-
-
-/* --- ДЕСКТОП (>=1200px) --- */
-@media (min-width: 1200px) {
-  
-  .sticky-bottom-bar {
-    top: auto !important;
-    bottom: var(--space-4, 1.5rem) !important;
-    right: var(--space-4, 1.5rem) !important;
-    left: auto !important;
-    
-    width: 48px !important;
-    max-height: calc(100vh - 4rem) !important;
-    
-    flex-direction: column !important;
-    gap: var(--space-2, 0.5rem) !important;
-    padding: var(--space-2, 0.5rem) !important;
-    
-    border-radius: 12px !important;
-    border: 1px solid var(--color-border, #ddd) !important;
-    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15) !important;
-  }
-
-  [data-theme="dark"] .sticky-bottom-bar {
-    background-color: var(--color-bg-secondary, #1e1e1e) !important;
-    border-color: #333 !important;
-  }
-
-  /* NO CONTENT SQUEEZE NEEDED HERE */
-  .post-content, 
-  article.single-post,
-  main.container {
-    padding-right: var(--standard-padding, 1rem) !important; 
-    padding-left: var(--standard-padding, 1rem) !important;
-    margin-right: auto !important;
-    margin-left: auto !important;
-  }
-}
-
-
-/* --- ОБЩИЕ СТИЛИ КНОПОК ДОКА (>=768px) --- */
+/* Tablet & Desktop: РІРµСЂС‚РёРєР°Р»СЊРЅС‹Р№ Р±Р°СЂ СЃРїСЂР°РІР° */
 @media (min-width: 768px) {
-  .sticky-bottom-bar button {
-    appearance: none !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 2px !important;
-    
-    min-width: 44px !important;
-    min-height: 44px !important;
-    padding: 4px !important;
-    border-radius: 6px !important;
-    
-    color: inherit !important;
-    transition: background-color 0.2s ease !important;
+  .sticky-bottom-bar {
+    bottom: var(--space-4);
+    right: var(--space-4);
+    left: auto;
+    width: 48px;
+    max-height: calc(100vh - 4rem);
+    flex-direction: column;
+    gap: var(--space-2);
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.15);
   }
 
-  .sticky-bottom-bar button:hover {
-    background-color: rgba(0, 0, 0, 0.05) !important;
-  }
-  
-  [data-theme="dark"] .sticky-bottom-bar button:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-  }
-
-  .sticky-bottom-bar button svg {
-    width: 20px !important;
-    height: 20px !important;
-    stroke: currentColor !important;
-    fill: none !important;
-    stroke-width: 2 !important;
-  }
-
-  .sticky-bottom-bar button span {
-    font-size: 10px !important;
-    line-height: 1 !important;
-    opacity: 0.8 !important;
+  [data-theme="dark"] .sticky-bottom-bar {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border);
   }
 }
 
-/* --- ПОПОВЕРЫ (UNIFIED CENTERED MODALS) --- */
+/* Popovers */
 .dock-popover {
-  /* Always Centered Logic */
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
-  /* Visual Style Upgrade */
-  background: var(--color-bg, #fff);
-  backdrop-filter: blur(10px); /* Glass effect */
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--color-border, #ddd);
+  background: var(--color-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-lg);
   padding: 16px 0;
   z-index: 1001;
   min-width: 200px;
   max-width: 90vw;
-  display: none; 
+  display: none;
   flex-direction: column;
   gap: 4px;
-  
-  /* Animation Prep */
-  opacity: 0;
-  transition: opacity 0.2s ease-out;
 }
 
 [data-theme="dark"] .dock-popover {
-  background: rgba(30, 30, 30, 0.95);
-  border-color: #444;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border);
 }
 
 .dock-popover.is-open {
   display: flex;
-  opacity: 1;
 }
 
 .dock-popover a,
 .dock-popover button.popover-action {
   display: block;
-  width: 100%;
+  width: calc(100% - 16px);
   padding: 12px 24px;
+  margin: 0 8px;
   text-decoration: none;
-  color: var(--color-text, #333);
+  color: var(--color-text);
   font-size: 15px;
   font-weight: 500;
   border: none;
   background: none;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 8px; /* Rounded items inside list */
-  margin: 0 8px; /* Indent from edges */
-  width: calc(100% - 16px); /* Adjust width due to margin */
-}
-
-[data-theme="dark"] .dock-popover a,
-[data-theme="dark"] .dock-popover button.popover-action {
-  color: #e0e0e0;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
 }
 
 .dock-popover a:hover,
 .dock-popover button.popover-action:hover {
-  background-color: var(--color-bg-secondary, #f5f5f5);
-  color: var(--color-primary, #007bff);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-primary);
 }
 
-[data-theme="dark"] .dock-popover a:hover,
-[data-theme="dark"] .dock-popover button.popover-action:hover {
-  background-color: #333;
-  color: #fff;
-}
-
-/* Overlay Backdrop */
 .dock-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4); /* Darker overlay for contrast */
+  background: rgba(0,0,0,0.4);
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   z-index: 1000;
   display: none;
-  opacity: 0;
-  transition: opacity 0.2s;
 }
+
 .dock-overlay.is-active {
   display: block;
-  opacity: 1;
 }
 
-/* Print Hidden */
 @media print {
-  .sticky-bottom-bar, .dock-popover, .dock-overlay { display: none !important; }
-}
-
-/* --- FIX MOBILE SHARE ICON SHRINKAGE --- */
-@media (max-width: 767px) {
-  .sticky-bottom-bar button svg {
-    /* Жестко фиксируем размер и запрещаем сжатие */
-    width: 24px !important;
-    height: 24px !important;
-    min-width: 24px !important;
-    flex-shrink: 0 !important; 
-    
-    /* Центрирование внутри кнопки */
-    display: block !important;
-    margin: 0 auto !important;
-  }
-  
-  /* Дополнительно страхуем кнопку целиком */
-  .sticky-bottom-bar button {
-    min-width: unset !important; /* Отменяем предыдущее ограничение, если оно мешает */
-    width: auto !important;
-    flex-grow: 1; /* Позволяет расти, но контент внутри фиксирован */
+  .sticky-bottom-bar, .dock-popover, .dock-overlay {
+    display: none !important;
   }
 }
-
