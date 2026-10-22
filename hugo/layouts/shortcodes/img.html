@@ -10,13 +10,13 @@
 {{ $caption := .Get "caption" }}
 
 <figure class="{{ $class }}">
-    <img loading="lazy" decoding="async" fetchpriority="low" 
+    <img loading="lazy" fetchpriority="low" 
         src="{{ $src }}" 
         alt="{{ $alt }}"
         {{ with $width }}width="{{ . }}"{{ end }}
         {{ with $height }}height="{{ . }}"{{ end }}
         loading="lazy"
-        decoding="async"
+       
     >
     {{ with $caption }}
     <figcaption>{{ . }}</figcaption>

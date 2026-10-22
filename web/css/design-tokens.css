@@ -97,3 +97,64 @@ html, body, * {
               color var(--transition-normal), 
               border-color var(--transition-normal);
 }
+
+/* ==========================================
+   INFRA-100: Logo Protection (MUST have !important)
+   Анти-фильтр + анти-jitter каскад
+   НЕ УДАЛЯТЬ — живой override-cascade (README shared-assets)
+   ========================================== */
+
+.site-logo-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px !important;
+  background-color: #ffffff !important;
+  border-radius: 6px !important;
+  transition: background-color 0.3s ease !important;
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+}
+
+[data-theme="dark"] .site-logo-link {
+  background-color: #1e1e1e !important;
+}
+
+.site-logo {
+  width: 144px !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: contain !important;
+  filter: none !important;
+  opacity: 1 !important;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+@media (max-width: 767px) {
+  .site-logo {
+    width: 128px !important;
+  }
+}
+
+.site-title-accent {
+  color: var(--color-accent) !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="dark"] .site-title-accent {
+  color: var(--color-accent) !important;
+  font-weight: 700 !important;
+}
+
+.site-tagline {
+  color: #b45309 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="dark"] .site-tagline {
+  color: #ffcc80 !important;
+  font-weight: 600 !important;
+}
