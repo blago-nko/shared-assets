@@ -103,7 +103,7 @@ html, body, * {
    INFRA-100: Logo Protection (design-tokens zone ONLY)
    !important для filter/opacity/padding/background/
    border-radius/display/width/height/object-fit.
-   Anti-jitter (flex/will-change/transform/...) НЕ здесь —
+   Anti-jitter НЕ здесь —
    он в main.css (disjoint !important, см. README KB).
    ========================================== */
 
