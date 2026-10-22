@@ -49,3 +49,34 @@
   --color-primary: #3b82f6;
   --color-accent: #fb923c;
 }
+
+/* ==========================================
+   INFRA-100: Logo Protection (Antifilter Zone)
+   Единственный владелец !important для filter/opacity.
+   НЕ переносить в main.css (нарушение disjoint контракта).
+   ========================================== */
+
+.site-logo-link {
+  padding: 10px !important;
+  background-color: #ffffff !important;
+  border-radius: 6px !important;
+  display: inline-flex !important;
+}
+
+[data-theme="dark"] .site-logo-link {
+  background-color: #1e1e1e !important;
+}
+
+.site-logo {
+  width: 144px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  filter: none !important;      /* Анти-фильтр */
+  opacity: 1 !important;        /* Анти-прозрачность */
+}
+
+@media (max-width: 767px) {
+  .site-logo {
+    width: 128px !important;
+  }
+}
