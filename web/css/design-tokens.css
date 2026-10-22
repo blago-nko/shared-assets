@@ -98,10 +98,13 @@ html, body, * {
               border-color var(--transition-normal);
 }
 
+
 /* ==========================================
-   INFRA-100: Logo Protection (MUST have !important)
-   Анти-фильтр + анти-jitter каскад
-   НЕ УДАЛЯТЬ — живой override-cascade (README shared-assets)
+   INFRA-100: Logo Protection (design-tokens zone ONLY)
+   !important для filter/opacity/padding/background/
+   border-radius/display/width/height/object-fit.
+   Anti-jitter (flex/will-change/transform/...) НЕ здесь —
+   он в main.css (disjoint !important, см. README KB).
    ========================================== */
 
 .site-logo-link {
@@ -112,8 +115,6 @@ html, body, * {
   background-color: #ffffff !important;
   border-radius: 6px !important;
   transition: background-color 0.3s ease !important;
-  flex: 0 0 auto !important;
-  flex-shrink: 0 !important;
 }
 
 [data-theme="dark"] .site-logo-link {
@@ -127,10 +128,6 @@ html, body, * {
   object-fit: contain !important;
   filter: none !important;
   opacity: 1 !important;
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  image-rendering: -webkit-optimize-contrast;
 }
 
 @media (max-width: 767px) {

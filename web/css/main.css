@@ -456,3 +456,23 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 a:focus:not(:focus-visible), button:focus:not(:focus-visible) {
   outline: none;
 }
+
+/* ==========================================
+   INFRA-095: Logo Anti-Jitter (main.css zone ONLY)
+   flex/GPU-подсказки с !important. НЕ пересекается
+   со свойствами design-tokens.css => победитель
+   каскада фиксирован независимо от порядка загрузки.
+   decoding="sync" обеспечён в header.html (HTML-слой).
+   ========================================== */
+
+.site-logo-link {
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+}
+
+.site-logo {
+  will-change: transform !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  image-rendering: -webkit-optimize-contrast !important;
+}
