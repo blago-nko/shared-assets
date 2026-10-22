@@ -1,15 +1,30 @@
 {{ define "main" }}
-<section class="posts-section">
-  <div class="posts-grid">
-    {{ range first 9 .Site.RegularPages.ByDate.Reverse }}
-      {{ partial "post-card.html" . }}
-    {{ end }}
-  </div>
+<div class="container">
   
-  {{ if gt .Site.RegularPages.Len 9 }}
-  <div class="pagination-wrapper">
-     <!-- Опционально: пагинация -->
-  </div>
+  <!-- Приветственный блок / О нас -->
+  {{ if .Content }}
+  <section class="hero-section">
+    <h1>{{ .Title }}</h1>
+    <div class="hero-content">{{ .Content }}</div>
+  </section>
   {{ end }}
-</section>
+
+  <!-- Сетка последних статей -->
+  <section class="recent-posts">
+    <h2 class="section-title">Последние обзоры</h2>
+    
+    <div class="post-grid">
+      {{ range first 6 site.RegularPages.ByDate.Reverse }}
+        {{ partial "post-card.html" . }}
+      {{ end }}
+    </div>
+    
+    <!-- Кнопка "Все статьи", если их больше 6 -->
+    {{ if gt (len site.RegularPages) 6 }}
+    <div class="view-all-wrapper">
+      <a href="{{ "posts/" | relURL }}" class="btn btn-secondary">Все статьи</a>
+    </div>
+    {{ end }}
+  </section>
+</div>
 {{ end }}
