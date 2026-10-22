@@ -1,157 +1,51 @@
 /* ==========================================
-   INFRA-VISUAL: Design Tokens (Clean)
-   ТОЛЬКО переменные, никаких селекторов
+   INFRA-VISUAL: Design Tokens v2 (Clean Slate)
+   Только переменные. Никаких селекторов компонентов.
    ========================================== */
 
 :root {
-  /* Colors - Primary */
-  --color-primary: #2c3e50;
-  --color-primary-light: #34495e;
-
-  /* Colors - Secondary */
-  --color-secondary: #c0392b;
-  --color-secondary-light: #e74c3c;
-
-  /* Colors - Accent */
-  --color-accent: #d4a017;
-  --color-accent-light: #f4c430;
-
-  /* Colors - Neutral */
-  --color-neutral-900: #2d3436;
-  --color-neutral-700: #636e72;
-  --color-neutral-500: #b2bec3;
-  --color-neutral-300: #dfe6e9;
-  --color-neutral-100: #f5f6fa;
-  --color-neutral-50: #ffffff;
-
-  /* Colors - Background (Light/Dark) */
+  /* Цвета фона */
   --color-bg: #ffffff;
-  --color-bg-secondary: #f8f9fa;
-  --color-text: #2d3436;
-  --color-text-muted: #636e72;
-  --color-border: #dfe6e9;
-  --color-card-bg: #ffffff;
-
-  /* Typography */
-  --font-heading: 'PT Serif', Georgia, serif;
-  --font-body: 'PT Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Fira Code', 'Courier New', monospace;
-
-  /* Font Weights */
-  --font-weight-regular: 400;
-  --font-weight-bold: 700;
-
-  /* Spacing (4px base) - ЕДИНАЯ СИСТЕМА */
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 1rem;      /* 16px */
-  --space-4: 1.5rem;    /* 24px */
-  --space-5: 2rem;      /* 32px */
-  --space-6: 3rem;      /* 48px */
-
-  /* Layout Spacing - Консистентные отступы */
-  --header-padding: var(--space-4);
-  --footer-padding: var(--space-4);
-  --content-padding: var(--space-4);
-  --content-max-width: 75ch;
-  --page-max-width: 1200px;
-
-  /* Line heights */
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.6;
-  --line-height-relaxed: 1.8;
-
-  /* Border radius */
+  --color-bg-secondary: #f8fafc;
+  --color-border: #e2e8f0;
+  
+  /* Цвета текста */
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  
+  /* Акценты */
+  --color-primary: #2563eb;
+  --color-accent: #d97706; /* Оранжевый для тегов/ссылок */
+  
+  /* Отступы (система spacing) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  
+  /* Радиусы */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 16px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-
-  /* Transitions */
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.3s ease;
+  --radius-lg: 12px;
+  
+  /* Тени */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+  
+  /* Транзишены */
+  --transition-fast: 150ms ease-in-out;
 }
 
-/* ==========================================
-   Dark Mode Variables
-   ========================================== */
 [data-theme="dark"] {
-  --color-bg: #121212;
-  --color-bg-secondary: #1e1e1e;
-  --color-text: #e0e0e0;
-  --color-text-muted: #a0a0a0;
-  --color-border: #333333;
-  --color-card-bg: #1e1e1e;
-  --color-primary: #8ab4f8;
-  --color-primary-light: #aecbfa;
-  --color-accent: #fbbc04;
-}
-
-/* Smooth theme transitions */
-html, body, * {
-  transition: background-color var(--transition-normal), 
-              color var(--transition-normal), 
-              border-color var(--transition-normal);
-}
-
-
-/* ==========================================
-   INFRA-100: Logo Protection (design-tokens zone ONLY)
-   !important для filter/opacity/padding/background/
-   border-radius/display/width/height/object-fit.
-   Anti-jitter НЕ здесь —
-   он в main.css (disjoint !important, см. README KB).
-   ========================================== */
-
-.site-logo-link {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 10px !important;
-  background-color: #ffffff !important;
-  border-radius: 6px !important;
-  transition: background-color 0.3s ease !important;
-}
-
-[data-theme="dark"] .site-logo-link {
-  background-color: #1e1e1e !important;
-}
-
-.site-logo {
-  width: 144px !important;
-  height: auto !important;
-  display: block !important;
-  object-fit: contain !important;
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-@media (max-width: 767px) {
-  .site-logo {
-    width: 128px !important;
-  }
-}
-
-.site-title-accent {
-  color: var(--color-accent) !important;
-  font-weight: 700 !important;
-}
-
-[data-theme="dark"] .site-title-accent {
-  color: var(--color-accent) !important;
-  font-weight: 700 !important;
-}
-
-.site-tagline {
-  color: #b45309 !important;
-  font-weight: 600 !important;
-}
-
-[data-theme="dark"] .site-tagline {
-  color: #ffcc80 !important;
-  font-weight: 600 !important;
+  --color-bg: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-border: #334155;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-primary: #3b82f6;
+  --color-accent: #fb923c;
 }
