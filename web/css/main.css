@@ -915,3 +915,140 @@ body > header .site-tagline {
     gap: var(--space-4);
   }
 }
+
+
+
+/* ==========================================
+   INFRA-VISUAL: Left-Aligned Header v6
+   Logo+Text Top, Navigation Below, Aligned Left
+   ========================================== */
+
+.site-header {
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: var(--space-4) 0;
+}
+
+.header-inner {
+  display: flex;
+  flex-direction: column; /* Вертикальный стек */
+  align-items: flex-start; /* ЖЕСТКОЕ ВЫРАВНИВАНИЕ ПО ЛЕВОМУ КРАЮ */
+  gap: var(--space-4);    /* Отступ между блоками */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* Блок бренда (Лого + Текст) */
+.brand-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Прижимаем лого и текст влево */
+  gap: var(--space-3);
+  text-decoration: none;
+  width: 100%;
+}
+
+.site-logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  /* ANTI-JITTER ZONE START (KB INFRA-095) */
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  /* ANTI-JITTER ZONE END */
+}
+
+[data-theme="dark"] .site-logo-link {
+  background-color: #1e1e1e;
+}
+
+.site-logo {
+  width: 96px; /* Компактный размер */
+  height: auto;
+  object-fit: contain;
+  /* ANTI-JITTER ZONE START (KB INFRA-095) */
+  will-change: transform !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  image-rendering: -webkit-optimize-contrast !important;
+  /* ANTI-JITTER ZONE END */
+}
+
+@media (max-width: 767px) {
+  .site-logo { width: 72px; }
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left; /* Текст по левому краю */
+}
+
+.site-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+  margin: 0;
+  color: var(--color-text);
+}
+
+/* ОПИСАНИЕ САЙТА (Tagline) */
+.site-tagline {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+  white-space: normal;
+  max-width: 400px; /* Ограничиваем ширину описания */
+  line-height: 1.3;
+}
+
+/* Блок навигации (Ниже бренда) */
+.main-nav {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /* Меню тоже влево */
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--space-5); /* Воздух между пунктами */
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 1rem;
+  color: var(--color-text);
+  font-weight: 500;
+  padding: var(--space-2) 0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+}
+
+.search-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  padding: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -12,11 +12,10 @@
       </a>
       
       <div class="brand-text">
-        <!-- Заголовок сайта -->
-        <h1 class="site-title">
-          <span class="site-title-main">{{ trim .Site.Title "Образ слов" }}</span> 
-          <span class="site-title-accent">слов</span>
-        </h1>
+        <!-- БЕЗОПАСНЫЙ ВЫВОД ЗАГОЛОВКА -->
+        <!-- Просто берем Site.Title целиком. Если нужно выделить последнее слово цветом, 
+             это делается сложнее, но сейчас приоритет - работоспособность. -->
+        <h1 class="site-title">{{ .Site.Title }}</h1>
         
         <!-- ОПИСАНИЕ САЙТА (Tagline) -->
         <p class="site-tagline">{{ .Site.Params.description }}</p>
