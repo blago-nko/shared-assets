@@ -94,9 +94,7 @@ main {
   image-rendering: -webkit-optimize-contrast !important;
   /* ANTI-JITTER ZONE END */
 }
-@media (max-width: 767px) {
-  .site-logo { width: 128px; }
-}
+
 .brand-text {
   display: flex;
   flex-direction: column;
@@ -667,4 +665,95 @@ body > header .site-tagline {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-5);
   padding: var(--space-5) 0;
+}
+
+
+
+/* ==========================================
+   INFRA-VISUAL: Mobile Header Stacking
+   ========================================== */
+@media (max-width: 767px) {
+  body > header .container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  
+  /* Reduce logo size further on mobile if needed */
+  .site-logo { width: 64px !important; } 
+  
+  /* Make nav links wrap below title */
+  body > header nav {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: var(--space-2);
+  }
+  
+  body > header nav > ul {
+    gap: var(--space-4);
+    font-size: 0.9rem; /* Slightly smaller text for fit */
+  }
+}
+
+/* ==========================================
+   INFRA-VISUAL: Enhanced Post Styling
+   ========================================== */
+
+.post-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.meta-separator {
+  opacity: 0.5;
+}
+
+.post-body.prose {
+  background: var(--color-bg-secondary);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  line-height: 1.8;
+}
+
+[data-theme="dark"] .post-body.prose {
+  background: #1e293b;
+  box-shadow: none;
+}
+
+/* ==========================================
+   INFRA-VISUAL: Polished Dock Buttons
+   ========================================== */
+
+.dock-item svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  transition: transform 0.2s ease;
+}
+
+.dock-item:hover svg {
+  transform: scale(1.1);
+}
+
+.dock-item.active {
+  color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.1);
+  border-radius: var(--radius-md);
+}
+
+/* Fix Footer Separation */
+.site-footer {
+  margin-top: auto;
+  padding-top: var(--space-8); /* Increased top padding */
+  border-top: 2px solid var(--color-border); /* Thicker separator */
+  background: var(--color-bg-secondary);
 }

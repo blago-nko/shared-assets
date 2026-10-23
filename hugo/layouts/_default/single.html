@@ -4,17 +4,25 @@
     <header class="post-header">
       <h1 class="post-title">{{ .Title }}</h1>
       
-      <div class="post-meta">
-        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
-        {{ with .Params.author }} • Автор: <span class="author-name">{{ . }}</span>{{ end }}
+      <!-- Improved Meta Line -->
+      <div class="post-meta-row">
+        <time datetime="{{ .Date.Format "2006-01-02" }}" class="meta-item">{{ .Date.Format "02 January 2006" }}</time>
+        
+        {{ with .Params.author }}
+          <span class="meta-separator">•</span>
+          <span class="meta-item author">Автор: {{ . }}</span>
+        {{ end }}
         
         {{ if isset .Params "tags" }}
           {{ with .GetTerms "tags" }}
-            <br><strong>Ярлыки:</strong> 
-            {{ range $i, $tag := . }}
-              {{ if gt $i 0 }}, {{ end }}
-              <a href="{{ $tag.Permalink }}" rel="tag">{{ $tag.LinkTitle }}</a>
-            {{ end }}
+            <span class="meta-separator">•</span>
+            <span class="meta-item tags-group">
+              Ярлыки: 
+              {{ range $i, $tag := . }}
+                {{ if gt $i 0 }}, {{ end }}
+                <a href="{{ $tag.Permalink }}" rel="tag">{{ $tag.LinkTitle }}</a>
+              {{ end }}
+            </span>
           {{ end }}
         {{ end }}
       </div>
@@ -22,18 +30,14 @@
 
     {{ if .Params.image }}
       <figure class="post-cover">
-        <!-- Прямой тег img с lazy loading и alt для SEO -->
+        <!-- Standard img tag for cover, avoiding shortcode complexity in template -->
         <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}" loading="lazy" decoding="async">
       </figure>
     {{ end }}
 
-    <div class="post-body">
+    <div class="post-body prose">
       {{ .Content }}
     </div>
-
-    <footer class="post-footer">
-      <!-- Здесь можно добавить Disqus или другие виджеты -->
-    </footer>
   </article>
 </div>
 {{ end }}
