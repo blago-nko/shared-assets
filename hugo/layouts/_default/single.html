@@ -1,14 +1,29 @@
 {{ define "main" }}
-<article class="post-article">
-  <h1 data-pagefind-weight="100">{{ .Title }}</h1>
-  <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
-  {{ with .Params.author }}<p class="post-author">Автор: {{ . }}</p>{{ end }}
-  {{ with .GetTerms "categories" }}
-  <p class="post-categories">Рубрики: {{ range $i, $t := . }}{{ if $i }}, {{ end }}<a href="{{ $t.Permalink }}">{{ $t.LinkTitle }}</a>{{ end }}</p>
-  {{ end }}
-  {{ with .GetTerms "tags" }}
-  <p class="post-tags">Ярлыки: {{ range $i, $t := . }}{{ if $i }}, {{ end }}<a href="{{ $t.Permalink }}">{{ $t.LinkTitle }}</a>{{ end }}</p>
-  {{ end }}
-  <div class="post-content">{{ .Content }}</div>
-</article>
+<div class="container post-wrapper">
+  <article class="post-content">
+    <header class="post-header">
+      <h1>{{ .Title }}</h1>
+      <div class="post-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+        {{ if .Params.author }} • Автор: {{ .Params.author }}{{ end }}
+        {{ if .GetTerms "tags" }} • Ярлыки: 
+          {{ range $i, $tag := .GetTerms "tags" }}
+            {{ if gt $i 0 }}, {{ end }}
+            <a href="{{ $tag.Permalink }}">{{ $tag.LinkTitle }}</a>
+          {{ end }}
+        {{ end }}
+      </div>
+    </header>
+
+    {{ if .Params.image }}
+      <figure class="post-cover">
+        <img src="{{ .Params.image }}" alt="{{ .Title }}">
+      </figure>
+    {{ end }}
+
+    <div class="post-body">
+      {{ .Content }}
+    </div>
+  </article>
+</div>
 {{ end }}

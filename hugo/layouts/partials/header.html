@@ -1,34 +1,30 @@
-<header>
-  <div class="container">
-  <nav>
+<header class="site-header">
+  <div class="container header-inner">
+    <!-- Бренд: Лого + Название + Описание -->
     <div class="brand">
-      <a class="site-logo-link" href="{{ "" | relURL }}" aria-label="{{ .Site.Title }} — на главную">
+      <a href="{{ "" | relURL }}" class="site-logo-link" aria-label="Главная">
         {{ with .Site.Params.logo }}
-        <img class="site-logo" src="{{ .src | relURL }}" alt="" loading="eager" decoding="sync">
+          <img src="{{ .src | relURL }}" alt="" class="site-logo" loading="eager" decoding="sync">
         {{ else }}
-        <svg class="site-logo" viewBox="0 0 48 48" role="img" aria-hidden="true" focusable="false">
-          <rect x="2" y="2" width="44" height="44" rx="12" fill="#2c3e50"/>
-          <circle cx="18" cy="24" r="8" fill="none" stroke="#ffffff" stroke-width="3"/>
-          <path d="M35 17.5a8.5 8.5 0 1 0 0 13" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="38" cy="14" r="3" fill="#e67e22"/>
-        </svg>
+          <svg class="site-logo" viewBox="0 0 48 48" role="img" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="12" fill="#2c3e50"/><circle cx="18" cy="24" r="8" fill="none" stroke="#fff" stroke-width="3"/><path d="M35 17.5a8.5 8.5 0 1 0 0 13" fill="none" stroke="#fff" stroke-width="3"/></svg>
         {{ end }}
       </a>
       <div class="brand-text">
-        {{ partial "site-title.html" . }}
-        {{ if .IsHome }}<p class="site-tagline">{{ .Site.Params.description }}</p>{{ end }}
+        <span class="site-title"><span class="site-title-main">{{ trim .Site.Title "Образ слов" }}</span> <span class="site-title-accent">слов</span></span>
+        <p class="site-tagline">{{ .Site.Params.description }}</p>
       </div>
     </div>
-    <ul>
-      <li><a href="{{ "posts/" | relURL }}">Статьи</a></li>
-      <li><a href="{{ "about/" | relURL }}">О нас</a></li>
-      <li class="nav-search-item">
-        {{ partial "search-trigger.html" . }}
-      </li>
-    
-      <li></li>
-</ul>
-  </nav>
-  </div>
 
+    <!-- Навигация (Desktop/Tablet Landscape) -->
+    <nav class="main-nav desktop-only">
+      <ul class="nav-list">
+        <li><a href="{{ "posts/" | relURL }}" class="nav-link">Статьи</a></li>
+        <li><a href="{{ "about/" | relURL }}" class="nav-link">О нас</a></li>
+        <li><button id="search-trigger-btn" class="search-toggle" aria-label="Поиск">🔍</button></li>
+      </ul>
+    </nav>
+
+    <!-- Кнопка мобильного меню (Mobile Portrait) -->
+    <button id="mobile-menu-btn" class="mobile-menu-btn mobile-only" aria-label="Открыть меню" aria-expanded="false">☰</button>
+  </div>
 </header>
