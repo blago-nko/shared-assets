@@ -1,19 +1,18 @@
 /* ==========================================
-   INFRA-VISUAL: Main Styles v3 (Final Clean Slate)
-   Полностью переписан для соответствия новым шаблонам.
-   Никакого мусора, никаких конфликтов каскада.
+   INFRA-VISUAL: Main Styles v6 (Final Polish)
+   Left-Aligned Header + Stacked Nav + SEO Meta
    ========================================== */
 
-/* --- Reset & Base Typography --- */
+/* --- Reset & Base --- */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: 16px; }
 body {
   margin: 0;
+  padding: 0;
   font-family: 'PT Serif', Georgia, serif;
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -29,24 +28,29 @@ h1, h2, h3, h4, h5, h6 {
 a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color 0.2s ease;
 }
 a:hover { color: var(--color-accent); }
 img { max-width: 100%; height: auto; display: block; }
 
-/* --- Layout Containers --- */
+/* --- Utility Classes --- */
+.desktop-only { display: block !important; }
+.mobile-only { display: none !important; }
+
+@media (max-width: 767px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+}
+
+/* --- Container --- */
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-4);
 }
-main {
-  flex: 1; /* Растягиваем контент между шапкой и подвалом */
-  padding: var(--space-6) 0;
-}
 
-/* --- Header --- */
+/* --- Header (Left Aligned Stack) --- */
 .site-header {
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
@@ -55,23 +59,32 @@ main {
   z-index: 100;
   padding: var(--space-4) 0;
 }
+
 .header-inner {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
+  flex-direction: column; /* Vertical stack */
+  align-items: flex-start; /* Hard left alignment */
+  gap: var(--space-4);    /* Space between blocks */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
 }
-.brand {
+
+/* Brand Group (Logo + Text) */
+.brand-group {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: var(--space-3);
   text-decoration: none;
+  width: 100%;
 }
+
 .site-logo-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 6px;
   background-color: #ffffff;
   border-radius: 6px;
   transition: background-color 0.3s ease;
@@ -80,11 +93,13 @@ main {
   flex-shrink: 0 !important;
   /* ANTI-JITTER ZONE END */
 }
+
 [data-theme="dark"] .site-logo-link {
   background-color: #1e1e1e;
 }
+
 .site-logo {
-  width: 144px;
+  width: 96px; /* Compact size */
   height: auto;
   object-fit: contain;
   /* ANTI-JITTER ZONE START (KB INFRA-095) */
@@ -95,82 +110,109 @@ main {
   /* ANTI-JITTER ZONE END */
 }
 
+@media (max-width: 767px) {
+  .site-logo { width: 72px; }
+}
+
 .brand-text {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  text-align: left; /* Text aligned left relative to logo */
 }
+
 .site-title {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.1;
-  white-space: nowrap;
+  white-space: normal; /* Allow wrapping if needed */
+  word-break: keep-all;
+  max-width: none;
+  margin: 0;
+  color: var(--color-text);
 }
-.site-title-main { color: var(--color-text); }
-.site-title-accent { color: var(--color-accent); }
+
 .site-tagline {
   font-size: 0.85rem;
   color: var(--color-text-muted);
   margin-top: 2px;
   white-space: normal;
+  max-width: 400px; /* Limit description width */
+  line-height: 1.3;
 }
 
-/* Navigation in Header */
+/* Navigation (Below Brand) */
 .main-nav {
+  width: 100%;
   display: flex;
-  align-items: center;
-  gap: var(--space-4);
+  justify-content: flex-start; /* Menu also left-aligned */
 }
+
 .nav-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-5); /* Air between items */
+  align-items: center;
 }
+
 .nav-link {
   font-size: 1rem;
   color: var(--color-text);
-  padding: var(--space-2) 0;
   font-weight: 500;
+  padding: var(--space-2) 0;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
+
+.nav-link:hover {
+  color: var(--color-primary);
+}
+
 .search-toggle {
   background: none;
   border: none;
   cursor: pointer;
   color: var(--color-text);
+  font-size: 1.2rem;
   padding: var(--space-2);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Mobile Menu Toggle (Hidden on Desktop) */
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text);
-  padding: var(--space-2);
+/* Mobile Adjustments for Stacked Header */
+@media (max-width: 767px) {
+  .header-inner {
+    align-items: flex-start; /* Keep left on mobile too */
+  }
+  
+  .brand-group {
+    justify-content: flex-start;
+  }
+  
+  .main-nav {
+    justify-content: flex-start;
+  }
+  
+  .nav-list {
+    gap: var(--space-4);
+  }
+  
+  .site-title {
+    font-size: 1.3rem; /* Slightly smaller on mobile */
+  }
 }
 
-/* --- Hero Section (Home Page Intro) --- */
-.hero-section {
-  padding: var(--space-8) 0;
-  text-align: center;
-  border-bottom: 1px solid var(--color-border);
-  margin-bottom: var(--space-6);
-}
-.hero-section h1 {
-  font-size: 2.5rem;
-  margin-bottom: var(--space-4);
-}
-.hero-content p {
-  max-width: 800px;
-  margin: 0 auto;
-  color: var(--color-text-muted);
-  font-size: 1.1rem;
-  line-height: 1.8;
+/* --- Main Content Area --- */
+main {
+  flex: 1;
+  padding: var(--space-6) 0;
+  /* Reserve space for Desktop Sidebar Dock */
+  @media (min-width: 768px) {
+    padding-right: 80px; /* Width of sidebar dock + gap */
+  }
 }
 
 /* --- Post Grid (Cards List) --- */
@@ -208,13 +250,13 @@ main {
   display: flex;
   flex-direction: column;
   height: 100%; /* Equal height cards */
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   border: 1px solid var(--color-border);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .post-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 .post-card-media {
   aspect-ratio: 16/9;
@@ -226,10 +268,6 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-}
-.post-card:hover .post-card-media img {
-  transform: scale(1.05);
 }
 .post-card-body {
   padding: var(--space-4);
@@ -315,7 +353,7 @@ main {
 .site-footer {
   padding: var(--space-6) 0;
   margin-top: auto; /* Stick to bottom if content is short */
-  border-top: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-border); /* Thicker separator */
   text-align: center;
   color: var(--color-text-muted);
   font-size: 0.9rem;
@@ -331,146 +369,12 @@ main {
 .footer-links a:hover { color: var(--color-accent); }
 
 /* --- Sticky Bottom Bar (Dock) --- */
-
-.dock-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-  text-decoration: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  transition: color 0.2s, background 0.2s;
-}
-.dock-item:hover, .dock-item.active {
-  color: var(--color-primary);
-  background: rgba(var(--color-primary-rgb), 0.1);
-}
-.dock-icon {
-  width: 24px;
-  height: 24px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* --- Responsive Adjustments --- */
-@media (max-width: 767px) {
-  .container { padding: 0 var(--space-3); }
-  
-  /* Hide desktop nav, show mobile toggle */
-  .main-nav .nav-list { display: none; }
-  .mobile-menu-btn { display: block; }
-  
-  /* Simplify header */
-  .brand-text { display: none; } 
-  
-  /* Stack hero title */
-  .hero-section h1 { font-size: 1.8rem; }
-  
-  /* Full width cards */
-  .post-grid { grid-template-columns: 1fr; gap: var(--space-4); }
-  
-  /* Dock adjustments */
-  
-  .dock-item span { display: none; } /* Icons only on very small screens if needed, keeping labels for clarity usually better unless <360px */
-  
-  /* Prevent body content from hiding behind dock */
-  body {
-    padding-bottom: 70px; /* Height of dock + safety margin */
-  }
-}
-
-
-
-/* FIX: Horizontal Navigation for Actual Header Structure */
-body > header {
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: var(--space-4) 0;
-}
-body > header .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--space-4);
-}
-body > header nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-body > header nav > ul {
-  list-style: none; /* УБИРАЕМ ТОЧКИ */
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: var(--space-5); /* Больше воздуха между ссылками */
-  align-items: center;
-}
-body > header nav > ul li {
-  margin: 0;
-}
-body > header nav > ul li a,
-body > header nav > ul li button {
-  text-decoration: none;
-  color: var(--color-text);
-  font-weight: 600;
-  padding: var(--space-2) 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: color 0.2s ease;
-}
-body > header nav > ul li a:hover,
-body > header nav > ul li button:hover {
-  color: var(--color-primary);
-}
-
-/* Brand Text Styling inside Header */
-body > header .brand-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-body > header .site-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.1;
-  white-space: nowrap;
-}
-body > header .site-tagline {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  margin-top: 2px;
-  white-space: normal;
-}
-
-
-
-/* ==========================================
-   ADAPTIVE DOCK LAYOUT (V4 FINAL)
-   Desktop/Tablet Landscape -> Sidebar Right
-   Mobile Portrait -> Bottom Bar
-   ========================================== */
-
-/* Base State: Hidden until media query activates specific layout */
 .sticky-bottom-bar {
+  /* Default state: Hidden until media query applies specific layout */
   display: none; 
 }
 
-/* DESKTOP & TABLET LANDSCAPE: Vertical Sidebar on Right */
+/* DESKTOP & TABLET LANDSCAPE: Vertical Sidebar Right */
 @media (min-width: 768px) {
   .sticky-bottom-bar {
     display: flex;
@@ -586,14 +490,9 @@ body > header .site-tagline {
   }
 }
 
-
-
-/* ==========================================
-   INFRA-VISUAL: Single Post Layout Fixes
-   ========================================== */
-
+/* --- Article Layout (Single Page) --- */
 .post-container {
-  max-width: 800px; /* Оптимальная ширина для чтения */
+  max-width: 800px; /* Optimal reading width */
   margin: 0 auto;
   padding-top: var(--space-6);
   padding-bottom: var(--space-8);
@@ -611,13 +510,19 @@ body > header .site-tagline {
   margin-bottom: var(--space-3);
 }
 
-.post-meta {
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
+.post-meta-row {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  align-items: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.meta-separator {
+  opacity: 0.5;
 }
 
 .post-cover {
@@ -627,15 +532,25 @@ body > header .site-tagline {
 .post-cover img {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  max-height: 500px; /* Ограничиваем высоту больших картинок */
+  max-height: 500px; /* Limit large images */
   object-fit: cover;
   width: 100%;
 }
 
-.post-body {
-  font-size: 1.1rem;
+.post-body.prose {
+  background: var(--color-bg-secondary);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
   line-height: 1.8;
+  font-size: 1.1rem;
 }
+
+[data-theme="dark"] .post-body.prose {
+  background: #1e293b;
+  box-shadow: none;
+}
+
 .post-body p {
   margin-bottom: var(--space-4);
 }
@@ -657,398 +572,4 @@ body > header .site-tagline {
   border: none;
   border-radius: var(--radius-md);
   margin: var(--space-5) 0;
-}
-
-/* Ensure Grid works even if class name differs slightly */
-.posts-grid, .post-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--space-5);
-  padding: var(--space-5) 0;
-}
-
-
-
-/* ==========================================
-   INFRA-VISUAL: Mobile Header Stacking
-   ========================================== */
-@media (max-width: 767px) {
-  body > header .container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
-  }
-  
-  /* Reduce logo size further on mobile if needed */
-  .site-logo { width: 64px !important; } 
-  
-  /* Make nav links wrap below title */
-  body > header nav {
-    width: 100%;
-    justify-content: flex-start;
-    margin-top: var(--space-2);
-  }
-  
-  body > header nav > ul {
-    gap: var(--space-4);
-    font-size: 0.9rem; /* Slightly smaller text for fit */
-  }
-}
-
-/* ==========================================
-   INFRA-VISUAL: Enhanced Post Styling
-   ========================================== */
-
-.post-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.meta-separator {
-  opacity: 0.5;
-}
-
-.post-body.prose {
-  background: var(--color-bg-secondary);
-  padding: var(--space-6);
-  border-radius: var(--radius-lg);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-  line-height: 1.8;
-}
-
-[data-theme="dark"] .post-body.prose {
-  background: #1e293b;
-  box-shadow: none;
-}
-
-/* ==========================================
-   INFRA-VISUAL: Polished Dock Buttons
-   ========================================== */
-
-.dock-item svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  transition: transform 0.2s ease;
-}
-
-.dock-item:hover svg {
-  transform: scale(1.1);
-}
-
-.dock-item.active {
-  color: var(--color-primary);
-  background: rgba(var(--color-primary-rgb), 0.1);
-  border-radius: var(--radius-md);
-}
-
-/* Fix Footer Separation */
-.site-footer {
-  margin-top: auto;
-  padding-top: var(--space-8); /* Increased top padding */
-  border-top: 2px solid var(--color-border); /* Thicker separator */
-  background: var(--color-bg-secondary);
-}
-
-
-
-/* ==========================================
-   INFRA-VISUAL: Stacked Header Layout v5
-   Logo+Text Top, Navigation Bottom
-   ========================================== */
-
-.site-header {
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: var(--space-4) 0;
-}
-
-.header-inner {
-  display: flex;
-  flex-direction: column; /* Вертикальный стек */
-  align-items: center;    /* Центрируем контент по горизонтали */
-  gap: var(--space-4);    /* Отступ между блоками */
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--space-4);
-}
-
-/* Блок бренда (Лого + Текст) */
-.brand-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-3);
-  text-decoration: none;
-  width: 100%;
-}
-
-.site-logo-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px; /* Чуть меньше паддинга для компактности */
-  background-color: #ffffff;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-  /* ANTI-JITTER ZONE START (KB INFRA-095) */
-  flex: 0 0 auto !important;
-  flex-shrink: 0 !important;
-  /* ANTI-JITTER ZONE END */
-}
-
-[data-theme="dark"] .site-logo-link {
-  background-color: #1e1e1e;
-}
-
-.site-logo {
-  width: 96px; /* Уменьшенный размер согласно требованию */
-  height: auto;
-  object-fit: contain;
-  /* ANTI-JITTER ZONE START (KB INFRA-095) */
-  will-change: transform !important;
-  transform: translateZ(0) !important;
-  backface-visibility: hidden !important;
-  image-rendering: -webkit-optimize-contrast !important;
-  /* ANTI-JITTER ZONE END */
-}
-
-@media (max-width: 767px) {
-  .site-logo { width: 72px; }
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: left; /* Текст выравниваем влево относительно лого */
-}
-
-.site-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.1;
-  white-space: nowrap;
-  margin: 0;
-}
-
-.site-title-main { color: var(--color-text); }
-.site-title-accent { color: var(--color-accent); }
-
-/* ОПИСАНИЕ САЙТА (Tagline) */
-.site-tagline {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  margin-top: 2px;
-  white-space: normal;
-  max-width: 300px; /* Ограничиваем ширину описания, чтобы оно не растягивало хедер бесконечно */
-  line-height: 1.3;
-}
-
-/* Блок навигации (Ниже бренда) */
-.main-nav {
-  width: 100%;
-  display: flex;
-  justify-content: center; /* Центрируем меню под лого */
-}
-
-.nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: var(--space-5); /* Больше воздуха между пунктами */
-  align-items: center;
-}
-
-.nav-link {
-  font-size: 1rem;
-  color: var(--color-text);
-  font-weight: 500;
-  padding: var(--space-2) 0;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.nav-link:hover {
-  color: var(--color-primary);
-}
-
-.search-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text);
-  font-size: 1.2rem;
-  padding: var(--space-2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Mobile Adjustments for Stacked Header */
-@media (max-width: 767px) {
-  .header-inner {
-    align-items: flex-start; /* На мобилке прижимаем к левому краю */
-  }
-  
-  .brand-group {
-    justify-content: flex-start;
-  }
-  
-  .main-nav {
-    justify-content: flex-start;
-  }
-  
-  .nav-list {
-    gap: var(--space-4);
-  }
-}
-
-
-
-/* ==========================================
-   INFRA-VISUAL: Left-Aligned Header v6
-   Logo+Text Top, Navigation Below, Aligned Left
-   ========================================== */
-
-.site-header {
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: var(--space-4) 0;
-}
-
-.header-inner {
-  display: flex;
-  flex-direction: column; /* Вертикальный стек */
-  align-items: flex-start; /* ЖЕСТКОЕ ВЫРАВНИВАНИЕ ПО ЛЕВОМУ КРАЮ */
-  gap: var(--space-4);    /* Отступ между блоками */
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--space-4);
-}
-
-/* Блок бренда (Лого + Текст) */
-.brand-group {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* Прижимаем лого и текст влево */
-  gap: var(--space-3);
-  text-decoration: none;
-  width: 100%;
-}
-
-.site-logo-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
-  background-color: #ffffff;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-  /* ANTI-JITTER ZONE START (KB INFRA-095) */
-  flex: 0 0 auto !important;
-  flex-shrink: 0 !important;
-  /* ANTI-JITTER ZONE END */
-}
-
-[data-theme="dark"] .site-logo-link {
-  background-color: #1e1e1e;
-}
-
-.site-logo {
-  width: 96px; /* Компактный размер */
-  height: auto;
-  object-fit: contain;
-  /* ANTI-JITTER ZONE START (KB INFRA-095) */
-  will-change: transform !important;
-  transform: translateZ(0) !important;
-  backface-visibility: hidden !important;
-  image-rendering: -webkit-optimize-contrast !important;
-  /* ANTI-JITTER ZONE END */
-}
-
-@media (max-width: 767px) {
-  .site-logo { width: 72px; }
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: left; /* Текст по левому краю */
-}
-
-.site-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.1;
-  white-space: nowrap;
-  margin: 0;
-  color: var(--color-text);
-}
-
-/* ОПИСАНИЕ САЙТА (Tagline) */
-.site-tagline {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  margin-top: 2px;
-  white-space: normal;
-  max-width: 400px; /* Ограничиваем ширину описания */
-  line-height: 1.3;
-}
-
-/* Блок навигации (Ниже бренда) */
-.main-nav {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start; /* Меню тоже влево */
-}
-
-.nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: var(--space-5); /* Воздух между пунктами */
-  align-items: center;
-}
-
-.nav-link {
-  font-size: 1rem;
-  color: var(--color-text);
-  font-weight: 500;
-  padding: var(--space-2) 0;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.nav-link:hover {
-  color: var(--color-primary);
-}
-
-.search-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text);
-  font-size: 1.2rem;
-  padding: var(--space-2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
