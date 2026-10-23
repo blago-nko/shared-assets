@@ -12,12 +12,15 @@
       </a>
       
       <div class="brand-text">
-        <!-- БЕЗОПАСНЫЙ ВЫВОД ЗАГОЛОВКА -->
-        <!-- Просто берем Site.Title целиком. Если нужно выделить последнее слово цветом, 
-             это делается сложнее, но сейчас приоритет - работоспособность. -->
-        <h1 class="site-title">{{ .Site.Title }}</h1>
+        <!-- Кликабельный заголовок -->
+        <a href="{{ "" | relURL }}" class="site-title-link" aria-label="Образ слов — на главную">
+          <h1 class="site-title">
+            <span class="title-part-1">Образ</span> 
+            <span class="title-part-2">слов</span>
+          </h1>
+        </a>
         
-        <!-- ОПИСАНИЕ САЙТА (Tagline) -->
+        <!-- Контрастное описание -->
         <p class="site-tagline">{{ .Site.Params.description }}</p>
       </div>
     </div>

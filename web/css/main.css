@@ -573,3 +573,51 @@ main {
   border-radius: var(--radius-md);
   margin: var(--space-5) 0;
 }
+
+/* ==========================================
+   INFRA-VISUAL: SEO Typography & Brand Colors
+   ========================================== */
+
+/* Ссылка на заголовке убирает подчеркивание и наследует цвет */
+.site-title-link {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.site-title-link:hover .title-part-1 {
+  opacity: 0.8; /* Легкий эффект при ховере */
+}
+
+/* Первое слово (Основной цвет) */
+.title-part-1 {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* Второе слово (Акцентный оранжевый, как в лого) */
+.title-part-2 {
+  color: #e67e22; /* Жесткий hex для гарантии соответствия бренду */
+  font-weight: 700;
+}
+
+[data-theme="dark"] .title-part-2 {
+  color: #f39c12; /* Чуть светлее для темной темы */
+}
+
+/* ОПИСАНИЕ САЙТА (Tagline) - Увеличенный и контрастный */
+.site-tagline {
+  font-size: 0.95rem; /* Было 0.85rem -> Стало крупнее */
+  color: var(--color-text-secondary); /* Используем вторичный цвет вместо muted для контраста */
+  margin-top: 4px;
+  line-height: 1.4;
+  max-width: 450px; /* Чуть шире лимит */
+  font-weight: 400;
+}
+
+/* Если secondary цвет слишком бледный, форсируем чуть темнее/светлее */
+body:not([data-theme="dark"]) .site-tagline {
+  color: #555555; 
+}
+[data-theme="dark"] .site-tagline {
+  color: #aaaaaa;
+}
