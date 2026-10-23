@@ -575,49 +575,59 @@ main {
 }
 
 /* ==========================================
-   INFRA-VISUAL: SEO Typography & Brand Colors
+   INFRA-VISUAL: High-Contrast Branding v7
+   Optimized for Dark Mode Readability
    ========================================== */
 
-/* Ссылка на заголовке убирает подчеркивание и наследует цвет */
+/* Ссылка на заголовке убирает подчеркивание */
 .site-title-link {
   text-decoration: none;
   display: inline-block;
 }
 
 .site-title-link:hover .title-part-1 {
-  opacity: 0.8; /* Легкий эффект при ховере */
+  opacity: 0.9; /* Легкий эффект при ховере */
 }
 
-/* Первое слово (Основной цвет) */
+/* Первое слово (Основной цвет текста - адаптивный) */
 .title-part-1 {
   color: var(--color-text);
   font-weight: 700;
 }
 
-/* Второе слово (Акцентный оранжевый, как в лого) */
+/* Второе слово (Акцентный оранжевый) 
+   В светлой теме: #e67e22 (как лого)
+   В темной теме: #f39c12 (чуть ярче для контраста на синем фоне) */
 .title-part-2 {
-  color: #e67e22; /* Жесткий hex для гарантии соответствия бренду */
+  color: #e67e22; 
   font-weight: 700;
 }
 
 [data-theme="dark"] .title-part-2 {
-  color: #f39c12; /* Чуть светлее для темной темы */
+  color: #f39c12; 
 }
 
-/* ОПИСАНИЕ САЙТА (Tagline) - Увеличенный и контрастный */
+/* ОПИСАНИЕ САЙТА (Tagline) - МАКСИМАЛЬНАЯ ЧИТАЕМОСТЬ */
 .site-tagline {
-  font-size: 0.95rem; /* Было 0.85rem -> Стало крупнее */
-  color: var(--color-text-secondary); /* Используем вторичный цвет вместо muted для контраста */
-  margin-top: 4px;
+  font-size: 0.95rem; 
   line-height: 1.4;
-  max-width: 450px; /* Чуть шире лимит */
+  max-width: 450px; 
   font-weight: 400;
-}
-
-/* Если secondary цвет слишком бледный, форсируем чуть темнее/светлее */
-body:not([data-theme="dark"]) .site-tagline {
+  margin-top: 4px;
+  
+  /* Светлая тема: темно-серый текст */
   color: #555555; 
 }
+
+/* Темная тема: Ярко-белый/голубоватый текст для высокого контраста */
 [data-theme="dark"] .site-tagline {
-  color: #aaaaaa;
+  color: #cbd5e1; /* Slate-300: очень хорошо читается на slate-800/900 */
 }
+
+/* Дополнительная защита от "выгорания" цвета на мобильных OLED экранах */
+@media (prefers-color-scheme: dark) {
+  body:not([data-theme]) .site-tagline {
+     color: #cbd5e1; 
+  }
+}
+
