@@ -587,3 +587,84 @@ body > header .site-tagline {
     padding-right: 0 !important;
   }
 }
+
+
+
+/* ==========================================
+   INFRA-VISUAL: Single Post Layout Fixes
+   ========================================== */
+
+.post-container {
+  max-width: 800px; /* Оптимальная ширина для чтения */
+  margin: 0 auto;
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-8);
+}
+
+.post-header {
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-4);
+}
+
+.post-title {
+  font-size: 2.2rem;
+  line-height: 1.2;
+  margin-bottom: var(--space-3);
+}
+
+.post-meta {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.post-cover {
+  margin: 0 0 var(--space-6) 0;
+  text-align: center;
+}
+.post-cover img {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  max-height: 500px; /* Ограничиваем высоту больших картинок */
+  object-fit: cover;
+  width: 100%;
+}
+
+.post-body {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+.post-body p {
+  margin-bottom: var(--space-4);
+}
+.post-body h2 {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+  font-size: 1.5rem;
+}
+.post-body ul, .post-body ol {
+  padding-left: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+.post-body li {
+  margin-bottom: var(--space-2);
+}
+.post-body iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: none;
+  border-radius: var(--radius-md);
+  margin: var(--space-5) 0;
+}
+
+/* Ensure Grid works even if class name differs slightly */
+.posts-grid, .post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-5);
+  padding: var(--space-5) 0;
+}

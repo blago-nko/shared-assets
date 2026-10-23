@@ -68,7 +68,7 @@
 }
 
 .site-logo {
-  width: 144px !important;
+  width: 96px !important;
   height: auto !important;
   object-fit: contain !important;
   filter: none !important;      /* Анти-фильтр */
@@ -77,6 +77,6 @@
 
 @media (max-width: 767px) {
   .site-logo {
-    width: 128px !important;
+    width: 72px !important;
   }
 }
