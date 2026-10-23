@@ -38,6 +38,15 @@
   
   /* Транзишены */
   --transition-fast: 150ms ease-in-out;
+
+  /* INFRA-100 FIX: Missing Neutral Palette for Components */
+  --color-neutral-50: #f8fafc;  /* Very light gray (Slate-50) */
+  --color-neutral-100: #f1f5f9; /* Light gray (Slate-100) */
+  --color-neutral-200: #e2e8f0; /* Border gray (Slate-200) */
+  --color-neutral-700: #334155; /* Dark text on light bg (Slate-700) */
+  --color-neutral-800: #1e293b; /* Dark bg component (Slate-800) */
+  --color-neutral-900: #0f172a; /* Darkest bg (Slate-900) */
+
 }
 
 [data-theme="dark"] {

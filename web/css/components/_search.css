@@ -47,17 +47,90 @@
 
 /* --- Контейнер модального окна --- */
 .search-container {
-  background-color: var(--color-neutral-50);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  /* Светлая тема: Белый фон с легкой тенью */
+  background-color: #ffffff !important; 
+  color: #1e293b !important;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   width: 90%;
   max-width: 600px;
   max-height: 80vh;
-  padding: var(--space-4);
+  overflow-y: auto;
   position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  padding: 2rem;
+  
+  /* Анимация появления */
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Активное состояние */
+.search-overlay.active .search-container {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Темная тема: Глубокий синий/серый фон */
+[data-theme="dark"] .search-container {
+  background-color: #1e293b !important; /* Slate-800 */
+  color: #f1f5f9 !important;           /* Slate-100 */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  border: 1px solid #334155;           /* Slate-700 border */
+}
+
+/* Стили для внутренней части Pagefind UI */
+.pf-ui-container {
+  font-family: inherit;
+}
+
+.pf-input-wrapper input {
+  background: transparent !important;
+  border-bottom: 2px solid #cbd5e1 !important; /* Slate-300 */
+  color: inherit !important;
+  font-size: 1.2rem;
+  padding: 0.5rem 0;
+}
+
+[data-theme="dark"] .pf-input-wrapper input {
+  border-bottom-color: #475569 !important; /* Slate-600 */
+}
+
+.pf-result-title {
+  color: var(--color-primary) !important;
+  font-weight: 700;
+}
+
+.pf-result-excerpt mark {
+  background-color: #fef08a !important; /* Yellow highlight */
+  color: #1e293b !important;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+[data-theme="dark"] .pf-result-excerpt mark {
+  background-color: #ca8a04 !important; /* Amber-600 */
+  color: #fff !important;
+}
+
+.close-search-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #64748b; /* Slate-500 */
+  z-index: 10;
+}
+
+[data-theme="dark"] .close-search-btn {
+  color: #94a3b8; /* Slate-400 */
+}
+
+.close-search-btn:hover {
+  color: #ef4444; /* Red-500 */
 }
 
 /* --- Кнопка закрытия --- */
@@ -173,8 +246,90 @@ mark.pagefind-highlight {
 }
 
 [data-theme="dark"] .search-container {
-  background-color: var(--color-bg-secondary, #1e1e1e);
-  color: var(--color-text, #e0e0e0);
+  /* Светлая тема: Белый фон с легкой тенью */
+  background-color: #ffffff !important; 
+  color: #1e293b !important;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 2rem;
+  
+  /* Анимация появления */
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Активное состояние */
+.search-overlay.active .search-container {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Темная тема: Глубокий синий/серый фон */
+[data-theme="dark"] .search-container {
+  background-color: #1e293b !important; /* Slate-800 */
+  color: #f1f5f9 !important;           /* Slate-100 */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  border: 1px solid #334155;           /* Slate-700 border */
+}
+
+/* Стили для внутренней части Pagefind UI */
+.pf-ui-container {
+  font-family: inherit;
+}
+
+.pf-input-wrapper input {
+  background: transparent !important;
+  border-bottom: 2px solid #cbd5e1 !important; /* Slate-300 */
+  color: inherit !important;
+  font-size: 1.2rem;
+  padding: 0.5rem 0;
+}
+
+[data-theme="dark"] .pf-input-wrapper input {
+  border-bottom-color: #475569 !important; /* Slate-600 */
+}
+
+.pf-result-title {
+  color: var(--color-primary) !important;
+  font-weight: 700;
+}
+
+.pf-result-excerpt mark {
+  background-color: #fef08a !important; /* Yellow highlight */
+  color: #1e293b !important;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+[data-theme="dark"] .pf-result-excerpt mark {
+  background-color: #ca8a04 !important; /* Amber-600 */
+  color: #fff !important;
+}
+
+.close-search-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #64748b; /* Slate-500 */
+  z-index: 10;
+}
+
+[data-theme="dark"] .close-search-btn {
+  color: #94a3b8; /* Slate-400 */
+}
+
+.close-search-btn:hover {
+  color: #ef4444; /* Red-500 */
 }
 
 [data-theme="dark"] #pagefind-ui-root {
