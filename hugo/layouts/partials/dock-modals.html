@@ -1,0 +1,63 @@
+{{/* INFRA-DOCK: Centralized Modals for Menu and Share */}}
+
+<!-- 1. Mobile Menu Modal -->
+<div id="modal-menu" class="dock-modal-overlay" hidden aria-hidden="true">
+  <div class="dock-modal-backdrop" data-close-modal="modal-menu"></div>
+  <div class="dock-modal-panel menu-panel" role="dialog" aria-labelledby="menu-title">
+    <button class="dock-modal-close" data-close-modal="modal-menu" aria-label="Закрыть меню">&times;</button>
+    <h2 id="menu-title" class="sr-only">Навигация</h2>
+    <nav class="modal-nav-list">
+      <a href="{{ "/" | relURL }}">Главная</a>
+      <a href="{{ "posts/" | relURL }}">Статьи</a>
+      <a href="{{ "about/" | relURL }}">О нас</a>
+      <a href="{{ "tags/" | relURL }}">Ярлыки</a>
+    </nav>
+  </div>
+</div>
+
+<!-- 2. Share Modal -->
+<div id="modal-share" class="dock-modal-overlay" hidden aria-hidden="true">
+  <div class="dock-modal-backdrop" data-close-modal="modal-share"></div>
+  <div class="dock-modal-panel share-panel" role="dialog" aria-labelledby="share-title">
+    <button class="dock-modal-close" data-close-modal="modal-share" aria-label="Закрыть окно шаринга">&times;</button>
+    <h3 id="share-title" class="share-heading">Поделиться ссылкой</h3>
+    
+    <ul class="social-grid">
+      <!-- Telegram -->
+      <li>
+        <a href="#" class="social-btn tg-btn" data-social="telegram" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5318-1.184Q12.1 4.685 7.999 6.745c-1.959.98-3.918 1.96-5.877 2.94a1.988 1.988 0 0 0-.98 1.063 2.052 2.052 0 0 0 .13 1.75c.32.54.86.87 1.46.9l2.82.38c.2.03.37.14.48.3l1.54 2.28c.15.22.4.35.67.35.12 0 .24-.03.35-.08l3.4-1.7 2.58 1.94c.32.24.75.24 1.07 0l4.5-3.42c.4-.3.6-.77.53-1.25z"/></svg>
+          <span>Telegram</span>
+        </a>
+      </li>
+      <!-- VKontakte -->
+      <li>
+        <a href="#" class="social-btn vk-btn" data-social="vkontakte" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24"><path d="M12.785 16.241s.288-.092.435-.276c.137-.163.133-.423.133-.423s-.013-1.274.573-1.46c.576-.184 1.314 1.22 2.097 1.758.593.408 1.043.319 1.043.319l2.09-.029s1.09-.068.573-.926c-.042-.07-.3-.628-1.538-1.776-1.297-1.203-1.124-1.009.437-3.089.946-1.258 1.325-2.028 1.206-2.358-.113-.315-.808-.231-.808-.231l-2.35.015s-.174-.024-.303.056c-.126.078-.207.26-.207.26s-.372.996-.868 1.842c-1.046 1.78-1.467 1.876-1.637 1.765-.396-.256-.297-1.033-.297-1.585 0-1.72.259-2.438-.504-2.623-.253-.061-.438-.102-1.083-.108-.828-.009-1.528.004-1.923.197-.263.128-.465.414-.361.43.107.017.349.066.477.243.165.228.159.74.159.74s.098 1.415-.228 1.59c-.213.114-.505-.12-.96-1.02-.47-.928-.825-1.956-.825-1.956s-.068-.17-.19-.26c-.147-.108-.353-.142-.353-.142l-2.235.015s-.336.009-.46.156c-.11.123-.009.378-.009.378s1.746 4.08 3.725 6.13c1.816 1.878 3.876 1.754 3.876 1.754h.935z"/></svg>
+          <span>VK</span>
+        </a>
+      </li>
+      <!-- WhatsApp -->
+      <li>
+        <a href="#" class="social-btn wa-btn" data-social="whatsapp" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          <span>WhatsApp</span>
+        </a>
+      </li>
+      <!-- Email -->
+      <li>
+        <a href="#" class="social-btn mail-btn" data-social="email">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          <span>Email</span>
+        </a>
+      </li>
+      <!-- Copy Link -->
+      <li>
+        <button type="button" class="social-btn copy-btn" data-social="copy">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          <span>Копировать</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
