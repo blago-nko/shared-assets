@@ -896,12 +896,14 @@ main {
   transform: scale(1.1);
 }
 
-/* Brand Colors for Social Icons */
-.tg-btn:hover svg { fill: #0088cc; }
-.vk-btn:hover svg { fill: #0077ff; }
-.wa-btn:hover svg { fill: #25d366; }
-.mail-btn:hover svg { fill: #ea4335; }
-.copy-btn:hover svg { fill: #64748b; }
+/* Brand colors in RESTING state (native, recognizable without hover).
+   Specificity 0,2,1 beats base .social-btn svg (0,1,1). Hover keeps its own scale rule. */
+.social-btn.tg-btn svg   { fill: #229ED9; }  /* Telegram */
+.social-btn.vk-btn svg   { fill: #0077FF; }  /* VK */
+.social-btn.wa-btn svg   { fill: #25D366; }  /* WhatsApp */
+.social-btn.mail-btn svg { fill: #EA4335; }  /* Email */
+.social-btn.copy-btn svg { fill: #64748B; }  /* Copy (neutral) */
+[data-theme="dark"] .social-btn.copy-btn svg { fill: #94A3B8; }
 
 /* --- Dock Icons Unification --- */
 .sticky-bottom-bar .dock-item svg {

@@ -49,23 +49,10 @@
   {{ partial "footer.html" . }}
   <script src="{{ "js/CookieConsent.js" | relURL }}"></script>
 
-    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Меню" hidden>
-    <div class="mobile-menu__backdrop" data-menu-close></div>
-    <nav class="mobile-menu__panel">
-      <button class="mobile-menu__close" data-menu-close aria-label="Закрыть меню">&times;</button>
-      <ul>
-        <li><a href="{{ "" | relURL }}">Главная</a></li>
-        <li><a href="{{ "posts/" | relURL }}">Статьи</a></li>
-        <li><a href="{{ "about/" | relURL }}">О нас</a></li>
-        <li><a href="{{ "tags/" | relURL }}">Ярлыки</a></li>
-      </ul>
-    </nav>
-  </div>
-
   <!-- INFRA-082 V4 UNIFIED DOCK -->
   <nav class="sticky-bottom-bar" data-pagefind-ignore aria-label="Панель управления">
     <!-- Кнопка Темы -->
-    <button id="dock-theme-btn" type="button" aria-label="Переключить тему" title="Переключить тему">
+    <button class="dock-item" id="dock-theme-btn" type="button" aria-label="Переключить тему" title="Переключить тему">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
       </svg>
@@ -73,7 +60,7 @@
     </button>
 
     <!-- Кнопка Меню -->
-    <button id="sticky-menu-btn" type="button" aria-label="Меню" aria-controls="mobile-menu" aria-expanded="false">
+    <button class="dock-item" id="sticky-menu-btn" type="button" aria-label="Меню" aria-controls="mobile-menu" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -83,7 +70,7 @@
     </button>
 
     <!-- Кнопка Поделиться -->
-    <button id="sticky-share-btn" type="button" aria-label="Поделиться">
+    <button class="dock-item" id="sticky-share-btn" type="button" aria-label="Поделиться">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="18" cy="5" r="3"/>
         <circle cx="6" cy="12" r="3"/>
@@ -95,7 +82,7 @@
     </button>
 
     <!-- Кнопка Наверх -->
-    <button id="sticky-top-btn" type="button" aria-label="Наверх">
+    <button class="dock-item" id="sticky-top-btn" type="button" aria-label="Наверх">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="18 15 12 9 6 15"/>
       </svg>
