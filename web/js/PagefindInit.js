@@ -1,139 +1,195 @@
-// INFRA-097: Pagefind Initialization (Official Vanilla JS approach)
-
-(function() {
+(function () {
   'use strict';
 
-  const overlay = document.getElementById('search-overlay');
-  const openBtn = document.getElementById('search-open-btn') || document.getElementById('open-search-btn');
-  const closeBtn = document.querySelector('.close-search-btn');
+  var overlay = document.getElementById('search-overlay');
+  var openBtn = document.getElementById('search-open-btn') || document.getElementById('open-search-btn');
+  var closeBtn = document.querySelector('.close-search-btn');
+  var root = document.getElementById('pagefind-ui-root');
 
-  if (!overlay || !openBtn) {
+  if (!overlay || !openBtn || !root) {
     console.warn('Search DOM elements not found. Skipping Pagefind init.');
     return;
   }
 
-  let isInitialized = false;
+  var isInitialized = false;
+  var lastFocusedElement = null;
 
-  const initPagefind = () => {
+  var focusableSelector = [
+    'a[href]',
+    'button:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])'
+  ].join(', ');
+
+  function getBaseUrl() {
+    var meta = document.querySelector('meta[name="pagefind-base"]');
+    var base = meta && meta.content ? meta.content : '/';
+    if (base.charAt(base.length - 1) !== '/') base += '/';
+    return base;
+  }
+
+  function getFocusables(container) {
+    return Array.prototype.slice.call(container.querySelectorAll(focusableSelector))
+      .filter(function (el) {
+        return !el.hasAttribute('disabled') && el.offsetParent !== null;
+      });
+  }
+
+  function handleKeydown(event) {
+    if (!overlay.classList.contains('active')) return;
+
+    if (event.key === 'Escape') {
+      closeModal();
+      return;
+    }
+
+    if (event.key === 'Tab') {
+      var focusables = getFocusables(overlay);
+      if (!focusables.length) return;
+
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  function initPagefind() {
     if (isInitialized) return;
 
-    const isSubdir = window.location.pathname.startsWith('/obrazslov/');
-    const basePath = isSubdir ? '/obrazslov/pagefind/' : '/pagefind/';
-    const baseUrl = isSubdir ? '/obrazslov/' : '/';
+    var baseUrl = getBaseUrl();
+    var basePath = baseUrl + 'pagefind/';
 
-    console.log(`[Pagefind] Initializing with basePath: ${basePath}`);
+    console.log('[Pagefind] Initializing with basePath:', basePath);
 
-    const link = document.createElement('link');
+    var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = basePath + 'pagefind-ui.css';
     document.head.appendChild(link);
 
-    const script = document.createElement('script');
+    var script = document.createElement('script');
     script.src = basePath + 'pagefind-ui.js';
 
-    script.onload = () => {
-      if (typeof window.PagefindUI !== 'undefined') {
-        new window.PagefindUI({
-          element: "#pagefind-ui-root",
-          baseUrl: baseUrl,
-          language: 'ru',
-          showSubResults: true,
-          excerptLength: 30,
-          highlightParam: 'highlight',
-          translations: {
-            placeholder: 'Введите запрос...',
-            clear_search: 'Очистить',
-            load_more: 'Загрузить ещё',
-            no_results: 'Ничего не найдено',
-          }
-        });
-        isInitialized = true;
-        console.log('✅ Pagefind UI successfully initialized with Russian language support');
-
-        // INFRA-097: automatic phrase mode for multi-word queries (capture-normalize, NO dispatch).
-        // Pagefind has NO stopwords, so a single-letter preposition ("о") in "О нас" matches every
-        // page and pollutes ranking + highlighting. Rule set (final, edge-case-tested):
-        //   • No quotes in value  -> wrap into "..." iff >=2 words (1 word / spacing untouched).
-        //   • Any quote in value  -> RESPECT it (explicit user phrase or our finished phrase), EXCEPT
-        //     a symmetric ONE-word phrase "word" which we auto-unwrap to word (semantically identical
-        //     for Pagefind, and it prevents a stuck quote when the user deletes the 2nd word back).
-        // Done in CAPTURE so Pagefind reads the normalized value on the SAME event => one search,
-        // no re-dispatch, no recursion guard. Caret kept inside quotes on wrap; at end on unwrap.
-        const pfInput = document.querySelector('.pagefind-ui__search-input');
-        if (pfInput) {
-          pfInput.addEventListener('input', function () {
-            const cur = pfInput.value;
-
-            if (cur.indexOf('"') === -1) {
-              // No quotes at all: only wrap when there are >=2 words.
-              const words = cur.trim().split(/\s+/).filter(Boolean);
-              if (words.length < 2) return;            // 0..1 word: leave as-is (keeps spacing while typing)
-              const want = '"' + cur.trim() + '"';
-              if (want === cur) return;
-              pfInput.value = want;
-              const caret = want.length - 1;            // inside the closing quote
-              try { pfInput.setSelectionRange(caret, caret); } catch (e) {}
-              return;
-            }
-
-            // Has quote(s): respect explicit/user input by default. Auto-unwrap ONLY a symmetric
-            // one-word phrase so deleting the 2nd word of an auto-phrase leaves no stuck quotes.
-            if (cur.length >= 2 && cur.charCodeAt(0) === 34 && cur.charCodeAt(cur.length - 1) === 34) {
-              const inner = cur.slice(1, -1).trim();
-              const iw = inner.length ? inner.split(/\s+/).filter(Boolean) : [];
-              if (iw.length <= 1) {                     // "word" or "" -> unwrap to word (safe, equivalent)
-                if (inner === cur) return;
-                pfInput.value = inner;
-                const caret = inner.length;
-                try { pfInput.setSelectionRange(caret, caret); } catch (e) {}
-              }
-              // else: >=2 words inside quotes = valid phrase (ours or explicit) -> untouched.
-            }
-            // asymmetric quotes (user mid-typing an explicit phrase) -> untouched.
-          }, true);
-        }
-      } else {
-        console.error('❌ PagefindUI is not defined after script load');
+    script.onload = function () {
+      if (typeof window.PagefindUI === 'undefined') {
+        console.error('PagefindUI is not defined after script load');
+        root.innerHTML = '<p style="color:red; padding:1rem;">Ошибка инициализации поиска.</p>';
+        return;
       }
+
+      new window.PagefindUI({
+        element: '#pagefind-ui-root',
+        baseUrl: baseUrl,
+        language: 'ru',
+        showSubResults: true,
+        excerptLength: 30,
+        highlightParam: 'highlight',
+        translations: {
+          placeholder: 'Введите запрос...',
+          clear_search: 'Очистить',
+          load_more: 'Загрузить ещё',
+          no_results: 'Ничего не найдено'
+        }
+      });
+
+      isInitialized = true;
+
+      var pfInput = document.querySelector('.pagefind-ui__search-input');
+      if (!pfInput) return;
+
+      pfInput.addEventListener('input', function () {
+        var cur = pfInput.value;
+
+        if (cur.indexOf('"') === -1) {
+          var words = cur.trim().split(/\s+/).filter(Boolean);
+          if (words.length < 2) return;
+
+          var want = '"' + cur.trim() + '"';
+          if (want === cur) return;
+
+          pfInput.value = want;
+          var caret = want.length - 1;
+          try { pfInput.setSelectionRange(caret, caret); } catch (e) {}
+          return;
+        }
+
+        if (
+          cur.length >= 2 &&
+          cur.charCodeAt(0) === 34 &&
+          cur.charCodeAt(cur.length - 1) === 34
+        ) {
+          var inner = cur.slice(1, -1).trim();
+          var innerWords = inner.length ? inner.split(/\s+/).filter(Boolean) : [];
+
+          if (innerWords.length <= 1) {
+            if (inner === cur) return;
+            pfInput.value = inner;
+            var caret2 = inner.length;
+            try { pfInput.setSelectionRange(caret2, caret2); } catch (e2) {}
+          }
+        }
+      }, true);
     };
 
-    script.onerror = (e) => {
-      console.error('❌ Failed to load Pagefind UI script:', e);
-      const root = document.getElementById('pagefind-ui-root');
-      if (root) {
-        root.innerHTML = '<p style="color:red; padding: 1rem;">Ошибка загрузки скрипта поиска. Проверьте консоль (F12).</p>';
-      }
+    script.onerror = function () {
+      console.error('Failed to load Pagefind UI script');
+      root.innerHTML = '<p style="color:red; padding:1rem;">Ошибка загрузки скрипта поиска. Проверьте консоль (F12).</p>';
     };
 
     document.head.appendChild(script);
-  };
+  }
 
-  openBtn.addEventListener('click', () => {
+  function openModal() {
+    lastFocusedElement = document.activeElement;
+
+    overlay.removeAttribute('hidden');
     overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+
     initPagefind();
 
-    setTimeout(() => {
-      const input = document.querySelector('.pagefind-ui__search-input');
-      if (input) input.focus();
-    }, 200);
-  });
+    window.setTimeout(function () {
+      var input = document.querySelector('.pagefind-ui__search-input');
+      if (input) {
+        input.focus();
+      } else {
+        var focusables = getFocusables(overlay);
+        if (focusables.length) focusables[0].focus();
+      }
+    }, 120);
+  }
 
-  const closeModal = () => {
+  function closeModal() {
     overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.setAttribute('hidden', '');
     document.body.style.overflow = '';
-  };
 
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeModal();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && overlay.classList.contains('active')) {
-      closeModal();
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus();
     }
+
+    lastFocusedElement = null;
+  }
+
+  openBtn.addEventListener('click', openModal);
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  }
+
+  overlay.addEventListener('click', function (event) {
+    if (event.target === overlay) closeModal();
   });
 
+  overlay.addEventListener('keydown', handleKeydown);
 })();

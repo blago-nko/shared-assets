@@ -1,67 +1,65 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<script>
-(function() {
-  console.log('%c[THEME-INIT] Запуск...', 'color: #fbbc04; font-weight: bold;');
-  const stored = localStorage.getItem('theme');
-  console.log('[THEME-INIT] Тема в localStorage:', stored);
-
-  if (stored === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    console.log('%c[THEME-INIT] Применена ТЕМНАЯ тема из памяти', 'color: #8ab4f4;');
-  } else if (stored === 'light') {
-    document.documentElement.removeAttribute('data-theme');
-    console.log('%c[THEME-INIT] Применена СВЕТЛАЯ тема из памяти', 'color: #8ab4f4;');
-  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    console.log('%c[THEME-INIT] Применена ТЕМНАЯ тема из настроек системы', 'color: #8ab4f4;');
-  } else {
-    console.log('%c[THEME-INIT] Тема не задана, используется СВЕТЛАЯ по умолчанию', 'color: #8ab4f4;');
-  }
-})();
-</script>
-
   <meta charset="utf-8">
+  {{ partial "head/theme-init.html" . }}
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{{ "css/design-tokens.css" | relURL }}">
-  <link rel="stylesheet" href="{{ "css/dock-v4.css" | relURL }}">
-  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
-  <link rel="stylesheet" href="{{ "css/content-layout.css" | relURL }}">
+
   <title>{{ if eq .Title .Site.Title }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+
   <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+
   {{ if eq hugo.Environment "staging" }}
   <meta name="robots" content="noindex, nofollow">
+  {{ else }}
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   {{ end }}
+
+  <link rel="canonical" href="{{ .Permalink }}">
+  <link rel="manifest" href="{{ "manifest.json" | relURL }}">
+
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+  <meta name="pagefind-base" content="{{ "" | relURL }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://blogger.googleusercontent.com">
+
   {{ partial "head-meta.html" . }}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+
+  <link rel="stylesheet" href="{{ "css/design-tokens.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/content-layout.css" | relURL }}">
   <link rel="stylesheet" href="{{ "css/components/_search.css" | relURL }}">
+
   {{ partial "jsonld-article.html" . }}
   {{ partial "jsonld-breadcrumb.html" . }}
 </head>
 <body>
+  <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+
   {{ partial "header.html" . }}
-  <main {{ if eq .Kind "page" }}data-pagefind-body{{ else }}data-pagefind-ignore{{ end }}>
+
+  <main id="main" {{ if eq .Kind "page" }}data-pagefind-body{{ else }}data-pagefind-ignore{{ end }}>
     {{ block "main" . }}{{ end }}
   </main>
-  {{ partial "footer.html" . }}
-  <script src="{{ "js/CookieConsent.js" | relURL }}"></script>
 
-  <!-- INFRA-082 V4 UNIFIED DOCK -->
+  {{ partial "footer.html" . }}
+
   <nav class="sticky-bottom-bar" data-pagefind-ignore aria-label="Панель управления">
-    <!-- Кнопка Темы -->
-    <button class="dock-item" id="dock-theme-btn" type="button" aria-label="Переключить тему" title="Переключить тему">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <button class="dock-item" id="dock-theme-btn" type="button" aria-label="Переключить тему" aria-pressed="false" title="Переключить тему">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
       </svg>
       <span>Тема</span>
     </button>
 
-    <!-- Кнопка Меню -->
-    <button class="dock-item" id="sticky-menu-btn" type="button" aria-label="Меню" aria-controls="mobile-menu" aria-expanded="false">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <button class="dock-item" id="sticky-menu-btn" type="button" aria-label="Меню" aria-controls="modal-menu" aria-expanded="false" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
         <line x1="3" y1="18" x2="21" y2="18"/>
@@ -69,9 +67,8 @@
       <span>Меню</span>
     </button>
 
-    <!-- Кнопка Поделиться -->
-    <button class="dock-item" id="sticky-share-btn" type="button" aria-label="Поделиться">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <button class="dock-item" id="sticky-share-btn" type="button" aria-label="Поделиться" aria-controls="modal-share" aria-expanded="false" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <circle cx="18" cy="5" r="3"/>
         <circle cx="6" cy="12" r="3"/>
         <circle cx="18" cy="19" r="3"/>
@@ -81,20 +78,19 @@
       <span>Поделиться</span>
     </button>
 
-    <!-- Кнопка Наверх -->
     <button class="dock-item" id="sticky-top-btn" type="button" aria-label="Наверх">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <polyline points="18 15 12 9 6 15"/>
       </svg>
       <span>Наверх</span>
     </button>
   </nav>
 
-  <script src="{{ "js/StickyBottomBar.js" | relURL }}"></script>
   {{ partial "search-modal.html" . }}
-  <script type="module" src="{{ "js/PagefindInit.js" | relURL }}"></script>
-
   {{ partial "dock-modals.html" . }}
+
+  <script src="{{ "js/CookieConsent.js" | relURL }}" defer></script>
+  <script src="{{ "js/StickyBottomBar.js" | relURL }}" defer></script>
+  <script type="module" src="{{ "js/PagefindInit.js" | relURL }}"></script>
 </body>
-<script src="{{ "js/lazy-iframe.js" | relURL }}"></script>
 </html>

@@ -1,4 +1,22 @@
-<figure>
-<img src="{{ .Get "src" | relURL }}" alt="{{ .Get "alt" }}" title="{{ .Get "title" }}" loading="lazy">
-{{ with .Get "caption" }}<figcaption>{{ . }}</figcaption>{{ end }}
-</figure>
+{{ $src := .Get "src" | default "" }}
+{{ if $src }}
+  {{ $parsed := urls.Parse $src }}
+  {{ if not $parsed.IsAbs }}
+    {{ $src = $src | relURL }}
+  {{ end }}
+
+  <figure>
+    <img
+      src="{{ $src }}"
+      alt="{{ .Get "alt" | default "" }}"
+      {{ with .Get "title" }}title="{{ . }}"{{ end }}
+      {{ with .Get "width" }}width="{{ . }}"{{ end }}
+      {{ with .Get "height" }}height="{{ . }}"{{ end }}
+      loading="lazy"
+      decoding="async"
+    >
+    {{ with .Get "caption" }}
+      <figcaption>{{ . }}</figcaption>
+    {{ end }}
+  </figure>
+{{ end }}
