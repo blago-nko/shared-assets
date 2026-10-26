@@ -2,22 +2,21 @@
 <div class="container post-container">
   <article class="post-article">
     <header class="post-header">
-      <h1 class="post-title">{{ .Title }}</h1>
-      
-      <!-- Improved Meta Line -->
+      <h1 class="post-title" data-pagefind-weight="100">{{ .Title }}</h1>
+
       <div class="post-meta-row">
         <time datetime="{{ .Date.Format "2006-01-02" }}" class="meta-item">{{ .Date.Format "02 January 2006" }}</time>
-        
+
         {{ with .Params.author }}
           <span class="meta-separator">•</span>
           <span class="meta-item author">Автор: {{ . }}</span>
         {{ end }}
-        
+
         {{ if isset .Params "tags" }}
           {{ with .GetTerms "tags" }}
             <span class="meta-separator">•</span>
             <span class="meta-item tags-group">
-              Ярлыки: 
+              Ярлыки:
               {{ range $i, $tag := . }}
                 {{ if gt $i 0 }}, {{ end }}
                 <a href="{{ $tag.Permalink }}" rel="tag">{{ $tag.LinkTitle }}</a>
@@ -28,10 +27,23 @@
       </div>
     </header>
 
-    {{ if .Params.image }}
+    {{ $image := .Params.image }}
+    {{ if $image }}
+      {{ $parsed := urls.Parse $image }}
+      {{ if not $parsed.IsAbs }}
+        {{ $image = $image | relURL }}
+      {{ end }}
+
       <figure class="post-cover">
-        <!-- Standard img tag for cover, avoiding shortcode complexity in template -->
-        <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}" loading="lazy" decoding="async">
+        <img
+          src="{{ $image }}"
+          alt="{{ .Params.image_alt | default .Title }}"
+          {{ with .Params.image_width }}width="{{ . }}"{{ end }}
+          {{ with .Params.image_height }}height="{{ . }}"{{ end }}
+          loading="eager"
+          fetchpriority="high"
+          decoding="sync"
+        >
       </figure>
     {{ end }}
 

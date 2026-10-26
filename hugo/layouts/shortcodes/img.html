@@ -1,24 +1,33 @@
-{{/* 
-    Шорткод img для экосистемы blago-nko
-    Поддерживает: src, alt, width, height, class, caption
-*/}}
-{{ $src := .Get "src" }}
-{{ $alt := .Get "alt" | default "" }}
-{{ $width := .Get "width" }}
-{{ $height := .Get "height" }}
-{{ $class := .Get "class" | default "post-image" }}
-{{ $caption := .Get "caption" }}
+{{ $src := .Get "src" | default "" }}
+{{ if $src }}
+  {{ $parsed := urls.Parse $src }}
+  {{ if not $parsed.IsAbs }}
+    {{ $src = $src | relURL }}
+  {{ end }}
 
-<figure class="{{ $class }}">
-    <img loading="lazy" fetchpriority="low" 
-        src="{{ $src }}" 
-        alt="{{ $alt }}"
-        {{ with $width }}width="{{ . }}"{{ end }}
-        {{ with $height }}height="{{ . }}"{{ end }}
-        loading="lazy"
-       
+  {{ $alt := .Get "alt" | default "" }}
+  {{ $title := .Get "title" }}
+  {{ $class := .Get "class" | default "post-image" }}
+  {{ $caption := .Get "caption" }}
+  {{ $loading := .Get "loading" | default "lazy" }}
+  {{ $fetchpriority := .Get "fetchpriority" | default "auto" }}
+  {{ $decoding := .Get "decoding" | default "async" }}
+
+  <figure class="{{ $class }}">
+    <img
+      src="{{ $src }}"
+      alt="{{ $alt }}"
+      loading="{{ $loading }}"
+      fetchpriority="{{ $fetchpriority }}"
+      decoding="{{ $decoding }}"
+      {{ with $title }}title="{{ . }}"{{ end }}
+      {{ with .Get "width" }}width="{{ . }}"{{ end }}
+      {{ with .Get "height" }}height="{{ . }}"{{ end }}
+      {{ with .Get "srcset" }}srcset="{{ . }}"{{ end }}
+      {{ with .Get "sizes" }}sizes="{{ . }}"{{ end }}
     >
     {{ with $caption }}
-    <figcaption>{{ . }}</figcaption>
+      <figcaption>{{ . }}</figcaption>
     {{ end }}
-</figure>
+  </figure>
+{{ end }}

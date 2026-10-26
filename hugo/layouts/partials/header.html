@@ -1,40 +1,44 @@
 <header class="site-header">
   <div class="container header-inner">
-    
-    <!-- БЛОК 1: Бренд (Лого + Текст) -->
     <div class="brand-group">
       <a href="{{ "" | relURL }}" class="site-logo-link" aria-label="На главную">
         {{ with .Site.Params.logo }}
           <img src="{{ .src | relURL }}" alt="" class="site-logo" loading="eager" decoding="sync">
         {{ else }}
-          <svg class="site-logo" viewBox="0 0 48 48" role="img" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="12" fill="#2c3e50"/><circle cx="18" cy="24" r="8" fill="none" stroke="#fff" stroke-width="3"/><path d="M35 17.5a8.5 8.5 0 1 0 0 13" fill="none" stroke="#fff" stroke-width="3"/></svg>
+          <svg class="site-logo" viewBox="0 0 48 48" role="img" aria-hidden="true" focusable="false">
+            <rect x="2" y="2" width="44" height="44" rx="12" fill="#2c3e50"/>
+            <circle cx="18" cy="24" r="8" fill="none" stroke="#fff" stroke-width="3"/>
+            <path d="M35 17.5a8.5 8.5 0 1 0 0 13" fill="none" stroke="#fff" stroke-width="3"/>
+          </svg>
         {{ end }}
       </a>
-      
+
       <div class="brand-text">
-        <!-- Кликабельный заголовок -->
-        <a href="{{ "" | relURL }}" class="site-title-link" aria-label="Образ слов — на главную">
-          <h1 class="site-title">
-            <span class="title-part-1">Образ</span> 
-            <span class="title-part-2">слов</span>
-          </h1>
+        <a href="{{ "" | relURL }}" class="site-title-link" aria-label="{{ .Site.Title }} — на главную">
+          {{- $words := split .Site.Title " " -}}
+          {{- $n := len $words -}}
+          <span class="site-title">
+            {{- range $i, $w := $words -}}
+              {{- if and (gt $n 1) (eq $i (sub $n 1)) -}}
+                <span class="title-part-2">{{ $w }}</span>
+              {{- else -}}
+                <span class="title-part-1">{{ $w }}</span>
+              {{- end -}}
+              {{- if lt $i (sub $n 1) }} {{ end -}}
+            {{- end -}}
+          </span>
         </a>
-        
-        <!-- Контрастное описание -->
+
         <p class="site-tagline">{{ .Site.Params.description }}</p>
       </div>
     </div>
 
-    <!-- БЛОК 2: Навигация (Под брендом) -->
     <nav class="main-nav" aria-label="Основная навигация">
       <ul class="nav-list">
         <li><a href="{{ "posts/" | relURL }}" class="nav-link">Статьи</a></li>
         <li><a href="{{ "about/" | relURL }}" class="nav-link">О нас</a></li>
-        <li>
-          {{ partial "search-trigger.html" . }}
-        </li>
+        <li>{{ partial "search-trigger.html" . }}</li>
       </ul>
     </nav>
-
   </div>
 </header>
