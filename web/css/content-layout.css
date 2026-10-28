@@ -429,3 +429,34 @@ textarea:focus-visible {
     right: 80px !important;
   }
 }
+
+/* ==========================================
+   FIX: Full-width post cover matching body edges
+   ========================================== */
+
+.post-cover {
+  margin-left: calc(var(--space-6) * -1);
+  margin-right: calc(var(--space-6) * -1);
+  width: calc(100% + var(--space-6) * 2);
+  max-width: none;
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.post-cover img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+@media (max-width: 767px) {
+  .post-cover {
+    margin-left: calc(var(--space-4) * -1);
+    margin-right: calc(var(--space-4) * -1);
+    width: calc(100% + var(--space-4) * 2);
+  }
+}
